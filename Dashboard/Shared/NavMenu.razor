@@ -1,6 +1,6 @@
 ﻿<BarMenu>
     <BarStart>
-        <BarLabel>Main</BarLabel>
+
         <BarItem>
             <BarLink To="">
                 <BarIcon IconName="IconName.Dashboard" />
@@ -11,44 +11,37 @@
             <BarDropdown @bind-Visible="uiElementsVisible">
                 <BarDropdownToggle>
                     <BarIcon IconName="IconName.Wrench" />
-                    UI Elements
+                    User Management
                 </BarDropdownToggle>
                 <BarDropdownMenu>
-                    <BarDropdownItem To="tests/buttons">
-                        Buttons
+                    <BarDropdownItem To="/user">
+                        User
                     </BarDropdownItem>
-                    <BarDropdownItem To="tests/modals">
-                        Modals
+                    <BarDropdownItem To="/customer">
+                        Customer
                     </BarDropdownItem>
-                    <BarDropdownItem To="tests/cards">
-                        Cards
+                    <BarDropdownItem To="/employee">
+                        Employee
                     </BarDropdownItem>
-                    <BarDropdownItem To="tests/progressbars">
-                        Progress bars
+                    <BarDropdownItem To="/role">
+                        Role
                     </BarDropdownItem>
-                    <BarDropdownItem To="tests/elements">
-                        General UI
+                    <BarDropdownItem To="/permission">
+                        Permission
                     </BarDropdownItem>
-                    <BarDropdownItem To="tests/typography">
-                        Typography
-                    </BarDropdownItem>
-                    <BarDropdownItem To="tests/collapse">
-                        Collapse
-                    </BarDropdownItem>
-                    <BarDropdownItem To="tests/tables">
-                        Tables
-                    </BarDropdownItem>
-                    <BarDropdownItem To="tests/figures">
-                        Figures
-                    </BarDropdownItem>
-                    <BarDropdownItem To="tests/tabs">
-                        Tabs
-                    </BarDropdownItem>
-                    <BarDropdownItem To="tests/carousel">
-                        Carousel
-                    </BarDropdownItem>
-                    <BarDropdownItem To="tests/layout">
-                        Layout
+
+                </BarDropdownMenu>
+            </BarDropdown>
+        </BarItem>
+        <BarItem>
+            <BarDropdown>
+                <BarDropdownToggle>
+                    <BarIcon IconName="IconName.Receipt" />
+                    Order Management
+                </BarDropdownToggle>
+                <BarDropdownMenu>
+                    <BarDropdownItem To="/order">
+                        Order
                     </BarDropdownItem>
                 </BarDropdownMenu>
             </BarDropdown>
@@ -56,99 +49,43 @@
         <BarItem>
             <BarDropdown>
                 <BarDropdownToggle>
-                    <BarIcon IconName="IconName.Edit" />
-                    Forms
+                    <BarIcon IconName="IconName.List" />
+                    List Management
                 </BarDropdownToggle>
                 <BarDropdownMenu>
-                    <BarDropdownItem To="tests/forms">
-                        Forms
+                    <BarDropdownItem To="category">
+                        Category
                     </BarDropdownItem>
-                    <BarDropdownItem To="tests/validations">
-                        Validations
+                    <BarDropdownItem To="product">
+                        Product
                     </BarDropdownItem>
-                    <BarDropdownItem To="tests/misc-forms">
-                        Misc
+                    <BarDropdownItem To="shipper">
+                        Shipper
                     </BarDropdownItem>
-                    <BarDropdown>
-                        <BarDropdownToggle>
-                            Nested Forms
-                        </BarDropdownToggle>
-                        <BarDropdownMenu>
-                            <BarDropdownItem To="tests/forms">
-                                Nested Forms
-                            </BarDropdownItem>
-                            <BarDropdownItem To="tests/validations">
-                                Nested Validations
-                            </BarDropdownItem>
-                        </BarDropdownMenu>
-                    </BarDropdown>
+                    <BarDropdownItem To="/supplier">
+                        Supplier
+                    </BarDropdownItem>
                 </BarDropdownMenu>
             </BarDropdown>
         </BarItem>
         <BarItem>
             <BarDropdown>
                 <BarDropdownToggle>
-                    <BarIcon IconName="IconName.PuzzlePiece" />
-                    Extensions
+                    <BarIcon IconName="IconName.History" />
+                    Report
                 </BarDropdownToggle>
                 <BarDropdownMenu>
-                    <BarDropdownItem To="tests/datagrid">
-                        Data Grid
-                    </BarDropdownItem>
-                    <BarDropdownItem To="tests/components">
-                        Components
-                    </BarDropdownItem>
-                    <BarDropdownItem To="tests/charts">
-                        Charts
-                    </BarDropdownItem>
-                    <BarDropdownItem To="tests/livecharts">
-                        Live Charts
-                    </BarDropdownItem>
-                    <BarDropdownItem To="tests/treeview">
-                        TreeView
-                    </BarDropdownItem>
-                    <BarDropdownItem To="tests/richtextedit">
-                        RichTextEdit
+                    <BarDropdownItem To="/report">
+                        Order Report
                     </BarDropdownItem>
                 </BarDropdownMenu>
             </BarDropdown>
         </BarItem>
     </BarStart>
-    <BarEnd>
-        <BarItem>
-            <BarDropdown>
-                <BarDropdownToggle>
-                    <BarIcon IconName="IconName.Smartphone" />
-                    Apps
-                </BarDropdownToggle>
-                <BarDropdownMenu>
-                    <BarDropdownItem To="apps/todo">
-                        Todo
-                    </BarDropdownItem>
-                </BarDropdownMenu>
-            </BarDropdown>
-        </BarItem>
+    <BarEnd>            
     </BarEnd>
 </BarMenu>
 
 @code{
-
-    void OnRoundedChanged(bool value)
-    {
-        if (Theme == null)
-            return;
-
-        Theme.IsRounded = value;
-
-        Theme.ThemeHasChanged();
-    }
-
-    
-
-    private bool topbarVisible = false;
     private bool uiElementsVisible = true;
-
-    [CascadingParameter] protected Theme Theme { get; set; }
-
-    RenderFragment customIcon =@<img src="/brand-logo.png" style="width:32px; height: 32px" />;
 }

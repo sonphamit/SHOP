@@ -18,6 +18,7 @@ using Dashboard.Data;
 using Blazorise;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
+using SHOP.Infrastructure.Database;
 
 namespace Dashboard
 {
