@@ -15,6 +15,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Dashboard.Areas.Identity;
 using Dashboard.Data;
+using Blazorise;
+using Blazorise.Bootstrap;
+using Blazorise.Icons.FontAwesome;
 
 namespace Dashboard
 {
@@ -31,6 +34,13 @@ namespace Dashboard
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddBlazorise(options =>
+            {
+                options.ChangeTextOnKeyPress = true; // optional
+            })
+            .AddBootstrapProviders()
+            .AddFontAwesomeIcons();
+
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
@@ -62,6 +72,10 @@ namespace Dashboard
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.ApplicationServices
+            .UseBootstrapProviders()
+            .UseFontAwesomeIcons();
 
             app.UseAuthentication();
             app.UseAuthorization();
