@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 
-namespace SHOP.Infrastructure.Entities
+namespace Infrastructure.Entities
 {
     public class Employee : IdentityUser
     {

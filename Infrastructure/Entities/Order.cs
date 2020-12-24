@@ -1,12 +1,12 @@
 ﻿using Shared.Entities;
-using SHOP.Infrastructure.Enums;
+using Infrastructure.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SHOP.Infrastructure.Entities
+namespace Infrastructure.Entities
 {
-    public class Order : GuidEntity
+    public class Order : BaseEntity
     {
         public string CustomerId { get; set; }
         public string EmployeeId { get; set; }

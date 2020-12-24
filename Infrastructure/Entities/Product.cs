@@ -1,9 +1,9 @@
 ﻿using Shared.Entities;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SHOP.Infrastructure.Entities
+namespace Infrastructure.Entities
 {
-    public class Product : GuidEntity
+    public class Product : BaseEntity
     {
         public string SupplierId { get; set; }
         public string CategoryId { get; set; }

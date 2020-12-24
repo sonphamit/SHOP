@@ -1,8 +1,8 @@
 ﻿using Shared.Entities;
 
-namespace SHOP.Infrastructure.Entities
+namespace Infrastructure.Entities
 {
-    public class Supplier : GuidEntity
+    public class Supplier : BaseEntity
     {
         public string CompanyName { get; set; }
     }

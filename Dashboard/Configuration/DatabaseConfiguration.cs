@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using SHOP.Infrastructure.Database;
+using Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 
 namespace Dashboard.Configuration

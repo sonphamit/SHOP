@@ -1,12 +1,17 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Infrastructure.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using SHOP.Infrastructure.Entities;
 
-namespace SHOP.Infrastructure.Database
+namespace Infrastructure.Database
 {
     public class ApplicationDbContext : IdentityDbContext
     {
-        public ApplicationDbContext(DbContextOptions options) : base(options)
+        //public ApplicationDbContext(DbContextOptions options) : base(options)
+        //{
+        //
+        //}
+
+        public ApplicationDbContext() : base()
         {
 
         }

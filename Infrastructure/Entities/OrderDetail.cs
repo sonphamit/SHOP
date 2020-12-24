@@ -1,7 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SHOP.Infrastructure.Entities
+namespace Infrastructure.Entities
 {
     public class OrderDetail
     {

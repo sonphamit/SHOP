@@ -1,10 +1,10 @@
 ﻿using Shared.Entities;
-using SHOP.Infrastructure.Enums;
+using Infrastructure.Enums;
 using System.Collections.Generic;
 
-namespace SHOP.Infrastructure.Entities
+namespace Infrastructure.Entities
 {
-    public class Shipper : GuidEntity
+    public class Shipper : BaseEntity
     {
         public string ShipperName { get; set; }
         public string ShipperPhone { get; set; }

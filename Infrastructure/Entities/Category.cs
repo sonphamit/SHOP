@@ -1,9 +1,9 @@
 ﻿using Shared.Entities;
 using System.Collections.Generic;
 
-namespace SHOP.Infrastructure.Entities
+namespace Infrastructure.Entities
 {
-    public class Category : GuidEntity
+    public class Category : BaseEntity
     {
         public string Name { get; set; }
         public string Description { get; set; }

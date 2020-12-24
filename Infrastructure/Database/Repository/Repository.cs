@@ -9,17 +9,19 @@ namespace Infrastructure.Database
 {
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
-        public Repository()
-        {
-        }
         public DbContext DbContext { get; set; }
-
-        public DbSet<TEntity> DbSet {
+        public DbSet<TEntity> DbSet
+        {
             get
             {
                 return DbContext.Set<TEntity>();
             }
         }
+
+        public Repository(ApplicationDbContext dbContext)
+        {
+        }
+
 
         /// <summary>
         /// Add an entity
