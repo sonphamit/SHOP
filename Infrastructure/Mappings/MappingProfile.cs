@@ -2,9 +2,9 @@
 
 namespace Infrastructure.Mappings
 {
-    public class CustomerProfile : Profile
+    public class MappingProfile : Profile
     {
-        public CustomerProfile()
+        public MappingProfile()
         {
             //CreateMap<CustomerPayment, CustomerPaymentFullModel>()
              //   .ForMember(x => x.CardTypeName, opt => opt.MapFrom(y => EnumHelper.GetDescription(y.CardType)));

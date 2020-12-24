@@ -11,6 +11,7 @@ namespace Infrastructure.Database
 
         
         public IRepository<Customer> CustomerRepository { get; }
+        public IRepository<Category> CategoryRepository { get; }
         public IRepository<Employee> EmployeeRepository { get; }
         public IRepository<Order> OrderRepository { get; }
         public IRepository<OrderDetail> OrderDetailRepository { get; }
@@ -34,6 +35,7 @@ namespace Infrastructure.Database
 
         public UnitOfWork(ApplicationDbContext dbContext,
             IRepository<Customer> customerRepository,
+            IRepository<Category> categoryRepository,
             IRepository<Employee> employeeRepository,
             IRepository<Order> orderRepository,
             IRepository<OrderDetail> orderDetailRepository,
@@ -42,8 +44,12 @@ namespace Infrastructure.Database
             IRepository<Supplier> supplierRepository)
         {
             this.dbContext = dbContext;
+
             CustomerRepository = customerRepository;
             CustomerRepository.DbContext = dbContext;
+
+            CategoryRepository = categoryRepository;
+            CategoryRepository.DbContext = dbContext;
 
             EmployeeRepository = employeeRepository;
             EmployeeRepository.DbContext = dbContext;
