@@ -38,6 +38,8 @@ namespace Dashboard
 
             services.Configure<AppSettings>(Configuration);
 
+            services.AddMapperConfiguration();
+
             string connectionString = Configuration.GetConnectionString("DbConnection");
             services.AddAppDatabase(connectionString);
 
