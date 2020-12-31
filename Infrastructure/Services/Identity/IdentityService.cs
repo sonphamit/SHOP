@@ -1,4 +1,4 @@
-﻿namespace SHOP.Infrastructure.Services
+﻿namespace Infrastructure.Services
 {
     public class IdentityService : IIdentityService
     {

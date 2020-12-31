@@ -1,0 +1,39 @@
+﻿<Modal @ref="modalRef">
+    <ModalBackdrop />
+    <ModalContent IsCentered="true" >
+        <ModalHeader>
+            <ModalTitle>Category edit</ModalTitle>
+            <CloseButton Clicked="@HideModal" />
+        </ModalHeader>
+        <ModalBody>
+            <Field>
+                <FieldLabel>Name</FieldLabel>
+                <TextEdit Placeholder="Enter name..." />
+            </Field>
+            <Field>
+                <FieldLabel>Desciption</FieldLabel>
+                <MemoEdit Rows="5" Placeholder="Enter desciption..." />
+            </Field>
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="@HideModal">Close</Button>
+            <Button Color="Color.Primary" Clicked="@HideModal">Save Changes</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+
+@code {
+    // reference to the modal component
+    public Modal modalRef;
+
+    public void ShowModal()
+    {
+        modalRef.Show();
+    }
+
+    public void HideModal()
+    {
+        modalRef.Hide();
+    }
+}

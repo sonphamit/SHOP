@@ -1,0 +1,85 @@
+﻿@page "/category"
+@inject ICategoryService categoryService
+@inject IJSRuntime JsRuntime
+
+<div class="row mb-4 mt-4">
+    <div class="col-10">
+        <h3 class="mr-5">Category</h3>
+        <EditCategory @ref="child" />
+        <Button Color="Color.Primary" Size="Size.Medium" Clicked="@ShowModal">
+            <Icon Name="IconName.Add" />
+            Add
+        </Button>
+    </div>
+    <div class="col-2">
+
+    </div>
+</div>
+
+
+
+
+<table class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>No.</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var category in categories)
+        {
+            <tr>
+                <td>@(++order)</td>
+                <td>@category.Name</td>
+                <td>@category.Description</td>
+                <td>
+                    <Button Color="Color.Primary" Size="Size.Small">
+                        <Icon Name="IconName.Edit" />
+                        Edit
+                    </Button>
+                    <Button Color="Color.Danger" Size="Size.Small" Clicked="@(async () => await Delete(category))">
+                        <Icon Name="IconName.Delete" />
+                        Delete
+                    </Button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@code {
+
+    EditCategory child;
+    void ShowModal()
+    {
+        child.ShowModal();
+    }
+
+    IEnumerable<CategoryModel> categories;
+    int order = 0;
+    protected override async Task OnInitializedAsync()
+    {
+        //categories = new List<CategoryModel>();
+        categories = await categoryService.GetAllAsync();
+        //order = categories.Count();
+    }
+
+    async Task Delete(CategoryModel category)
+    {
+        if (!await JsRuntime.InvokeAsync<bool>("confirm", $"Are you sure you want to delete the category '{category.Name}'?"))
+            return;
+
+        await categoryService.DeleteAsync(category);
+        var result = await categoryService.SaveChangesAsync();
+        if (result > 0)
+        {
+            //nothing
+            categories = await categoryService.GetAllAsync();
+        }
+    }
+
+}

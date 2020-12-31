@@ -11,12 +11,12 @@ namespace Infrastructure.Services
 {
     public class CategoryService : ICategoryService
     {
-        private IUnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         public CategoryService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
-            _mapper = mapper; 
+            _mapper = mapper;
         }
 
         public async Task AddAsync(CategoryModel model)
@@ -30,19 +30,37 @@ namespace Infrastructure.Services
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<CategoryModel>> GetAllAsync()
+        public async Task DeleteAsync(CategoryModel model)
         {
-            throw new NotImplementedException();
+            var entity = await _unitOfWork.CategoryRepository.GetByIdAsync(model.Id);
+            _unitOfWork.CategoryRepository.Delete(entity);
         }
 
-        public Task<CategoryModel> GetByIdAsync(string id)
+        public async Task<IEnumerable<CategoryModel>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var entities =  _unitOfWork.CategoryRepository.GetAll();
+            return _mapper.Map<IEnumerable<CategoryModel>>(entities);
+        }
+
+        public async Task<CategoryModel> GetByIdAsync(string id)
+        {
+            var entity = await _unitOfWork.CategoryRepository.GetByIdAsync(id);
+            return _mapper.Map<CategoryModel>(entity);
         }
 
         public Task<IEnumerable<CategoryModel>> Pagination(Expression<Func<CategoryModel, bool>> predicate)
         {
             throw new NotImplementedException();
+        }
+
+        public int SaveChanges()
+        {
+            return _unitOfWork.SaveChanges();
+        }
+
+        public async Task<int> SaveChangesAsync()
+        {
+            return await _unitOfWork.SaveChangesAsync();
         }
     }
 }

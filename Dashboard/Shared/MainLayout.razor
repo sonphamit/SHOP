@@ -11,7 +11,7 @@
                     <BarItem>
                         <BarLink To="">
                             <BarIcon IconName="customIcon" />
-                            Blazorise Demo
+                            
                         </BarLink>
                     </BarItem>
                 </BarBrand>
@@ -25,66 +25,19 @@
                 <BarBrand>
                     <BarItem>
                         <BarLink To="">
-                            <BarIcon IconName="IconName.Dashboard" />
-                            Blazorise Demo
+                            <BarIcon IconName="IconName.Home" />
+                            SHOP MANAGEMENT
                         </BarLink>
                     </BarItem>
                 </BarBrand>
                 <BarToggler />
                 <BarMenu>
                     <BarStart>
-                        <BarItem>
-                            <BarLink To="https://blazorise.com/">Home</BarLink>
-                        </BarItem>
-                        <BarItem>
-                            <BarLink To="https://blazorise.com/docs/">Documentation</BarLink>
-                        </BarItem>
-                        <BarItem>
-                            <BarDropdown>
-                                <BarDropdownToggle>More</BarDropdownToggle>
-                                <BarDropdownMenu>
-                                    <BarDropdownItem To="https://blazorise.com/docs/quick-start/">
-                                        Quick-Start Guide
-                                    </BarDropdownItem>
-                                    <BarDropdownItem To="https://blazorise.com/docs/usage/">
-                                        Usage
-                                    </BarDropdownItem>
-                                </BarDropdownMenu>
-                            </BarDropdown>
-                        </BarItem>
+                        
                     </BarStart>
                     <BarEnd>
                         <BarItem>
-                            <BarDropdown>
-                                <BarDropdownToggle><Icon Name="IconName.Tint" /> Theme</BarDropdownToggle>
-                                <BarDropdownMenu Style="padding: 15px; min-width:550px;" RightAligned="true">
-                                    <Row>
-                                        <Column Margin="Margin.Is2.FromBottom">
-                                            <Field>
-                                                <Switch TValue="bool" Checked="@(Theme?.Enabled == true)" CheckedChanged="@OnThemeEnabledChanged">Theme enabled</Switch>
-                                            </Field>
-                                        </Column>
-                                    </Row>
-                                    <Row>
-                                        <Column Margin="Margin.Is2.FromBottom">
-                                            <Field>
-                                                <Check TValue="bool" Checked="@(Theme?.IsGradient == true)" CheckedChanged="@OnGradientChanged">Gradient colors</Check>
-                                            </Field>
-                                            <Field>
-                                                <Check TValue="bool" Checked="@(Theme?.IsRounded == true)" CheckedChanged="@OnRoundedChanged">Rounded elements</Check>
-                                            </Field>
-                                        </Column>
-                                    </Row>
-                                    <Row>
-                                        <Column>
-                                            
-                                        </Column>
-                                    </Row>
-                                </BarDropdownMenu>
-                            </BarDropdown>
-                        </BarItem>
-                        <BarItem>
-                            <BarLink To="https://github.com/stsrki/blazorise">GitHub</BarLink>
+                                <LoginDisplay />
                         </BarItem>
                     </BarEnd>
                 </BarMenu>

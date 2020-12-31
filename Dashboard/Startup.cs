@@ -13,6 +13,7 @@ using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
 using Infrastructure.Database;
 using Dashboard.Configuration;
+using Infrastructure.Services;
 
 namespace Dashboard
 {
@@ -35,7 +36,8 @@ namespace Dashboard
             })
             .AddBootstrapProviders()
             .AddFontAwesomeIcons();
-
+            //services.AddScoped<ICategoryService, CategoryService>();
+            services.AddServicesDependency();
             services.Configure<AppSettings>(Configuration);
 
             services.AddMapperConfiguration();

@@ -13,5 +13,8 @@ namespace Infrastructure.Services
         Task<IEnumerable<CategoryModel>> GetAllAsync();
         Task<CategoryModel> GetByIdAsync(string id);
         Task<IEnumerable<CategoryModel>> Pagination(Expression<Func<CategoryModel, bool>> predicate);
+        Task DeleteAsync(CategoryModel model);
+        Task<int> SaveChangesAsync();
+        int SaveChanges();
     }
 }

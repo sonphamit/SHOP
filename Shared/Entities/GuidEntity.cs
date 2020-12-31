@@ -7,8 +7,8 @@ namespace Shared.Entities
     public interface IBaseEntity
     {
         public string Id { get; set; }
-        public DateTime CreatedBy { get; set; }
-        public DateTime UpdatedBy { get; set; }
+        public string CreatedBy { get; set; }
+        public string UpdatedBy { get; set; }
 
     }
 
@@ -17,13 +17,13 @@ namespace Shared.Entities
         public BaseEntity()
         {
             Id = CommonHelper.NewGuid();
-            CreatedBy = DateTime.UtcNow;
+            CreatedAt = DateTime.UtcNow;
             UpdatedAt = DateTime.UtcNow;
         }
 
         public string Id { get; set; }
-        public DateTime CreatedBy { get; set; }
-        public DateTime UpdatedBy { get; set; }
+        public string CreatedBy { get; set; }
+        public string UpdatedBy { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
