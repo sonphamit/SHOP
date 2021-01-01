@@ -11,7 +11,7 @@ namespace Dashboard.Configuration
         {
             //services.Scan(scan => scan
             //    .FromCallingAssembly()
-            //    .AddClasses(classes => classes.AssignableTo(typeof(ICategoryService)))
+            //    .AddClasses(classes => classes.AssignableTo(typeof(IService)))
             //    .AsSelf()
             //    .WithTransientLifetime()
             //);
