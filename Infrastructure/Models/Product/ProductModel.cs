@@ -5,6 +5,7 @@ namespace Infrastructure.Models
 {
     public class ProductModel : IMapFrom<Product>
     {
+        public string Id { get; set; }
         public string SupplierId { get; set; }
         public string CategoryId { get; set; }
         public string Name { get; set; }

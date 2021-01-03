@@ -12,6 +12,12 @@ namespace Infrastructure.Mappings
             //   .ForMember(x => x.CardTypeName, opt => opt.MapFrom(y => EnumHelper.GetDescription(y.CardType)));
             CreateMap<Category, CategoryModel>();
             CreateMap<CategoryModel, Category > ();
+
+            CreateMap<User, UserModel>();
+            CreateMap<UserModel, User>();
+
+            CreateMap<Product, ProductModel>();
+            CreateMap<ProductModel, Product>();
         }
 
         

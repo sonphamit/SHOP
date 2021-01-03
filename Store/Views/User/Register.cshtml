@@ -1,0 +1,93 @@
+﻿@model Infrastructure.Models.UserModel
+
+@{
+    ViewData["Title"] = "View";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<div class="row">
+    <div class="col-sm-3 col-md-6 col-lg-3"></div>
+    <div class="col-sm-3 col-md-6 col-lg-6">
+        <div class="row">
+            <div class="form-group col-md-6">
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-6">
+                <h3>Tạo tài khoản</h3>
+            </div>
+        </div>
+        <form asp-action="Register">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label asp-for="FullName" class="control-label">Họ tên:</label>
+                    <input asp-for="FullName" class="form-control" />
+                    <span asp-validation-for="FullName" class="text-danger"></span>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label asp-for="Email" class="control-label">Email:</label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger" typeof="email"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="BirthDay" class="control-label">Ngày sinh:</label>
+                    <input asp-for="BirthDay" class="form-control" />
+                    <span asp-validation-for="BirthDay" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label asp-for="BirthDay" class="control-label">Ngày sinh:</label>
+                    <input asp-for="BirthDay" class="form-control" type="date" />
+                    <span asp-validation-for="BirthDay" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label asp-for="PassWord" class="control-label">Mật khẩu:</label>
+                    <input asp-for="PassWord" class="form-control" />
+                    <span asp-validation-for="PassWord" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="PhoneNumber" class="control-label">Số điện thoại:</label>
+                    <input asp-for="PhoneNumber" class="form-control" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label asp-for="Address" class="control-label">Địa chỉ:</label>
+                    <input asp-for="Address" class="form-control" />
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label asp-for="City" class="control-label">Quận/Huyện:</label>
+                    <input asp-for="City" class="form-control" />
+                    <span asp-validation-for="City" class="text-danger"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="Country" class="control-label">Tỉnh/Thành phố:</label>
+                    <input asp-for="Country" class="form-control" />
+                    <span asp-validation-for="Country" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group button-div">
+                @*<button type="submit" value="Đăng ký" class="btn btn-primary register-btn" />*@
+                <button class="btn btn-primary register-btn">Đăng ký</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

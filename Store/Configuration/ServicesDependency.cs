@@ -32,6 +32,7 @@ namespace Store.Configuration
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IShipperService, ShipperService>();
             services.AddScoped<ISupplierService, SupplierService>();
+            services.AddScoped<IUserService, UserService>();
             services.AddScoped<IProductService, ProductService>();
 
             services.AddScoped<IOrderService, OrderService>();

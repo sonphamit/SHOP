@@ -31,7 +31,7 @@ namespace Dashboard.Configuration
             services.AddScoped<IEmployeeService, EmployeeService>();
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IShipperService, ShipperService>();
-            services.AddScoped<ISupplierService, SupplierService>();
+            services.AddScoped<IUserService, SupplierService>();
             services.AddScoped<IProductService, ProductService>();
 
             services.AddScoped<IOrderService, OrderService>();

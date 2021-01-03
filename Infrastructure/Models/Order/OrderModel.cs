@@ -8,6 +8,7 @@ namespace Infrastructure.Models
 {
     public class OrderModel : IMapFrom<Order>
     {
+        public string Id { get; set; }
         public string CustomerId { get; set; }
         public string EmployeeId { get; set; }
         public OrderStatus Status { get; set; }

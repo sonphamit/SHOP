@@ -6,7 +6,7 @@
     <div class="col-10">
         <h3 class="mr-5">Category</h3>
         <EditCategory @ref="child" />
-        <Button Color="Color.Primary" Size="Size.Medium" Clicked="@ShowModal">
+        <Button Color="Color.Primary" Size="Size.Medium" Clicked="@(async () => await Add())">
             <Icon Name="IconName.Add" />
             Add
         </Button>
@@ -80,6 +80,11 @@
             //nothing
             categories = await categoryService.GetAllAsync();
         }
+    }
+
+    async Task Add()
+    {
+     
     }
 
 }
