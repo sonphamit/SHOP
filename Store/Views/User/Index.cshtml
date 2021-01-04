@@ -24,35 +24,35 @@
             <div class="row">
                 <div class="col-lg-9 col-md-12 login-card">
                     <div class="row">
-                        <form asp-action="Login" asp-controller="User" method="post">
-                            <div class="col-md-6 logn-part">
-                                <div class="row">
-                                    <div class="col-lg-10 col-md-12 mx-auto">
-                                        <div class="form-cover">
-                                            <h3>Đăng nhập</h3>
-                                            <input placeholder="Enter Email" asp-for="Email" type="text" class="form-control">
-                                            <span asp-validation-for="Email" class="text-danger"></span>
-                                            <input Placeholder="Enter Password" type="PassWord" class="form-control">
-                                            <span asp-validation-for="Password" class="text-danger"></span>
-                                            <div class="row form-footer">
-                                                <div class="col-md-6 forget-paswd">
-                                                    <a href="">Forget Password ?</a>
-                                                </div>
-                                                <div class="col-md-6 button-div">
-                                                    <button class="btn btn-primary">Login</button>
-                                                </div>
+                        @* <form asp-action="Login" asp-controller="User" method="post" > *@
+                        <div class="col-md-6 logn-part">
+                            <div class="row">
+                                <div class="col-lg-10 col-md-12 mx-auto">
+                                    <div class="form-cover">
+                                        <h3>Đăng nhập</h3>
+                                        @*<input placeholder="Enter Email" asp-for="Email" type="text" class="form-control">
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                        <input Placeholder="Enter Password" type="PassWord" class="form-control">
+                        <span asp-validation-for="Password" class="text-danger"></span>*@
+                                        <div class="row form-footer">
+                                            <div class="col-md-6 forget-paswd">
+                                                <a href="">Forget Password ?</a>
+                                            </div>
+                                            <div class="col-md-6 button-div">
+                                                <button class="btn btn-primary">Login</button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6 logn-part">
-                                <h3>Đăng ký</h3>
-                                <div class="button-div create-btn">
-                                    <button value="Login" type="submit" class="btn btn-primary create-account">Đăng nhập</button>
-                                </div>
+                        </div>
+                        <div class="col-md-6 logn-part">
+                            <h3>Đăng ký</h3>
+                            <div class="button-div create-btn">
+                                <button value="Login" type="submit" class="btn btn-primary create-account">Đăng nhập</button>
                             </div>
-                        </form>
+                        </div>
+                        @*</form>*@
                     </div>
                 </div>
             </div>
