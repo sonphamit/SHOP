@@ -85,3 +85,17 @@ html, body {
         transform: scale3D(0, 0, 1);
     }
 }
+
+
+/* modified style */
+.navbar-brand .nav-item a.active, .navbar-brand .nav-item a, .navbar-brand .nav-item a:hover{
+    color: white;
+}
+
+header nav.navbar {
+    background-color: #061b2e !important;
+    padding-top: 0px !important;
+}
+
+
+/* modified style  end */
