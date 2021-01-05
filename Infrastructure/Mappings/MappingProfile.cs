@@ -11,7 +11,7 @@ namespace Infrastructure.Mappings
             //CreateMap<CustomerPayment, CustomerPaymentFullModel>()
             //   .ForMember(x => x.CardTypeName, opt => opt.MapFrom(y => EnumHelper.GetDescription(y.CardType)));
             CreateMap<Category, CategoryModel>();
-            CreateMap<CategoryModel, Category > ();
+            CreateMap<CategoryModel, Category> ().ForMember(x => x.Id, opt => opt.Ignore());
 
             CreateMap<User, UserModel>();
             CreateMap<UserModel, User>();

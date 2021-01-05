@@ -123,7 +123,7 @@ namespace Infrastructure.Database
         /// <returns></returns>
         public IEnumerable<TEntity> GetAll(bool allowTracking = true)
         {
-            return DbSet.ToList().ToList();
+            return DbSet.ToList();
         }
 
         /// <summary>

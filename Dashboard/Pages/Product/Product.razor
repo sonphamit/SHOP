@@ -29,23 +29,25 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (ProductModel product in products)
-        {
-            <tr>
-                <td>@(++order)</td>
-                <td>@product.Name</td>
-                <td>@product.UnitPrice</td>
-                <td>
-                    <Button Color="Color.Primary" Size="Size.Small">
-                        <Icon Name="IconName.Edit" />
-                        Edit
-                    </Button>
-                    <Button Color="Color.Danger" Size="Size.Small" Clicked="@(async () => await Delete(product))">
-                        <Icon Name="IconName.Delete" />
-                        Delete
-                    </Button>
-                </td>
-            </tr>
+        @if(products != null){
+            @foreach (ProductModel product in products)
+            {
+                <tr>
+                    <td>@(++order)</td>
+                    <td>@product.Name</td>
+                    <td>@product.UnitPrice</td>
+                    <td>
+                        <Button Color="Color.Primary" Size="Size.Small">
+                            <Icon Name="IconName.Edit" />
+                            Edit
+                        </Button>
+                        <Button Color="Color.Danger" Size="Size.Small" Clicked="@(async () => await Delete(product))">
+                            <Icon Name="IconName.Delete" />
+                            Delete
+                        </Button>
+                    </td>
+                </tr>
+            }
         }
     </tbody>
 </table>

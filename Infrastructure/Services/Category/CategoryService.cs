@@ -2,9 +2,7 @@
 using Infrastructure.Database;
 using Infrastructure.Entities;
 using Infrastructure.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Infrastructure.Services
@@ -25,11 +23,6 @@ namespace Infrastructure.Services
             await _unitOfWork.CategoryRepository.AddAsync(entity);
         }
 
-        public Task AddRangeAsync(IEnumerable<CategoryModel> entities)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task DeleteAsync(CategoryModel model)
         {
             var entity = await _unitOfWork.CategoryRepository.GetByIdAsync(model.Id);
@@ -42,15 +35,16 @@ namespace Infrastructure.Services
             return _mapper.Map<IEnumerable<CategoryModel>>(entities);
         }
 
+        public IEnumerable<CategoryModel> GetAll()
+        {
+            var entities = _unitOfWork.CategoryRepository.GetAll();
+            return _mapper.Map<IEnumerable<CategoryModel>>(entities);
+        }
+
         public async Task<CategoryModel> GetByIdAsync(string id)
         {
             var entity = await _unitOfWork.CategoryRepository.GetByIdAsync(id);
             return _mapper.Map<CategoryModel>(entity);
-        }
-
-        public Task<IEnumerable<CategoryModel>> Pagination(Expression<Func<CategoryModel, bool>> predicate)
-        {
-            throw new NotImplementedException();
         }
 
         public int SaveChanges()
@@ -61,6 +55,17 @@ namespace Infrastructure.Services
         public async Task<int> SaveChangesAsync()
         {
             return await _unitOfWork.SaveChangesAsync();
+        }
+
+        public void Update(string id, CategoryModel model)
+        {
+            if (!string.IsNullOrWhiteSpace(id))
+            {
+                var entity = _mapper.Map<Category>(model);
+                entity.Id = model.Id;
+                _unitOfWork.CategoryRepository.Update(entity);
+            }
+            
         }
     }
 }

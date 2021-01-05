@@ -5,8 +5,8 @@
 <div class="row mb-4 mt-4">
     <div class="col-10">
         <h3 class="mr-5">Category</h3>
-        <EditCategory @ref="child" />
-        <Button Color="Color.Primary" Size="Size.Medium" Clicked="@(async () => await Add())">
+        <EditCategory @ref="child" OnSaveChange="@(async () => await GetAllAsync())" />
+        <Button Color="Color.Primary" Size="Size.Medium" Clicked="@AddModal">
             <Icon Name="IconName.Add" />
             Add
         </Button>
@@ -31,18 +31,18 @@
     <tbody>
         @if (categories != null)
         {
-            @foreach (var category in categories)
+            @for (int i = 0; i < total; i++)
             {
                 <tr>
-                    <td>@(++order)</td>
-                    <td>@category.Name</td>
-                    <td>@category.Description</td>
+                    <td>@(i+1)</td>
+                    <td>@categories.ElementAt(i).Name</td>
+                    <td>@categories.ElementAt(i).Description</td>
                     <td>
-                        <Button Color="Color.Primary" Size="Size.Small">
+                        <Button Color="Color.Primary" Size="Size.Small" Clicked="@(() => EditModal(categories.ElementAt(i)))">
                             <Icon Name="IconName.Edit" />
                             Edit
                         </Button>
-                        <Button Color="Color.Danger" Size="Size.Small" Clicked="@(async () => await Delete(category))">
+                        <Button Color="Color.Danger" Size="Size.Small" Clicked="@(async () => await Delete(categories.ElementAt(i)))">
                             <Icon Name="IconName.Delete" />
                             Delete
                         </Button>
@@ -58,19 +58,23 @@
 @code {
 
     EditCategory child;
-    void ShowModal()
+    void AddModal()
     {
-        child.ShowModal();
+        child.AddModal();
     }
 
-    IEnumerable<CategoryModel> categories;
-    int order = 0;
+    void EditModal(CategoryModel model)
+    {
+        child.EditModal(model);
+    }
+
+    public IEnumerable<CategoryModel> categories;
+    int total = 0;
     protected override async Task OnInitializedAsync()
     {
         //categories = new List<CategoryModel>();
-        categories = await categoryService.GetAllAsync();
-        categories.Count();
-        //order = categories.Count();
+        await GetAllAsync();
+
     }
 
     async Task Delete(CategoryModel category)
@@ -87,9 +91,10 @@
         }
     }
 
-    async Task Add()
+    public async Task GetAllAsync()
     {
-
+        categories = await categoryService.GetAllAsync();
+        total = categories.Count();
     }
 
 }

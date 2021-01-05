@@ -11,4 +11,11 @@ namespace Infrastructure.Models
         public string Description { get; set; }
         public virtual ICollection<ProductModel> Products { get; set; }
     }
+
+    public class CategoryAddModel : IMapFrom<Category>
+    {
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public virtual ICollection<ProductModel> Products { get; set; }
+    }
 }
