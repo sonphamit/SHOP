@@ -38,7 +38,7 @@ namespace Infrastructure.Services
 
         public async Task<IEnumerable<CategoryModel>> GetAllAsync()
         {
-            var entities =  _unitOfWork.CategoryRepository.GetAll();
+            var entities = await _unitOfWork.CategoryRepository.GetAllAsync();
             return _mapper.Map<IEnumerable<CategoryModel>>(entities);
         }
 

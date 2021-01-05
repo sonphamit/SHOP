@@ -29,24 +29,28 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var category in categories)
+        @if (categories != null)
         {
-            <tr>
-                <td>@(++order)</td>
-                <td>@category.Name</td>
-                <td>@category.Description</td>
-                <td>
-                    <Button Color="Color.Primary" Size="Size.Small">
-                        <Icon Name="IconName.Edit" />
-                        Edit
-                    </Button>
-                    <Button Color="Color.Danger" Size="Size.Small" Clicked="@(async () => await Delete(category))">
-                        <Icon Name="IconName.Delete" />
-                        Delete
-                    </Button>
-                </td>
-            </tr>
+            @foreach (var category in categories)
+            {
+                <tr>
+                    <td>@(++order)</td>
+                    <td>@category.Name</td>
+                    <td>@category.Description</td>
+                    <td>
+                        <Button Color="Color.Primary" Size="Size.Small">
+                            <Icon Name="IconName.Edit" />
+                            Edit
+                        </Button>
+                        <Button Color="Color.Danger" Size="Size.Small" Clicked="@(async () => await Delete(category))">
+                            <Icon Name="IconName.Delete" />
+                            Delete
+                        </Button>
+                    </td>
+                </tr>
+            }
         }
+
     </tbody>
 </table>
 
@@ -65,6 +69,7 @@
     {
         //categories = new List<CategoryModel>();
         categories = await categoryService.GetAllAsync();
+        categories.Count();
         //order = categories.Count();
     }
 
@@ -84,7 +89,7 @@
 
     async Task Add()
     {
-     
+
     }
 
 }
