@@ -23,7 +23,8 @@ namespace Infrastructure.Database
 
         public int SaveChanges()
         {
-            return dbContext.SaveChanges();
+            var result = dbContext.SaveChanges();
+            return result;
         }
 
         public async Task<int> SaveChangesAsync()

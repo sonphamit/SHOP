@@ -8,6 +8,7 @@ namespace Infrastructure.Services
     {
         Task AddAsync(CategoryModel model);
         void Update(string id,CategoryModel model);
+
         Task<IEnumerable<CategoryModel>> GetAllAsync();
         IEnumerable<CategoryModel> GetAll();
         Task<CategoryModel> GetByIdAsync(string id);

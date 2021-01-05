@@ -45,7 +45,6 @@
         if (String.IsNullOrWhiteSpace(model.Id))
         {
             categoryService.AddAsync(model);
-            categoryService.SaveChanges();
         }
         else
         {

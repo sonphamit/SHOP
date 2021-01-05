@@ -2,7 +2,9 @@
 using Infrastructure.Database;
 using Infrastructure.Entities;
 using Infrastructure.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Infrastructure.Services
@@ -21,11 +23,12 @@ namespace Infrastructure.Services
         {
             var entity = _mapper.Map<Category>(model);
             await _unitOfWork.CategoryRepository.AddAsync(entity);
+            SaveChanges();
         }
 
         public async Task DeleteAsync(CategoryModel model)
         {
-            var entity = await _unitOfWork.CategoryRepository.GetByIdAsync(model.Id);
+            var entity = await _unitOfWork.CategoryRepository.FindByCondition(cat => cat.Id.Equals(model.Id)).FirstOrDefaultAsync();
             _unitOfWork.CategoryRepository.Delete(entity);
         }
 
@@ -61,9 +64,12 @@ namespace Infrastructure.Services
         {
             if (!string.IsNullOrWhiteSpace(id))
             {
-                var entity = _mapper.Map<Category>(model);
-                entity.Id = model.Id;
-                _unitOfWork.CategoryRepository.Update(entity);
+                var originEntity =  _unitOfWork.CategoryRepository.FindByCondition(cat => cat.Id.Equals(model.Id)).FirstOrDefault();
+                var entityUpdate = _mapper.Map(model, originEntity);
+                entityUpdate.Id = model.Id;
+                _unitOfWork.CategoryRepository.Update(entityUpdate);
+                SaveChanges();
+                _unitOfWork.CategoryRepository.Detach(entityUpdate);
             }
             
         }

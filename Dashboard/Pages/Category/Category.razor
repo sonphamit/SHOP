@@ -31,18 +31,18 @@
     <tbody>
         @if (categories != null)
         {
-            @for (int i = 0; i < total; i++)
+            @foreach (var item in categories.Select((value, index) => new { value, index }))
             {
                 <tr>
-                    <td>@(i+1)</td>
-                    <td>@categories.ElementAt(i).Name</td>
-                    <td>@categories.ElementAt(i).Description</td>
+                    <td>@(item.index+1)</td>
+                    <td>@item.value.Name</td>
+                    <td>@item.value.Description</td>
                     <td>
-                        <Button Color="Color.Primary" Size="Size.Small" Clicked="@(() => EditModal(categories.ElementAt(i)))">
+                        <Button Color="Color.Primary" Size="Size.Small" Clicked="@(() => EditModal(item.value))">
                             <Icon Name="IconName.Edit" />
                             Edit
                         </Button>
-                        <Button Color="Color.Danger" Size="Size.Small" Clicked="@(async () => await Delete(categories.ElementAt(i)))">
+                        <Button Color="Color.Danger" Size="Size.Small" Clicked="@(async () => await Delete(item.value))">
                             <Icon Name="IconName.Delete" />
                             Delete
                         </Button>
@@ -80,15 +80,14 @@
     async Task Delete(CategoryModel category)
     {
         if (!await JsRuntime.InvokeAsync<bool>("confirm", $"Are you sure you want to delete the category '{category.Name}'?"))
+        {
             return;
+        }
+
 
         await categoryService.DeleteAsync(category);
-        var result = await categoryService.SaveChangesAsync();
-        if (result > 0)
-        {
-            //nothing
-            categories = await categoryService.GetAllAsync();
-        }
+        await categoryService.SaveChangesAsync();
+        categories = await categoryService.GetAllAsync();
     }
 
     public async Task GetAllAsync()

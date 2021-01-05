@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Shared.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -65,10 +66,7 @@ namespace Infrastructure.Database
         /// <param name="entity"></param>
         public void Delete(TEntity entity)
         {
-            if (DbSet.Find(entity) is TEntity)
-            {
-                DbSet.Remove(entity);
-            }
+            DbSet.Remove(entity);
         }
 
         /// <summary>
@@ -123,7 +121,7 @@ namespace Infrastructure.Database
         /// <returns></returns>
         public IEnumerable<TEntity> GetAll(bool allowTracking = true)
         {
-            return DbSet.ToList();
+            return DbSet.AsNoTracking().ToList();
         }
 
         /// <summary>
@@ -133,7 +131,7 @@ namespace Infrastructure.Database
         /// <returns></returns>
         public async Task<IEnumerable<TEntity>> GetAllAsync(bool allowTracking = true)
         {
-            return await DbSet.ToListAsync();
+            return await DbSet.AsNoTracking().ToListAsync();
         }
 
         /// <summary>
@@ -155,7 +153,7 @@ namespace Infrastructure.Database
         /// <returns></returns>
         public async Task<TEntity> GetByIdAsync(string id, bool allowTracking = true)
         {
-            return await DbSet.FirstOrDefaultAsync(e => (e.GetType().GetProperty("Id").GetValue(e) as string) == id);
+            return await DbSet.Where(e => (e.GetType().GetProperty("Id").GetValue(e) as string) == id).FirstOrDefaultAsync();
         }
 
         /// <summary>
@@ -164,20 +162,9 @@ namespace Infrastructure.Database
         /// <param name="predicate"></param>
         /// <param name="allowTracking"></param>
         /// <returns></returns>
-        public IEnumerable<TEntity> GetMany(Expression<Func<TEntity, bool>> predicate, bool allowTracking = true)
+        public IQueryable<TEntity> FindByCondition(Expression<Func<TEntity, bool>> predicate, bool allowTracking = true)
         {
-            return DbSet.Where(predicate).ToList();
-        }
-
-        /// <summary>
-        /// Get many entities by predicate
-        /// </summary>
-        /// <param name="predicate"></param>
-        /// <param name="allowTracking"></param>
-        /// <returns></returns>
-        public async Task<IEnumerable<TEntity>> GetManyAsync(Expression<Func<TEntity, bool>> predicate, bool allowTracking = true)
-        {
-            return await DbSet.Where(predicate).ToListAsync();
+            return DbSet.Where(predicate).AsNoTracking();
         }
 
         /// <summary>
@@ -186,8 +173,17 @@ namespace Infrastructure.Database
         /// <param name="entity"></param>
         public void Update(TEntity entity)
         {
-            DbSet.Attach(entity);
+            //DbSet.Attach(entity);
             DbContext.Entry(entity).State = EntityState.Modified;
+        }
+
+        /// <summary>
+        /// Detach an entity
+        /// </summary>
+        /// <param name="entity"></param>
+        public void Detach(TEntity entity)
+        {
+            DbContext.Entry(entity).State = EntityState.Detached;
         }
 
     }
