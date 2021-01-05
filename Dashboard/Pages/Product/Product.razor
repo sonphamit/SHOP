@@ -1,11 +1,11 @@
-﻿@page "/category"
+﻿@page "/product"
 @inject IProductService productService
 @inject IJSRuntime JsRuntime
 
 <div class="row mb-4 mt-4">
     <div class="col-10">
         <h3 class="mr-5">Category</h3>
-        <EditCategory @ref="child" />
+        <EditProduct @ref="child" />
         <Button Color="Color.Primary" Size="Size.Medium" Clicked="@(async () => await Add())">
             <Icon Name="IconName.Add" />
             Add
@@ -29,18 +29,18 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var product in products)
+        @foreach (ProductModel product in products)
         {
             <tr>
                 <td>@(++order)</td>
                 <td>@product.Name</td>
-                <td>@product.Description</td>
+                <td>@product.UnitPrice</td>
                 <td>
                     <Button Color="Color.Primary" Size="Size.Small">
                         <Icon Name="IconName.Edit" />
                         Edit
                     </Button>
-                    <Button Color="Color.Danger" Size="Size.Small" Clicked="@(async () => await Delete(category))">
+                    <Button Color="Color.Danger" Size="Size.Small" Clicked="@(async () => await Delete(product))">
                         <Icon Name="IconName.Delete" />
                         Delete
                     </Button>
@@ -59,7 +59,7 @@
         child.ShowModal();
     }
 
-    IEnumerable<ProductModel> product;
+    IEnumerable<ProductModel> products;
     int order = 0;
     protected override async Task OnInitializedAsync()
     {
@@ -68,17 +68,17 @@
         //order = categories.Count();
     }
 
-    async Task Delete(ProductModel products)
+    async Task Delete(ProductModel model)
     {
-        if (!await JsRuntime.InvokeAsync<bool>("confirm", $"Are you sure you want to delete the category '{category.Name}'?"))
+        if (!await JsRuntime.InvokeAsync<bool>("confirm", $"Are you sure you want to delete the production '{model.Name}'?"))
             return;
 
-        await productService.DeleteAsync(products);
+        await productService.DeleteAsync(model);
         var result = await productService.SaveChangesAsync();
         if (result > 0)
         {
             //nothing
-            product = await productService.GetAllAsync();
+            products = await productService.GetAllAsync();
         }
     }
 

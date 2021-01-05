@@ -40,7 +40,7 @@ namespace Infrastructure.Services
 
         public async Task<IEnumerable<ProductModel>> GetAllAsync()
         {
-            var entities = _unitOfWork.ProductRepository.GetAll();
+            var entities = await _unitOfWork.ProductRepository.GetAllAsync();
             return _mapper.Map<IEnumerable<ProductModel>>(entities);
         }
 
