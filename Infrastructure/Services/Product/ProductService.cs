@@ -2,8 +2,10 @@
 using Infrastructure.Database;
 using Infrastructure.Entities;
 using Infrastructure.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -25,6 +27,7 @@ namespace Infrastructure.Services
         {
             var entity = _mapper.Map<Product>(model);
             await _unitOfWork.ProductRepository.AddAsync(entity);
+            SaveChanges();
         }
 
         public Task AddRangeAsync(IEnumerable<ProductModel> models)
@@ -34,13 +37,19 @@ namespace Infrastructure.Services
 
         public async Task DeleteAsync(ProductModel model)
         {
-            var entity = await _unitOfWork.ProductRepository.GetByIdAsync(model.Id);
+            var entity = await _unitOfWork.ProductRepository.FindByCondition(cat => cat.Id.Equals(model.Id)).FirstOrDefaultAsync();
             _unitOfWork.ProductRepository.Delete(entity);
         }
 
         public async Task<IEnumerable<ProductModel>> GetAllAsync()
         {
             var entities = await _unitOfWork.ProductRepository.GetAllAsync();
+            return _mapper.Map<IEnumerable<ProductModel>>(entities);
+        }
+
+        public IEnumerable<ProductModel> GetAll()
+        {
+            var entities = _unitOfWork.ProductRepository.GetAll();
             return _mapper.Map<IEnumerable<ProductModel>>(entities);
         }
 
@@ -64,5 +73,20 @@ namespace Infrastructure.Services
         {
             return await _unitOfWork.SaveChangesAsync();
         }
+
+        public void Update(string id, ProductModel model)
+        {
+            if (!string.IsNullOrWhiteSpace(id))
+            {
+                var originEntity = _unitOfWork.ProductRepository.FindByCondition(cat => cat.Id.Equals(model.Id)).FirstOrDefault();
+                var entityUpdate = _mapper.Map(model, originEntity);
+                entityUpdate.Id = model.Id;
+                _unitOfWork.ProductRepository.Update(entityUpdate);
+                SaveChanges();
+                _unitOfWork.ProductRepository.Detach(entityUpdate);
+            }
+
+        }
+
     }
 }
