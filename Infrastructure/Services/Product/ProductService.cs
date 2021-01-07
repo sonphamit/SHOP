@@ -25,7 +25,9 @@ namespace Infrastructure.Services
 
         public async Task AddAsync(ProductModel model)
         {
+            model.CategoryId = model.Category.Id;
             var entity = _mapper.Map<Product>(model);
+            //vr cat = _unitOfWork.CategoryRepository.GetByIdAsync(model.Category.Id);
             await _unitOfWork.ProductRepository.AddAsync(entity);
             SaveChanges();
         }
@@ -43,7 +45,7 @@ namespace Infrastructure.Services
 
         public async Task<IEnumerable<ProductModel>> GetAllAsync()
         {
-            var entities = await _unitOfWork.ProductRepository.GetAllAsync();
+            var entities = await _unitOfWork.ProductRepository.DbSet.Include(item => item.Category).ToListAsync();
             return _mapper.Map<IEnumerable<ProductModel>>(entities);
         }
 
@@ -87,6 +89,23 @@ namespace Infrastructure.Services
             }
 
         }
+        public async Task<bool> UpdateAsync(string id, ProductModel model)
+        {
+            if (!string.IsNullOrWhiteSpace(id))
+            {
+                var originEntity = _unitOfWork.ProductRepository.FindByCondition(cat => cat.Id.Equals(model.Id)).FirstOrDefault();
+                var entityUpdate = _mapper.Map(model, originEntity);
+                entityUpdate.Id = model.Id;
+                _unitOfWork.ProductRepository.Update(entityUpdate);
+                await SaveChangesAsync();
+                _unitOfWork.ProductRepository.Detach(entityUpdate);
+                return true;
+            }
+            return false;
+        }
+
+
+
 
     }
 }
