@@ -1,5 +1,4 @@
-﻿@using Microsoft.Extensions.DependencyInjection
-@inherits OwningComponentBase
+﻿@inject IRoleService service
 
 <Modal @ref="modalRef">
     <ModalBackdrop />
@@ -26,9 +25,9 @@
 
 @code {
     //inject services
-    private IRoleService service { get; set; }
 
-    [Parameter] public EventCallback OnSaveChange { get; set; }
+    [Parameter]
+    public EventCallback OnSaveChange { get; set; }
 
     // reference to the modal component
     public Modal modalRef;
@@ -37,7 +36,6 @@
     RoleModel model;
     protected override void OnInitialized()
     {
-        service = ScopedServices.GetRequiredService<IRoleService>();
         model = new RoleModel();
     }
 

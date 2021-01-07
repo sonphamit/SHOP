@@ -36,6 +36,19 @@
         <BarItem>
             <BarDropdown>
                 <BarDropdownToggle>
+                    <BarIcon IconName="IconName.Store" />
+                    Product
+                </BarDropdownToggle>
+                <BarDropdownMenu>
+                    <BarDropdownItem To="/product">
+                        Product List
+                    </BarDropdownItem>
+                </BarDropdownMenu>
+            </BarDropdown>
+        </BarItem>
+        <BarItem>
+            <BarDropdown>
+                <BarDropdownToggle>
                     <BarIcon IconName="IconName.ShoppingCart" />
                     Order Management
                 </BarDropdownToggle>
@@ -55,9 +68,6 @@
                 <BarDropdownMenu>
                     <BarDropdownItem To="category">
                         Category
-                    </BarDropdownItem>
-                    <BarDropdownItem To="product">
-                        Product
                     </BarDropdownItem>
                     <BarDropdownItem To="shipper">
                         Shipper
