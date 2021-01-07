@@ -1,11 +1,11 @@
-﻿@page "/category"
-@inject ICategoryService categoryService
-@inject IJSRuntime JsRuntime
+﻿@page "/role"
+@using Microsoft.Extensions.DependencyInjection
+@inherits OwningComponentBase
 
 <div class="row mb-4 mt-4">
     <div class="col-10">
-        <h3 class="mr-5">Category</h3>
-        <EditCategory @ref="child" OnSaveChange="@(async () => await GetAllAsync())" />
+        <h3 class="mr-5">Role</h3>
+        <RoleDetail @ref="child" OnSaveChange="@(async () => await GetAllRoleAsync())" />
         <Button Color="Color.Primary" Size="Size.Medium" Clicked="@AddModal">
             <Icon Name="IconName.Add" />
             Add
@@ -17,27 +17,27 @@
 </div>
 
 
-
-
 <table class="table table-striped table-bordered table-hover">
     <thead>
         <tr>
             <th>No.</th>
             <th>Name</th>
-            <th>Description</th>
             <th>Actions</th>
         </tr>
     </thead>
     <tbody>
-        @if (categories != null)
+        @if (roles != null)
         {
-            @foreach (var item in categories.Select((value, index) => new { value, index }))
+            @foreach (var item in roles.Select((value, index) => new { value, index }))
             {
                 <tr>
                     <td>@(item.index+1)</td>
                     <td>@item.value.Name</td>
-                    <td>@item.value.Description</td>
                     <td>
+                        <Button Color="Color.Primary" Size="Size.Small" Clicked="@(() => EditModal(item.value))">
+                            <Icon Name="@("users-cog")" />
+                            Configuration
+                        </Button>
                         <Button Color="Color.Primary" Size="Size.Small" Clicked="@(() => EditModal(item.value))">
                             <Icon Name="IconName.Edit" />
                             Edit
@@ -56,44 +56,46 @@
 
 
 @code {
+    //inject services
+    private IJSRuntime JsRuntime { get; set; }
+    private IRoleService service { get; set; }
 
-    EditCategory child;
+    RoleDetail child;
     void AddModal()
     {
         child.AddModal();
     }
 
-    void EditModal(CategoryModel model)
+    void EditModal(RoleModel model)
     {
         child.EditModal(model);
     }
 
-    public IEnumerable<CategoryModel> categories;
+    public IEnumerable<RoleModel> roles;
     int total = 0;
     protected override async Task OnInitializedAsync()
     {
-        //categories = new List<CategoryModel>();
-        await GetAllAsync();
+        service = ScopedServices.GetRequiredService<IRoleService>();
+        JsRuntime = ScopedServices.GetRequiredService<IJSRuntime>();
+        await GetAllRoleAsync();
 
     }
 
-    async Task Delete(CategoryModel category)
+    async Task Delete(RoleModel model)
     {
-        if (!await JsRuntime.InvokeAsync<bool>("confirm", $"Are you sure you want to delete the category '{category.Name}'?"))
+        if (!await JsRuntime.InvokeAsync<bool>("confirm", $"Are you sure you want to delete the category '{model.Name}'?"))
         {
             return;
         }
 
-
-        await categoryService.DeleteAsync(category);
-        await categoryService.SaveChangesAsync();
-        categories = await categoryService.GetAllAsync();
+        await service.DeleteAsync(model.Id);
+        roles = await service.GetAllRoleAsync();
     }
 
-    public async Task GetAllAsync()
+    public async Task GetAllRoleAsync()
     {
-        categories = await categoryService.GetAllAsync();
-        total = categories.Count();
+        roles = await service.GetAllRoleAsync();
+        total = roles.Count();
     }
 
 }

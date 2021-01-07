@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Infrastructure.Entities;
 using Infrastructure.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace Infrastructure.Mappings
 {
@@ -8,10 +9,13 @@ namespace Infrastructure.Mappings
     {
         public MappingProfile()
         {
-            //CreateMap<CustomerPayment, CustomerPaymentFullModel>()
-            //   .ForMember(x => x.CardTypeName, opt => opt.MapFrom(y => EnumHelper.GetDescription(y.CardType)));
+
+            CreateMap<IdentityRole, RoleModel>();
+            CreateMap<RoleModel, IdentityRole>().ForMember(x => x.Id, opt => opt.Ignore());
+
+
             CreateMap<Category, CategoryModel>();
-            CreateMap<CategoryModel, Category> ().ForMember(x => x.Id, opt => opt.Ignore());
+            CreateMap<CategoryModel, Category>().ForMember(x => x.Id, opt => opt.Ignore());
 
             CreateMap<User, UserModel>();
             CreateMap<UserModel, User>();
@@ -20,6 +24,6 @@ namespace Infrastructure.Mappings
             CreateMap<ProductModel, Product>();
         }
 
-        
+
     }
 }

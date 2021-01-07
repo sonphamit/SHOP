@@ -14,6 +14,7 @@ using Blazorise.Icons.FontAwesome;
 using Infrastructure.Database;
 using Dashboard.Configuration;
 using Infrastructure.Services;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Dashboard
 {
@@ -45,11 +46,15 @@ namespace Dashboard
             string connectionString = Configuration.GetConnectionString("DbConnection");
             services.AddAppDatabase(connectionString);
 
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+            //services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+
+            //services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>(); ;
 
             services.AddRazorPages();
             services.AddServerSideBlazor();
+            
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddDatabaseDeveloperPageExceptionFilter();
 

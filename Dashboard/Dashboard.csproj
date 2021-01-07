@@ -29,6 +29,10 @@
 
   <ItemGroup>
     <Folder Include="Middlewares\" />
+    <Folder Include="Pages\Customer\" />
+    <Folder Include="Pages\Employee\" />
+    <Folder Include="Pages\User\" />
+    <Folder Include="Pages\Permission\" />
   </ItemGroup>
 
   <ItemGroup>
