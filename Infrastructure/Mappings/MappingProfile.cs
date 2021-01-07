@@ -21,7 +21,7 @@ namespace Infrastructure.Mappings
             CreateMap<UserModel, User>();
 
             CreateMap<Product, ProductModel>();
-            CreateMap<ProductModel, Product>();
+            CreateMap<ProductModel, Product>().ForMember(x => x.Id, opt => opt.Ignore());
         }
 
 

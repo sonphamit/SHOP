@@ -5,8 +5,8 @@
 <div class="row mb-4 mt-4">
     <div class="col-10">
         <h3 class="mr-5">Category</h3>
-        <EditProduct @ref="child" />
-        <Button Color="Color.Primary" Size="Size.Medium" Clicked="@(async () => await Add())">
+        <EditProduct @ref="child" OnSaveChange="@(async () => await GetAllAsync())"  />
+        <Button Color="Color.Primary" Size="Size.Medium" Clicked="@AddModal">
             <Icon Name="IconName.Add" />
             Add
         </Button>
@@ -16,38 +16,39 @@
     </div>
 </div>
 
-
-
-
 <table class="table table-striped table-bordered table-hover">
     <thead>
         <tr>
             <th>No.</th>
             <th>Name</th>
-            <th>Description</th>
-            <th>Actions</th>
+            <th>UnitPrice</th>
+            <th>UnitsInStock</th>
+            <th>UnitsOnOrder</th>
         </tr>
     </thead>
     <tbody>
-        @if(products != null){
-            @foreach (ProductModel product in products)
-            {
-                <tr>
-                    <td>@(++order)</td>
-                    <td>@product.Name</td>
-                    <td>@product.UnitPrice</td>
-                    <td>
-                        <Button Color="Color.Primary" Size="Size.Small">
-                            <Icon Name="IconName.Edit" />
-                            Edit
-                        </Button>
-                        <Button Color="Color.Danger" Size="Size.Small" Clicked="@(async () => await Delete(product))">
-                            <Icon Name="IconName.Delete" />
-                            Delete
-                        </Button>
-                    </td>
-                </tr>
-            }
+        @if (products != null)
+        {
+            @foreach (var item in products.Select((value, index) => new { value, index }))
+                {
+        <tr>
+            <td>@(item.index + 1)</td>
+            <td>@item.value.Name</td>
+            <td>@item.value.UnitPrice</td>
+            @*<td>@item.value.UnitsInStock</td>*@
+            @*<td>@item.value.UnitsOnOrder</td>*@
+            <td>
+                <Button Color="Color.Primary" Size="Size.Small" Clicked="@(() => EditModal(item.value))">
+                    <Icon Name="IconName.Edit" />
+                    Edit
+                </Button>
+                <Button Color="Color.Danger" Size="Size.Small" Clicked="@(async () => await Delete(item.value))">
+                    <Icon Name="IconName.Delete" />
+                    Delete
+                </Button>
+            </td>
+        </tr>
+                }
         }
     </tbody>
 </table>
@@ -56,37 +57,42 @@
 @code {
 
     EditProduct child;
-    void ShowModal()
+    void AddModal()
     {
-        child.ShowModal();
+        child.AddModal();
     }
 
-    IEnumerable<ProductModel> products;
-    int order = 0;
+    void EditModal(ProductModel model)
+    {
+        child.EditModal(model);
+    }
+
+    public IEnumerable<ProductModel> products;
+    int total = 0;
     protected override async Task OnInitializedAsync()
     {
         //categories = new List<CategoryModel>();
-        products = await productService.GetAllAsync();
-        //order = categories.Count();
+        await GetAllAsync();
+
     }
 
-    async Task Delete(ProductModel model)
+    async Task Delete(ProductModel category)
     {
-        if (!await JsRuntime.InvokeAsync<bool>("confirm", $"Are you sure you want to delete the production '{model.Name}'?"))
-            return;
-
-        await productService.DeleteAsync(model);
-        var result = await productService.SaveChangesAsync();
-        if (result > 0)
+        if (!await JsRuntime.InvokeAsync<bool>("confirm", $"Are you sure you want to delete the category '{category.Name}'?"))
         {
-            //nothing
-            products = await productService.GetAllAsync();
+            return;
         }
+
+
+        await productService.DeleteAsync(category);
+        await productService.SaveChangesAsync();
+        products = await productService.GetAllAsync();
     }
 
-    async Task Add()
+    public async Task GetAllAsync()
     {
-
+        products = await productService.GetAllAsync();
+        total = products.Count();
     }
 
 }

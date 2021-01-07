@@ -1,6 +1,7 @@
 ﻿using Infrastructure.Entities;
 using Infrastructure.Mappings;
 
+
 namespace Infrastructure.Models
 {
     public class ProductModel : IMapFrom<Product>
@@ -14,5 +15,18 @@ namespace Infrastructure.Models
         public int UnitsOnOrder { get; set; }
         public virtual CategoryModel Category { get; set; }
         public virtual SupplierModel Supplier { get; set; }
+    
+    }
+    public class ProductAddModel : IMapFrom<Product>
+    {
+        public string Name { get; set; }
+        public string SupplierId { get; set; }
+        public string CategoryId { get; set; }
+        public decimal UnitPrice { get; set; }
+        public int UnitsInStock { get; set; }
+        public int UnitsOnOrder { get; set; }
+        public virtual CategoryModel Category { get; set; }
+        public virtual SupplierModel Supplier { get; set; }
+
     }
 }
