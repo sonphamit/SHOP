@@ -80,7 +80,7 @@
 
     async Task Delete(ProductModel model)
     {
-        if (!await JsRuntime.InvokeAsync<bool>("confirm", $"Are you sure you want to delete the product '{model.Name}'?"))
+        if (!await JsRuntime.InvokeAsync<bool>("confirm", $"Are you sure you want to delete '{model.Name}'?"))
         {
             return;
         }

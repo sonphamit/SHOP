@@ -1,4 +1,4 @@
-﻿@inject ICategoryService categoryService
+﻿@inject ISupplierService service
 
 <Modal @ref="modalRef">
     <ModalBackdrop />
@@ -11,11 +11,7 @@
             <ModalBody>
                 <Field>
                     <FieldLabel>Name</FieldLabel>
-                    <TextEdit Placeholder="Enter name..." @bind-Text="model.Name" />
-                </Field>
-                <Field>
-                    <FieldLabel>Desciption</FieldLabel>
-                    <MemoEdit Rows="5" Placeholder="Enter desciption..." @bind-Text="model.Description" />
+                    <TextEdit Placeholder="Enter name..." @bind-Text="model.CompanyName" />
                 </Field>
             </ModalBody>
             <ModalFooter>
@@ -34,21 +30,21 @@
     public Modal modalRef;
     public string modalTitle = "";
 
-    CategoryModel model;
+    SupplierModel model;
     protected override void OnInitialized()
     {
-        model = new CategoryModel();
+        model = new SupplierModel();
     }
 
     private void SaveChange()
     {
         if (String.IsNullOrWhiteSpace(model.Id))
         {
-            categoryService.AddAsync(model);
+            service.AddAsync(model);
         }
         else
         {
-            categoryService.Update(model.Id, model);
+            service.Update(model.Id, model);
         }
 
         OnSaveChange.InvokeAsync();
@@ -59,14 +55,14 @@
 
     public void AddModal()
     {
-        model = new CategoryModel();
-        modalTitle = "Add Category";
+        model = new SupplierModel();
+        modalTitle = "Add Supplier";
         modalRef.Show();
     }
 
-    public void EditModal(CategoryModel model)
+    public void EditModal(SupplierModel model)
     {
-        modalTitle = "Edit Category";
+        modalTitle = "Edit Supplier";
         this.model = model;
         modalRef.Show();
     }
