@@ -1,4 +1,4 @@
-﻿@inject ICategoryService categoryService
+﻿@inject IShipperService service
 
 <Modal @ref="modalRef">
     <ModalBackdrop />
@@ -10,12 +10,24 @@
             </ModalHeader>
             <ModalBody>
                 <Field>
-                    <FieldLabel>Name</FieldLabel>
-                    <TextEdit Placeholder="Enter name..." @bind-Text="model.Name" />
+                    <FieldLabel>Full Name</FieldLabel>
+                    <TextEdit Placeholder="Enter Full Name..." @bind-Text="model.ShipperName" />
                 </Field>
                 <Field>
-                    <FieldLabel>Desciption</FieldLabel>
-                    <MemoEdit Rows="5" Placeholder="Enter desciption..." @bind-Text="model.Description" />
+                    <FieldLabel>Phone</FieldLabel>
+                    <TextEdit Rows="5" Placeholder="Enter Phone..." @bind-Text="model.ShipperPhone" />
+                </Field>
+                <Field>
+                    <FieldLabel>Delivery Company</FieldLabel>
+                    <Select TValue="DeliveryCompany" Multiple="false" @bind-SelectedValue="model.Company" >
+                        @if (CompanyList != null)
+                        {
+                            @foreach (var item in CompanyList)
+                            {
+                                <SelectItem Value="@item.Key">@item.Value</SelectItem>
+                            }
+                        }
+                    </Select>
                 </Field>
             </ModalBody>
             <ModalFooter>
@@ -28,27 +40,32 @@
 
 
 @code {
-    [Parameter] public EventCallback OnSaveChange { get; set; }
+    [Parameter]
+    public EventCallback OnSaveChange { get; set; }
 
     // reference to the modal component
     public Modal modalRef;
     public string modalTitle = "";
 
-    CategoryModel model;
+    ShipperModel model;
+
+    List<KeyValuePair<DeliveryCompany, string>> CompanyList;
+
     protected override void OnInitialized()
     {
-        model = new CategoryModel();
+        model = new ShipperModel();
+        GetAllDeliverCompany();
     }
 
     private void SaveChange()
     {
         if (String.IsNullOrWhiteSpace(model.Id))
         {
-            categoryService.AddAsync(model);
+            service.AddAsync(model);
         }
         else
         {
-            categoryService.Update(model.Id, model);
+            service.Update(model.Id, model);
         }
 
         OnSaveChange.InvokeAsync();
@@ -59,14 +76,14 @@
 
     public void AddModal()
     {
-        model = new CategoryModel();
-        modalTitle = "Add Category";
+        model = new ShipperModel();
+        modalTitle = "Add Shipper";
         modalRef.Show();
     }
 
-    public void EditModal(CategoryModel model)
+    public void EditModal(ShipperModel model)
     {
-        modalTitle = "Edit Category";
+        modalTitle = "Edit Shipper";
         this.model = model;
         modalRef.Show();
     }
@@ -74,6 +91,16 @@
     public void HideModal()
     {
         modalRef.Hide();
+    }
+
+    public void GetAllDeliverCompany()
+    {
+        CompanyList = EnumHelper.GetEnumAndDescriptions<DeliveryCompany>();
+    }
+
+    public void DeliveryCompanyChange()
+    {
+
     }
 
 }

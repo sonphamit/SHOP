@@ -1,4 +1,4 @@
-﻿using Shared.Entities;
+﻿using SharedCore.Entities;
 using System.Collections.Generic;
 
 namespace Infrastructure.Entities

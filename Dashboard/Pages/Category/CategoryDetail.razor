@@ -1,4 +1,4 @@
-﻿@inject ICategoryService categoryService
+﻿@inject ICategoryService service
 
 <Modal @ref="modalRef">
     <ModalBackdrop />
@@ -44,11 +44,11 @@
     {
         if (String.IsNullOrWhiteSpace(model.Id))
         {
-            categoryService.AddAsync(model);
+            service.AddAsync(model);
         }
         else
         {
-            categoryService.Update(model.Id, model);
+            service.Update(model.Id, model);
         }
 
         OnSaveChange.InvokeAsync();

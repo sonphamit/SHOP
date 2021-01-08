@@ -1,5 +1,5 @@
 ﻿@page "/categories"
-@inject ICategoryService categoryService
+@inject ICategoryService service
 @inject IJSRuntime JsRuntime
 
 <div class="row mb-4 mt-4">
@@ -29,9 +29,9 @@
         </tr>
     </thead>
     <tbody>
-        @if (categories != null)
+        @if (data != null)
         {
-            @foreach (var item in categories.Select((value, index) => new { value, index }))
+            @foreach (var item in data.Select((value, index) => new { value, index }))
             {
                 <tr>
                     <td>@(item.index+1)</td>
@@ -68,32 +68,30 @@
         child.EditModal(model);
     }
 
-    public IEnumerable<CategoryModel> categories;
+    public IEnumerable<CategoryModel> data;
     int total = 0;
     protected override async Task OnInitializedAsync()
     {
-        //categories = new List<CategoryModel>();
         await GetAllAsync();
-
     }
 
-    async Task Delete(CategoryModel category)
+    async Task Delete(CategoryModel model)
     {
-        if (!await JsRuntime.InvokeAsync<bool>("confirm", $"Are you sure you want to delete the category '{category.Name}'?"))
+        if (!await JsRuntime.InvokeAsync<bool>("confirm", $"Are you sure you want to delete '{model.Name}'?"))
         {
             return;
         }
 
 
-        await categoryService.DeleteAsync(category);
-        await categoryService.SaveChangesAsync();
-        categories = await categoryService.GetAllAsync();
+        await service.DeleteAsync(model);
+        await service.SaveChangesAsync();
+        data = await service.GetAllAsync();
     }
 
     public async Task GetAllAsync()
     {
-        categories = await categoryService.GetAllAsync();
-        total = categories.Count();
+        data = await service.GetAllAsync();
+        total = data.Count();
     }
 
 }

@@ -1,5 +1,5 @@
-﻿using Shared.Entities;
-using Infrastructure.Enums;
+﻿using Infrastructure.Enums;
+using SharedCore.Entities;
 using System.Collections.Generic;
 
 namespace Infrastructure.Entities

@@ -1,8 +1,8 @@
-﻿using Shared.Entities;
-using Infrastructure.Enums;
+﻿using Infrastructure.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using SharedCore.Entities;
 
 namespace Infrastructure.Entities
 {

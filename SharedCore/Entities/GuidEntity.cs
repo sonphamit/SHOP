@@ -1,8 +1,8 @@
-﻿using Shared.Helpers;
+﻿using SharedCore.Helpers;
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Shared.Entities
+namespace SharedCore.Entities
 {
     public interface IBaseEntity
     {

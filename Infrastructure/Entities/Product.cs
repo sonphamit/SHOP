@@ -1,4 +1,4 @@
-﻿using Shared.Entities;
+﻿using SharedCore.Entities;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Infrastructure.Entities

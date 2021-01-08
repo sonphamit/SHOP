@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Shared.Helpers
+namespace SharedCore.Helpers
 {
     public static class CommonHelper
     {

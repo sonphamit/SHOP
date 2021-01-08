@@ -1,4 +1,5 @@
-﻿using Shared.Entities;
+﻿
+using SharedCore.Entities;
 
 namespace Infrastructure.Entities
 {

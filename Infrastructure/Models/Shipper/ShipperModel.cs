@@ -5,6 +5,7 @@ namespace Infrastructure.Models
 {
     public class ShipperModel
     {
+        public string Id { get; set; }
         public string ShipperName { get; set; }
         public string ShipperPhone { get; set; }
         public DeliveryCompany Company { get; set; }
