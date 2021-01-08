@@ -1,9 +1,6 @@
-﻿using Infrastructure.Entities;
-using Infrastructure.Mappings;
-
-namespace Infrastructure.Models
+﻿namespace Infrastructure.Models
 {
-    public class OrderDetailModel : IMapFrom<OrderDetail>
+    public class OrderDetailModel
     {
         public string OrderId { get; set; }
         public string ProductId { get; set; }

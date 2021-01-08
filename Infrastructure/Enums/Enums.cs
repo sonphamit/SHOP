@@ -1,22 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Infrastructure.Enums
 {
     public enum OrderStatus
     {
-        ORDERED,
-        APPROVED
+        [Display(Name = "Đã đặt hàng")]
+        ORDERED = 1,
+        [Display(Name = "Duyệt đơn")]
+        APPROVED = 2,
+        [Display(Name = "Shipper đã nhận hàng")]
+        SHIPMENT_PICKED_UP = 3,
+        [Display(Name = "Đang giao hàng")]
+        SHIPPING = 4,
+        [Display(Name = "Đã giao")]
+        DELIVERRED = 5
     }
 
-    public enum Company
+    public enum OrderPaymentStatus
     {
-        GIAO_HANG_NHANH,
-        GIAO_HANG_TIET_KIEM,
-        VIETTEL_POST,
-        VN_POST
+        PAID,
+        UNPAID_PAID,
+    }
+
+    public enum DeliveryCompany
+    {
+        [Display(Name = "Giao Hàng Nhanh")]
+        GIAO_HANG_NHANH = 1,
+        [Display(Name = "Giao Hàng Tiết Kiệm")]
+        GIAO_HANG_TIET_KIEM = 2,
+        [Display(Name = "Viettel Post")]
+        VIETTEL_POST = 3,
+        [Display(Name = "VIETNAM Post")]
+        VN_POST = 4,
+        [Display(Name = "DHL Express")]
+        DHL_EXPRESS = 5
     }
 }

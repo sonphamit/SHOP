@@ -1,9 +1,6 @@
-﻿using Infrastructure.Entities;
-using Infrastructure.Mappings;
-
-namespace Infrastructure.Models
+﻿namespace Infrastructure.Models
 {
-    public class SupplierModel : IMapFrom<Supplier>
+    public class SupplierModel
     {
         public string CompanyName { get; set; }
     }

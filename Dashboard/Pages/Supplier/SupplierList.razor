@@ -1,11 +1,11 @@
-﻿@page "/categories"
+﻿@page "/suppliers"
 @inject ICategoryService categoryService
 @inject IJSRuntime JsRuntime
 
 <div class="row mb-4 mt-4">
     <div class="col-10">
         <h3 class="mr-5">Category</h3>
-        <CategoryDetail @ref="child" OnSaveChange="@(async () => await GetAllAsync())" />
+        <SupplierDetail @ref="child" OnSaveChange="@(async () => await GetAllAsync())" />
         <Button Color="Color.Primary" Size="Size.Medium" Clicked="@AddModal">
             <Icon Name="IconName.Add" />
             Add
@@ -57,7 +57,7 @@
 
 @code {
 
-    CategoryDetail child;
+    SupplierDetail child;
     void AddModal()
     {
         child.AddModal();

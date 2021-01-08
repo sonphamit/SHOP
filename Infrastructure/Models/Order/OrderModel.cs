@@ -1,12 +1,10 @@
-﻿using Infrastructure.Entities;
-using Infrastructure.Enums;
-using Infrastructure.Mappings;
+﻿using Infrastructure.Enums;
 using System;
 using System.Collections.Generic;
 
 namespace Infrastructure.Models
 {
-    public class OrderModel : IMapFrom<Order>
+    public class OrderModel
     {
         public string Id { get; set; }
         public string CustomerId { get; set; }

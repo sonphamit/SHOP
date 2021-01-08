@@ -10,24 +10,24 @@
         <BarItem>
             <BarDropdown @bind-Visible="uiElementsVisible">
                 <BarDropdownToggle>
-                    <BarIcon IconName="IconName.Wrench" />
-                    Account Setting
+                    <BarIcon IconName="@("fa-users-cog")" />
+                    Account Settings
                 </BarDropdownToggle>
                 <BarDropdownMenu>
-                    <BarDropdownItem To="/user">
-                        User
+                    <BarDropdownItem To="/users">
+                        Users
                     </BarDropdownItem>
-                    <BarDropdownItem To="/customer">
-                        Customer
+                    <BarDropdownItem To="/customers">
+                        Customers
                     </BarDropdownItem>
-                    <BarDropdownItem To="/employee">
-                        Employee
+                    <BarDropdownItem To="/employees">
+                        Employees
                     </BarDropdownItem>
-                    <BarDropdownItem To="/role">
-                        Role
+                    <BarDropdownItem To="/roles">
+                        Roles
                     </BarDropdownItem>
-                    <BarDropdownItem To="/permission">
-                        Permission
+                    <BarDropdownItem To="/permissions">
+                        Permissions
                     </BarDropdownItem>
 
                 </BarDropdownMenu>
@@ -37,10 +37,10 @@
             <BarDropdown>
                 <BarDropdownToggle>
                     <BarIcon IconName="@("fa-dolly-flatbed")" />
-                    Product
+                    Products
                 </BarDropdownToggle>
                 <BarDropdownMenu>
-                    <BarDropdownItem To="/product">
+                    <BarDropdownItem To="/products">
                         Product List
                     </BarDropdownItem>
                 </BarDropdownMenu>
@@ -53,8 +53,8 @@
                     Order Management
                 </BarDropdownToggle>
                 <BarDropdownMenu>
-                    <BarDropdownItem To="/order">
-                        Order
+                    <BarDropdownItem To="/orders">
+                        Orders
                     </BarDropdownItem>
                 </BarDropdownMenu>
             </BarDropdown>
@@ -66,14 +66,14 @@
                     List Management
                 </BarDropdownToggle>
                 <BarDropdownMenu>
-                    <BarDropdownItem To="category">
-                        Category
+                    <BarDropdownItem To="categories">
+                        Categories
                     </BarDropdownItem>
-                    <BarDropdownItem To="shipper">
-                        Shipper
+                    <BarDropdownItem To="shippers">
+                        Shippers
                     </BarDropdownItem>
-                    <BarDropdownItem To="/supplier">
-                        Supplier
+                    <BarDropdownItem To="/suppliers">
+                        Suppliers
                     </BarDropdownItem>
                 </BarDropdownMenu>
             </BarDropdown>
@@ -82,10 +82,10 @@
             <BarDropdown>
                 <BarDropdownToggle>
                     <BarIcon IconName="IconName.FilePdf" />
-                    Report
+                    Reports
                 </BarDropdownToggle>
                 <BarDropdownMenu>
-                    <BarDropdownItem To="/report">
+                    <BarDropdownItem To="/order-report">
                         Order Report
                     </BarDropdownItem>
                 </BarDropdownMenu>

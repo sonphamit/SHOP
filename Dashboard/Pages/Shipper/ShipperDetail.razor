@@ -1,0 +1,79 @@
+﻿@inject ICategoryService categoryService
+
+<Modal @ref="modalRef">
+    <ModalBackdrop />
+    <ModalContent IsCentered="true">
+        <form method="post">
+            <ModalHeader>
+                <ModalTitle>@modalTitle</ModalTitle>
+                <CloseButton Clicked="@HideModal" />
+            </ModalHeader>
+            <ModalBody>
+                <Field>
+                    <FieldLabel>Name</FieldLabel>
+                    <TextEdit Placeholder="Enter name..." @bind-Text="model.Name" />
+                </Field>
+                <Field>
+                    <FieldLabel>Desciption</FieldLabel>
+                    <MemoEdit Rows="5" Placeholder="Enter desciption..." @bind-Text="model.Description" />
+                </Field>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary" Clicked="@HideModal">Close</Button>
+                <Button Color="Color.Primary" Clicked="@SaveChange">Save Changes</Button>
+            </ModalFooter>
+        </form>
+    </ModalContent>
+</Modal>
+
+
+@code {
+    [Parameter] public EventCallback OnSaveChange { get; set; }
+
+    // reference to the modal component
+    public Modal modalRef;
+    public string modalTitle = "";
+
+    CategoryModel model;
+    protected override void OnInitialized()
+    {
+        model = new CategoryModel();
+    }
+
+    private void SaveChange()
+    {
+        if (String.IsNullOrWhiteSpace(model.Id))
+        {
+            categoryService.AddAsync(model);
+        }
+        else
+        {
+            categoryService.Update(model.Id, model);
+        }
+
+        OnSaveChange.InvokeAsync();
+
+        HideModal();
+
+    }
+
+    public void AddModal()
+    {
+        model = new CategoryModel();
+        modalTitle = "Add Category";
+        modalRef.Show();
+    }
+
+    public void EditModal(CategoryModel model)
+    {
+        modalTitle = "Edit Category";
+        this.model = model;
+        modalRef.Show();
+    }
+
+    public void HideModal()
+    {
+        modalRef.Hide();
+    }
+
+}

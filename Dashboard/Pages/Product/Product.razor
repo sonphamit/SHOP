@@ -1,10 +1,10 @@
-﻿@page "/product"
+﻿@page "/products"
 @inject IProductService productService
 @inject IJSRuntime JsRuntime
 
 <div class="row mb-4 mt-4">
     <div class="col-10">
-        <h3 class="mr-5">Category</h3>
+        <h3 class="mr-5">Product</h3>
         <EditProduct @ref="child" OnSaveChange="@(async () => await GetAllAsync())"  />
         <Button Color="Color.Primary" Size="Size.Medium" Clicked="@AddModal">
             <Icon Name="IconName.Add" />
@@ -73,19 +73,19 @@
     int total = 0;
     protected override async Task OnInitializedAsync()
     {
-        //categories = new List<CategoryModel>();
+
         await GetAllAsync();
 
     }
 
-    async Task Delete(ProductModel category)
+    async Task Delete(ProductModel model)
     {
-        if (!await JsRuntime.InvokeAsync<bool>("confirm", $"Are you sure you want to delete the category '{category.Name}'?"))
+        if (!await JsRuntime.InvokeAsync<bool>("confirm", $"Are you sure you want to delete the product '{model.Name}'?"))
         {
             return;
         }
 
-        await productService.DeleteAsync(category);
+        await productService.DeleteAsync(model);
         await productService.SaveChangesAsync();
         products = await productService.GetAllAsync();
     }

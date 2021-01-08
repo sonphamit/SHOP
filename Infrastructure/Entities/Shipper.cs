@@ -8,7 +8,7 @@ namespace Infrastructure.Entities
     {
         public string ShipperName { get; set; }
         public string ShipperPhone { get; set; }
-        public Company Company { get; set; }
+        public DeliveryCompany Company { get; set; }
         public virtual ICollection<Order> Orders { get; set; }
     }
 }

@@ -1,10 +1,6 @@
-﻿using Infrastructure.Entities;
-using Infrastructure.Mappings;
-
-
-namespace Infrastructure.Models
+﻿namespace Infrastructure.Models
 {
-    public class ProductModel : IMapFrom<Product>
+    public class ProductModel
     {
         public ProductModel()
         {
@@ -22,7 +18,7 @@ namespace Infrastructure.Models
         public SupplierModel Supplier { get; set; }
     
     }
-    public class ProductAddModel : IMapFrom<Product>
+    public class ProductAddModel
     {
         public string Name { get; set; }
         public string SupplierId { get; set; }
