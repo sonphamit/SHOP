@@ -14,40 +14,33 @@
                     <FieldLabel>Name</FieldLabel>
                     <TextEdit Placeholder="Enter name..." @bind-Text="model.Name" />
                 </Field>
-                @*<Field>
-                        <FieldLabel>UnitPrice</FieldLabel>
-                        <MemoEdit Rows="5" Placeholder="Enter Unit Price" @bind-Text="model.UnitPrice.ToString()"  />
-                    </Field>
-                    <Field>
-                        <FieldLabel>UnitsInStock</FieldLabel>
-                        <MemoEdit Rows="5" Placeholder="Enter Unit In Stock..." @bind-Text="model.UnitsInStock.ToString()" />
-                    </Field>
-                    <Field>
-                        <FieldLabel>UnitsOnOrder</FieldLabel>
-                        <MemoEdit Rows="5" Placeholder="Enter UnitsOnOrder..." @bind-Text="model.UnitsOnOrder.ToString()" />
-                    </Field>*@
                 <Field>
                     <FieldLabel>UnitPrice</FieldLabel>
-                    <Dropdown @bind-Text="model.Category">
-                        <DropdownToggle Color="Color.Primary">
-                            Dropdown
-                        </DropdownToggle>
-                        <DropdownMenu>
-                            @if (categories != null)
+                    <NumericEdit Placeholder="Enter Unit Price" @bind-Value="model.UnitPrice" />
+                </Field>
+                <Field>
+                    <FieldLabel>UnitsInStock</FieldLabel>
+                    <NumericEdit Placeholder="Enter Unit Price" @bind-Value="model.UnitsInStock" />
+                </Field>
+                <Field>
+                    <FieldLabel>Category</FieldLabel>
+                    <Select TValue="string" Multiple="false" @bind-SelectedValue="model.Category.Id">
+                        @if (categories != null)
+                        {
+                            @foreach (var item in categories)
                             {
-                                @foreach (var item in categories)
-                                {
-                                    <DropdownItem Value="1">@item.Name</DropdownItem>
-                                    <DropdownDivider />
-                                }
+                                <SelectItem Value="@item.Id">@item.Name</SelectItem>
                             }
-                         </DropdownMenu>
-                    </Dropdown>
+                        }
+                    </Select>
+                </Field>
+                <Field>
+                    <FileEdit Filter="image/jpeg, image/png, image/gif" />
                 </Field>
             </ModalBody>
             <ModalFooter>
                 <Button Color="Color.Secondary" Clicked="@HideModal">Close</Button>
-                <Button Color="Color.Primary" Clicked="@SaveChange">Save Changes</Button>
+                <Button Color="Color.Primary" Clicked="@(async () => await SaveChangeAsync())">Save Changes</Button>
             </ModalFooter>
         </form>
     </ModalContent>
@@ -63,36 +56,40 @@
 
     ProductModel model;
 
-
     public IEnumerable<CategoryModel> categories;
     int total = 0;
     protected override async Task OnInitializedAsync()
     {
         //categories = new List<CategoryModel>();
         await GetAllAsync();
-
     }
+
     protected override void OnInitialized()
     {
         model = new ProductModel();
     }
 
-    private void SaveChange()
+    private async Task SaveChangeAsync()
     {
         if (String.IsNullOrWhiteSpace(model.Id))
         {
-            productService.AddAsync(model);
+            await productService.AddAsync(model);
+            await OnSaveChange.InvokeAsync();
         }
         else
         {
-            productService.Update(model.Id, model);
+            var a = await productService.UpdateAsync(model.Id, model);
+            if (a)
+            {
+                await OnSaveChange.InvokeAsync();
+            }
         }
-
-        OnSaveChange.InvokeAsync();
 
         HideModal();
 
     }
+
+
 
     public void AddModal()
     {

@@ -11,6 +11,7 @@ namespace Infrastructure.Services
     {
         Task AddAsync(ProductModel model);
         void Update(string id, ProductModel model);
+        Task<bool> UpdateAsync(string id, ProductModel model);
         Task AddRangeAsync(IEnumerable<ProductModel> models);
         Task<IEnumerable<ProductModel>> GetAllAsync();
         IEnumerable<ProductModel> GetAll();
