@@ -25,11 +25,11 @@ namespace Infrastructure.Services
 
         public async Task AddAsync(ProductModel model)
         {
-            model.CategoryId = model.Category.Id;
+            //model.CategoryId = model.Category.Id;
             var entity = _mapper.Map<Product>(model);
-            //vr cat = _unitOfWork.CategoryRepository.GetByIdAsync(model.Category.Id);
             await _unitOfWork.ProductRepository.AddAsync(entity);
             SaveChanges();
+            _unitOfWork.ProductRepository.Detach(entity);
         }
 
         public Task AddRangeAsync(IEnumerable<ProductModel> models)
@@ -45,7 +45,7 @@ namespace Infrastructure.Services
 
         public async Task<IEnumerable<ProductModel>> GetAllAsync()
         {
-            var entities = await _unitOfWork.ProductRepository.DbSet.Include(item => item.Category).ToListAsync();
+            var entities = await _unitOfWork.ProductRepository.DbSet.Include(item => item.Category).AsNoTracking().ToListAsync();
             return _mapper.Map<IEnumerable<ProductModel>>(entities);
         }
 

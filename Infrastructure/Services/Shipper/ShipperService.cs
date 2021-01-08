@@ -25,6 +25,7 @@ namespace Infrastructure.Services
             var entity = _mapper.Map<Shipper>(model);
             await _unitOfWork.ShipperRepository.AddAsync(entity);
             SaveChanges();
+            _unitOfWork.ShipperRepository.Detach(entity);
         }
 
         public async Task DeleteAsync(ShipperModel model)

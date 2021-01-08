@@ -37,7 +37,7 @@
             <td>@item.value.UnitPrice</td>
             <td>@item.value.UnitsInStock</td>
             <td>@item.value.UnitsOnOrder</td>
-            <td>@item.value.Category.Name</td>
+            <td>@item.value.Category?.Name</td>
             
             <td>
                 <Button Color="Color.Primary" Size="Size.Small" Clicked="@(() => EditModal(item.value))">

@@ -8,6 +8,7 @@ namespace Infrastructure.Services
     {
         Task AddAsync(SupplierModel model);
         void Update(string id, SupplierModel model);
+        Task UpdateAsync(string id, SupplierModel model);
 
         Task<IEnumerable<SupplierModel>> GetAllAsync();
         IEnumerable<SupplierModel> GetAll();

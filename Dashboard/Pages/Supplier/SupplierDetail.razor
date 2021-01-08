@@ -1,4 +1,5 @@
 ﻿@inject ISupplierService service
+@implements IDisposable
 
 <Modal @ref="modalRef">
     <ModalBackdrop />
@@ -16,7 +17,7 @@
             </ModalBody>
             <ModalFooter>
                 <Button Color="Color.Secondary" Clicked="@HideModal">Close</Button>
-                <Button Color="Color.Primary" Clicked="@SaveChange">Save Changes</Button>
+                <Button Color="Color.Primary" Clicked="@(async ()=> await SaveChangeAsync())">Save Changes</Button>
             </ModalFooter>
         </form>
     </ModalContent>
@@ -36,18 +37,18 @@
         model = new SupplierModel();
     }
 
-    private void SaveChange()
+    private async Task SaveChangeAsync()
     {
         if (String.IsNullOrWhiteSpace(model.Id))
         {
-            service.AddAsync(model);
+            await service.AddAsync(model);
         }
         else
         {
-            service.Update(model.Id, model);
+            await service.UpdateAsync(model.Id, model);
         }
 
-        OnSaveChange.InvokeAsync();
+        await OnSaveChange.InvokeAsync();
 
         HideModal();
 
@@ -69,7 +70,14 @@
 
     public void HideModal()
     {
+        //modalRef.Dispose();
+        this.Dispose();
         modalRef.Hide();
+    }
+
+    public void Dispose()
+    {
+        Debug.Print("Disposed");
     }
 
 }

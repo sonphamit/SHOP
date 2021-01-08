@@ -4,6 +4,7 @@ using Infrastructure.Entities;
 using Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -25,6 +26,8 @@ namespace Infrastructure.Services
             var entity = _mapper.Map<Supplier>(model);
             await _unitOfWork.SupplierRepository.AddAsync(entity);
             SaveChanges();
+            _unitOfWork.SupplierRepository.Detach(entity);
+
         }
 
         public async Task DeleteAsync(SupplierModel model)
@@ -68,8 +71,23 @@ namespace Infrastructure.Services
                 var originEntity = _unitOfWork.SupplierRepository.FindByCondition(cat => cat.Id.Equals(model.Id)).FirstOrDefault();
                 var entityUpdate = _mapper.Map(model, originEntity);
                 entityUpdate.Id = model.Id;
+                //_unitOfWork.SupplierRepository.Detach(entityUpdate);
                 _unitOfWork.SupplierRepository.Update(entityUpdate);
                 SaveChanges();
+                _unitOfWork.SupplierRepository.Detach(entityUpdate);
+            }
+        }
+
+        public async Task UpdateAsync(string id, SupplierModel model)
+        {
+            if (!string.IsNullOrWhiteSpace(id))
+            {
+                var originEntity = _unitOfWork.SupplierRepository.FindByCondition(cat => cat.Id.Equals(model.Id)).FirstOrDefault();
+                var entityUpdate = _mapper.Map(model, originEntity);
+                entityUpdate.Id = model.Id;
+                //_unitOfWork.SupplierRepository.Detach(entityUpdate);
+                _unitOfWork.SupplierRepository.Update(entityUpdate);
+                await SaveChangesAsync();
                 _unitOfWork.SupplierRepository.Detach(entityUpdate);
             }
         }
