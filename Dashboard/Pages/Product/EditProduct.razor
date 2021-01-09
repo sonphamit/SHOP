@@ -1,5 +1,6 @@
 ﻿@inject IProductService productService
 @inject ICategoryService categoryService
+@inject ISupplierService supplierService
 
 <Modal @ref="modalRef">
     <ModalBackdrop />
@@ -35,6 +36,18 @@
                     </Select>
                 </Field>
                 <Field>
+                    <FieldLabel>Supplier</FieldLabel>
+                    <Select TValue="string" Multiple="false" @bind-SelectedValue="model.SupplierId">
+                        @if (suppliers != null)
+                        {
+                            @foreach (var item in suppliers)
+                            {
+                                <SelectItem Value="@item.Id">@item.CompanyName</SelectItem>
+                            }
+                        }
+                    </Select>
+                </Field>
+                <Field>
                     <FileEdit Filter="image/jpeg, image/png, image/gif" />
                 </Field>
             </ModalBody>
@@ -57,7 +70,8 @@
     ProductModel model;
 
     public IEnumerable<CategoryModel> categories;
-    int total = 0;
+    public IEnumerable<SupplierModel> suppliers;
+
     protected override async Task OnInitializedAsync()
     {
         //categories = new List<CategoryModel>();
@@ -114,7 +128,7 @@
     public async Task GetAllAsync()
     {
         categories = await categoryService.GetAllAsync();
-        total = categories.Count();
+        suppliers = await supplierService.GetAllAsync();
     }
 
 }

@@ -5,7 +5,7 @@
         public ProductModel()
         {
             Category = new CategoryModel();
-            //Supplier = new SupplierModel();
+            Supplier = new SupplierModel();
         }
         public string Id { get; set; }
         public string SupplierId { get; set; }

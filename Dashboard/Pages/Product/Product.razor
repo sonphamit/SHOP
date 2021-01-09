@@ -24,6 +24,9 @@
             <th>UnitPrice</th>
             <th>UnitsInStock</th>
             <th>UnitsOnOrder</th>
+            <th>Category</th>
+            <th>Supplier</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -38,7 +41,8 @@
             <td>@item.value.UnitsInStock</td>
             <td>@item.value.UnitsOnOrder</td>
             <td>@item.value.Category?.Name</td>
-            
+            <td>@item.value.Supplier?.CompanyName</td>
+
             <td>
                 <Button Color="Color.Primary" Size="Size.Small" Clicked="@(() => EditModal(item.value))">
                     <Icon Name="IconName.Edit" />

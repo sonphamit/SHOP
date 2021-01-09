@@ -45,7 +45,7 @@ namespace Infrastructure.Services
 
         public async Task<IEnumerable<ProductModel>> GetAllAsync()
         {
-            var entities = await _unitOfWork.ProductRepository.DbSet.Include(item => item.Category).AsNoTracking().ToListAsync();
+            var entities = await _unitOfWork.ProductRepository.DbSet.Include(item => item.Category).Include(item => item.Supplier).AsNoTracking().ToListAsync();
             return _mapper.Map<IEnumerable<ProductModel>>(entities);
         }
 
@@ -103,9 +103,6 @@ namespace Infrastructure.Services
             }
             return false;
         }
-
-
-
 
     }
 }

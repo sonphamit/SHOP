@@ -3,9 +3,11 @@ using Infrastructure.Database;
 using Infrastructure.Entities;
 using Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Infrastructure.Services
@@ -27,7 +29,11 @@ namespace Infrastructure.Services
             await _unitOfWork.SupplierRepository.AddAsync(entity);
             SaveChanges();
             _unitOfWork.SupplierRepository.Detach(entity);
+        }
 
+        public Task AddRangeAsync(IEnumerable<SupplierModel> models)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task DeleteAsync(SupplierModel model)
@@ -36,15 +42,15 @@ namespace Infrastructure.Services
             _unitOfWork.SupplierRepository.Delete(entity);
         }
 
-        public IEnumerable<SupplierModel> GetAll()
-        {
-            var entities = _unitOfWork.SupplierRepository.GetAll();
-            return _mapper.Map<IEnumerable<SupplierModel>>(entities);
-        }
-
         public async Task<IEnumerable<SupplierModel>> GetAllAsync()
         {
             var entities = await _unitOfWork.SupplierRepository.GetAllAsync();
+            return _mapper.Map<IEnumerable<SupplierModel>>(entities);
+        }
+
+        public IEnumerable<SupplierModel> GetAll()
+        {
+            var entities = _unitOfWork.SupplierRepository.GetAll();
             return _mapper.Map<IEnumerable<SupplierModel>>(entities);
         }
 
@@ -52,6 +58,11 @@ namespace Infrastructure.Services
         {
             var entity = await _unitOfWork.SupplierRepository.GetByIdAsync(id);
             return _mapper.Map<SupplierModel>(entity);
+        }
+
+        public Task<IEnumerable<SupplierModel>> Pagination(Expression<Func<SupplierModel, bool>> predicate)
+        {
+            throw new NotImplementedException();
         }
 
         public int SaveChanges()
@@ -71,26 +82,25 @@ namespace Infrastructure.Services
                 var originEntity = _unitOfWork.SupplierRepository.FindByCondition(cat => cat.Id.Equals(model.Id)).FirstOrDefault();
                 var entityUpdate = _mapper.Map(model, originEntity);
                 entityUpdate.Id = model.Id;
-                //_unitOfWork.SupplierRepository.Detach(entityUpdate);
                 _unitOfWork.SupplierRepository.Update(entityUpdate);
                 SaveChanges();
                 _unitOfWork.SupplierRepository.Detach(entityUpdate);
             }
-        }
 
-        public async Task UpdateAsync(string id, SupplierModel model)
+        }
+        public async Task<bool> UpdateAsync(string id, SupplierModel model)
         {
             if (!string.IsNullOrWhiteSpace(id))
             {
                 var originEntity = _unitOfWork.SupplierRepository.FindByCondition(cat => cat.Id.Equals(model.Id)).FirstOrDefault();
                 var entityUpdate = _mapper.Map(model, originEntity);
                 entityUpdate.Id = model.Id;
-                //_unitOfWork.SupplierRepository.Detach(entityUpdate);
                 _unitOfWork.SupplierRepository.Update(entityUpdate);
                 await SaveChangesAsync();
                 _unitOfWork.SupplierRepository.Detach(entityUpdate);
+                return true;
             }
+            return false;
         }
-
     }
 }
