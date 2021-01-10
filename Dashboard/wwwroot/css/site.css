@@ -123,7 +123,7 @@ header nav.navbar {
     .dropArea input[type=file] {
         position: absolute;
         width: 100%;
-        height: 100%;
+        height: 50px;
         opacity: 0;
         cursor: pointer;
     }
@@ -132,7 +132,7 @@ header nav.navbar {
     background-color: lightseagreen;
 }
 
-.table-drap-drog {
+.list-image {
     margin-top: 30px;
 }
 /* upload file end*/
