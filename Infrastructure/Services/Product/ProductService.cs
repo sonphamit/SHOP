@@ -28,6 +28,7 @@ namespace Infrastructure.Services
             //model.CategoryId = model.Category.Id;
             var entity = _mapper.Map<Product>(model);
             await _unitOfWork.ProductRepository.AddAsync(entity);
+            entity.Images.ToList().ForEach( item => item.ProductId = entity.Id);
             await _unitOfWork.ResourceRepository.AddRangeAsync(entity.Images);
             SaveChanges();
             _unitOfWork.ProductRepository.Detach(entity);

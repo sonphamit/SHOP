@@ -142,9 +142,15 @@
 
         if (String.IsNullOrWhiteSpace(model.Id))
         {
+            try
+            {
+                await productService.AddAsync(model);
+            }
+            catch(Exception e)
+            {
+                throw e;
+            }
 
-
-            await productService.AddAsync(model);
             await OnSaveChange.InvokeAsync();
         }
         else
