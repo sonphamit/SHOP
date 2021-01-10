@@ -28,6 +28,7 @@ namespace Infrastructure.Services
             //model.CategoryId = model.Category.Id;
             var entity = _mapper.Map<Product>(model);
             await _unitOfWork.ProductRepository.AddAsync(entity);
+            await _unitOfWork.ResourceRepository.AddRangeAsync(entity.Images);
             SaveChanges();
             _unitOfWork.ProductRepository.Detach(entity);
         }
@@ -93,12 +94,31 @@ namespace Infrastructure.Services
         {
             if (!string.IsNullOrWhiteSpace(id))
             {
+                var resources = await _unitOfWork.ResourceRepository.FindByCondition(rs => rs.ProductId.Equals(id)&&rs.IsDeleted).ToListAsync();
+
+                resources.ForEach(item =>
+                {
+                    item.IsDeleted = true;
+                });
+
+
                 var originEntity = _unitOfWork.ProductRepository.FindByCondition(cat => cat.Id.Equals(model.Id)).FirstOrDefault();
                 var entityUpdate = _mapper.Map(model, originEntity);
                 entityUpdate.Id = model.Id;
+
+                resources.AddRange(entityUpdate.Images);
+
+
+                resources.ForEach(item =>
+                {
+                    _unitOfWork.ResourceRepository.Update(item);
+                });
+
                 _unitOfWork.ProductRepository.Update(entityUpdate);
+
                 await SaveChangesAsync();
                 _unitOfWork.ProductRepository.Detach(entityUpdate);
+               
                 return true;
             }
             return false;

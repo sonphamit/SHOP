@@ -25,6 +25,7 @@ namespace Dashboard.Configuration
             services.AddTransient<IRepository<Product>, Repository<Product>>();
             services.AddTransient<IRepository<Order>, Repository<Order>>();
             services.AddTransient<IRepository<OrderDetail>, Repository<OrderDetail>>();
+            services.AddTransient<IRepository<Resource>, Repository<Resource>>();
 
             services.AddTransient<ICategoryService, CategoryService>();
             services.AddTransient<ICustomerService, CustomerService>();

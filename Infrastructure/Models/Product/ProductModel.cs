@@ -7,6 +7,7 @@ namespace Infrastructure.Models
         public ProductModel()
         {
             Category = new CategoryModel();
+            Images = new List<ResourceModel>();
             Supplier = new SupplierModel();
         }
         public string Id { get; set; }

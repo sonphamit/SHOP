@@ -13,6 +13,7 @@ namespace Infrastructure.Database
         public IRepository<Product> ProductRepository { get; }
         public IRepository<Shipper> ShipperRepository { get; }
         public IRepository<Supplier> SupplierRepository { get; }
+        public IRepository<Resource> ResourceRepository { get; }
 
         Task<int> SaveChangesAsync();
         int SaveChanges();

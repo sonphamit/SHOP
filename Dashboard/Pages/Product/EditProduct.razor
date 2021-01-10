@@ -62,7 +62,7 @@
                                        @ondragleave="HandleDragLeave"
                                        multiple />
                         </div>
-                        @if (images != null && images.Count > 1)
+                        @if (images != null && images.Any())
                         {
                             <ol class="list-image">
                                 @foreach (var image in images)
@@ -106,7 +106,7 @@
 
     List<string> urls = new List<string>();
 
-    Dictionary<string, IBrowserFile>  images = new Dictionary<string, IBrowserFile>();
+    Dictionary<string, IBrowserFile> images = new Dictionary<string, IBrowserFile>();
 
 
     string dropClass = string.Empty;
@@ -125,14 +125,43 @@
 
     private async Task SaveChangeAsync()
     {
+        if (images.Values.Any())
+        {
+            foreach (var image in images)
+            {
+
+                model.Images.Add(new ResourceModel
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    PathName = image.Key,
+                    IsDeleted = false,
+                    ProductId = model.Id
+                });
+            }
+        }
+
         if (String.IsNullOrWhiteSpace(model.Id))
         {
+
+
             await productService.AddAsync(model);
             await OnSaveChange.InvokeAsync();
         }
         else
         {
+
+            foreach (var image in images)
+            {
+
+                model.Images.Add(new ResourceModel
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    PathName = image.Key,
+                    IsDeleted = false,
+                });
+            }
             var a = await productService.UpdateAsync(model.Id, model);
+
             if (a)
             {
                 await OnSaveChange.InvokeAsync();
@@ -222,9 +251,8 @@
             di.Create();
         }
 
-        var guid = Guid.NewGuid().ToString();
+        var createFileName = $"{DateTime.UtcNow.ToString("ddMMyyyyss")}_{file.Name}";
 
-        var createFileName = guid + Path.GetExtension(file.Name);
         var filePath = Path.Combine(dirToSave, createFileName);
         using (var stream = file.OpenReadStream(maxFileSize))
         {

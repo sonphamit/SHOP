@@ -18,6 +18,7 @@ namespace Infrastructure.Database
         public IRepository<Product> ProductRepository { get; }
         public IRepository<Shipper> ShipperRepository { get; }
         public IRepository<Supplier> SupplierRepository { get; }
+        public IRepository<Resource> ResourceRepository { get; }
 
         
 
@@ -42,7 +43,8 @@ namespace Infrastructure.Database
             IRepository<OrderDetail> orderDetailRepository,
             IRepository<Product> productRepository,
             IRepository<Shipper> shipperRepository,
-            IRepository<Supplier> supplierRepository)
+            IRepository<Supplier> supplierRepository,
+            IRepository<Resource> resourceRepository)
         {
             this.dbContext = dbContext;
 
@@ -69,6 +71,9 @@ namespace Infrastructure.Database
 
             SupplierRepository = supplierRepository;
             SupplierRepository.DbContext = dbContext;
+
+            ResourceRepository = resourceRepository;
+            resourceRepository.DbContext = dbContext;
         }
 
         protected virtual void Dispose(bool disposing)
