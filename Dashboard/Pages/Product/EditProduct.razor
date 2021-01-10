@@ -1,6 +1,10 @@
 ﻿@inject IProductService productService
+﻿@using System.IO;
+@using Microsoft.AspNetCore.Hosting;
+@inject IProductService productService
 @inject ICategoryService categoryService
 @inject ISupplierService supplierService
+@inject IWebHostEnvironment _env;
 
 <Modal @ref="modalRef">
     <ModalBackdrop />
@@ -16,11 +20,11 @@
                     <TextEdit Placeholder="Enter name..." @bind-Text="model.Name" />
                 </Field>
                 <Field>
-                    <FieldLabel>UnitPrice</FieldLabel>
+                    <FieldLabel>Unit Price</FieldLabel>
                     <NumericEdit Placeholder="Enter Unit Price" @bind-Value="model.UnitPrice" />
                 </Field>
                 <Field>
-                    <FieldLabel>UnitsInStock</FieldLabel>
+                    <FieldLabel>Units In Stock</FieldLabel>
                     <NumericEdit Placeholder="Enter Unit Price" @bind-Value="model.UnitsInStock" />
                 </Field>
                 <Field>
@@ -48,7 +52,59 @@
                     </Select>
                 </Field>
                 <Field>
-                    <FileEdit Filter="image/jpeg, image/png, image/gif" />
+                    <div>
+                        <div class="inputArea">
+                            <InputFile id="inputDefault"
+                                       OnChange="OnInputFileChange"
+                                       accept="image/png,image/gif,image/jpeg" multiple />
+                        </div>
+                        <div class="dropArea @dropClass">
+                            Drag and drop your files here or click to open file loading dialogue...
+                            <InputFile id="inputDrop"
+                                       OnChange="OnInputFileChange"
+                                       @ondragenter="HandleDragEnter"
+                                       @ondragleave="HandleDragLeave"
+                                       multiple />
+                        </div>
+                        @if (files != null && files.Count > 1)
+                        {
+                            <table class="table table-striped table-bordered table-hover table-drap-drog">
+                                <thead>
+                                    <tr>
+                                        <th>No.</th>
+                                        <td>Name</td>
+                                        <th>Path File</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var file in files.Select((fileVal, indexFile) => new { fileVal, indexFile }))
+                                    {
+
+                                        foreach (var url in urls.Select((urlVal, indexUrl) => new { urlVal, indexUrl }))
+                                        {
+                                            if (file.indexFile == url.indexUrl)
+                                            {
+                                                <tr>
+                                                    <td>@(file.indexFile+1)</td>
+                                                    <td>
+                                                        <span>
+                                                            @file.fileVal.Name
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <a href="@url.urlVal" download>@url.urlVal</a>
+                                                    </td>
+                                                </tr>
+                                            }
+
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+
+                        }
+
+                    </div>
                 </Field>
             </ModalBody>
             <ModalFooter>
@@ -72,9 +128,14 @@
     public IEnumerable<CategoryModel> categories;
     public IEnumerable<SupplierModel> suppliers;
 
+    //upload file
+    IReadOnlyList<IBrowserFile> files;
+    List<string> urls = new List<string>();
+    string dropClass = string.Empty;
+    const int maxFileSize = 10485760;
+
     protected override async Task OnInitializedAsync()
     {
-        //categories = new List<CategoryModel>();
         await GetAllAsync();
     }
 
@@ -103,8 +164,6 @@
 
     }
 
-
-
     public void AddModal()
     {
         model = new ProductModel();
@@ -129,6 +188,72 @@
     {
         categories = await categoryService.GetAllAsync();
         suppliers = await supplierService.GetAllAsync();
+    }
+
+    private void HandleDragEnter()
+    {
+        dropClass = "dropAreaDrug";
+    }
+    private void HandleDragLeave()
+    {
+        dropClass = string.Empty;
+    }
+    async Task OnInputFileChange(InputFileChangeEventArgs e)
+    {
+        dropClass = string.Empty;
+        try
+        {
+            if (e.FileCount > 0)
+            {
+                urls.Clear();
+                files = null;
+                files = e.GetMultipleFiles();
+                urls.AddRange(await SaveFiles(files));
+            }
+          
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.Message);
+            throw;
+        }
+    }
+    private async Task<List<string>> SaveFiles(IReadOnlyList<IBrowserFile> files)
+    {
+        var list = new List<string>();
+        foreach (var file in files)
+        {
+            var url = await SaveFile(file);
+            list.Add(url);
+        }
+        return list;
+    }
+    private async Task<string> SaveFile(IBrowserFile file)
+    {
+        var relativePath = Path.Combine("images/products");
+        var dirToSave = Path.Combine(_env.WebRootPath, relativePath);
+        var di = new DirectoryInfo(dirToSave);
+
+
+        if (!di.Exists)
+        {
+            di.Create();
+        }
+
+        var guid = Guid.NewGuid().ToString();
+
+        var createFileName = guid + Path.GetExtension(file.Name);
+        var filePath = Path.Combine(dirToSave, createFileName);
+        using (var stream = file.OpenReadStream(maxFileSize))
+        {
+            using (var mstream = new MemoryStream())
+            {
+                await stream.CopyToAsync(mstream);
+                await File.WriteAllBytesAsync(filePath, mstream.ToArray());
+            }
+        }
+        var url = Path.Combine(relativePath, createFileName).Replace("\\", "/");
+        return url;
     }
 
 }

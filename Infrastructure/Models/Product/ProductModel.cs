@@ -1,4 +1,6 @@
-﻿namespace Infrastructure.Models
+﻿using System.Collections.Generic;
+
+namespace Infrastructure.Models
 {
     public class ProductModel
     {
@@ -16,7 +18,8 @@
         public int UnitsOnOrder { get; set; }
         public CategoryModel Category { get; set; }
         public SupplierModel Supplier { get; set; }
-    
+        public virtual ICollection<ResourceModel> Images { get; set; }
+
     }
     public class ProductAddModel
     {
@@ -28,6 +31,7 @@
         public int UnitsOnOrder { get; set; }
         public virtual CategoryModel Category { get; set; }
         public virtual SupplierModel Supplier { get; set; }
+        public virtual ICollection<ResourceModel> Images { get; set; }
 
     }
 }

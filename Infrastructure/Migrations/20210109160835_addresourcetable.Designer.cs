@@ -4,14 +4,16 @@ using Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210109160835_addresourcetable")]
+    partial class addresourcetable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -141,8 +143,8 @@ namespace Infrastructure.Migrations
                     b.Property<bool>("Discontinued")
                         .HasColumnType("bit");
 
-                    b.Property<float>("Discount")
-                        .HasColumnType("real");
+                    b.Property<decimal>("Discount")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -184,9 +186,6 @@ namespace Infrastructure.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
                     b.Property<string>("PathName")
                         .HasColumnType("nvarchar(max)");
 
@@ -197,7 +196,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Resources");
+                    b.ToTable("Resource");
                 });
 
             modelBuilder.Entity("Infrastructure.Entities.Shipper", b =>

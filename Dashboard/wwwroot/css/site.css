@@ -99,3 +99,41 @@ header nav.navbar {
 
 
 /* modified style  end */
+
+/* upload file start*/
+
+.dropArea {
+    border: 2px dashed steelblue;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: lightblue;
+    font-size: 1.5rem;
+    cursor: pointer;
+    position: relative;
+    min-height: 200px;
+}
+
+    .dropArea:hover {
+        background-color: lightskyblue;
+        color: #333;
+    }
+
+    .dropArea input[type=file] {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+.dropAreaDrug {
+    background-color: lightseagreen;
+}
+
+.table-drap-drog {
+    margin-top: 30px;
+}
+/* upload file end*/
+
