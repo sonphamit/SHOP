@@ -48,7 +48,7 @@ namespace Dashboard.SeedData
                 };
                 //passwordHash.HashPassword(userAdmin, "1234");
 
-                IdentityResult result = userManager.CreateAsync(userAdmin, "123456").Result;
+                IdentityResult result = userManager.CreateAsync(userAdmin, "123456@bC").Result;
 
                 if (result.Succeeded)
                 {
