@@ -17,8 +17,8 @@ namespace Infrastructure.Mappings
             CreateMap<Category, CategoryModel>();
             CreateMap<CategoryModel, Category>().ForMember(x => x.Id, opt => opt.Ignore());
 
-            CreateMap<User, UserModel>();
-            CreateMap<UserModel, User>();
+            CreateMap<ApplicationUser, UserModel>();
+            CreateMap<UserModel, ApplicationUser>();
 
             CreateMap<Product, ProductModel>();
             CreateMap<ProductModel, Product>().ForMember(x => x.Id, opt => opt.Ignore())

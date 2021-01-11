@@ -35,4 +35,12 @@ namespace Infrastructure.Enums
         [Description("DHL Express")]
         DHL_EXPRESS = 4
     }
+
+    public enum UserType
+    {
+        [Description("Khách Hàng")]
+        CUSTOMER_TYPE = 0,
+        [Description("Nhân Viên")]
+        EMPLOYEE_TYPE = 1,
+    }
 }

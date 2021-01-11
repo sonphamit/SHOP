@@ -25,6 +25,7 @@ namespace Infrastructure.Database
             base.OnModelCreating(modelBuilder);
             //use this to configure the model
             modelBuilder.Entity<OrderDetail>().HasKey( o => new { o.OrderId , o.ProductId});
+            modelBuilder.Entity<ApplicationUser>().ToTable("AspNetUsers");
         }
 
         public DbSet<Category> Categories { get; set; }

@@ -15,6 +15,7 @@ using Infrastructure.Database;
 using Dashboard.Configuration;
 using Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Infrastructure.Entities;
 
 namespace Dashboard
 {
@@ -46,7 +47,7 @@ namespace Dashboard
             string connectionString = Configuration.GetConnectionString("DbConnection");
             services.AddAppDatabase(connectionString);
 
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddRoles<IdentityRole>()
+            services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true).AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             //services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 
@@ -55,7 +56,7 @@ namespace Dashboard
             services.AddRazorPages();
             services.AddServerSideBlazor();
             
-            services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
+            services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<ApplicationUser>>();
             services.AddDatabaseDeveloperPageExceptionFilter();
 
         }
