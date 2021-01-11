@@ -40,13 +40,27 @@ namespace Infrastructure.Services
 
         public async Task DeleteAsync(ProductModel model)
         {
-            var entity = await _unitOfWork.ProductRepository.FindByCondition(cat => cat.Id.Equals(model.Id)).FirstOrDefaultAsync();
-            _unitOfWork.ProductRepository.Delete(entity);
+            var resources = await _unitOfWork.ResourceRepository.FindByCondition(rs => rs.ProductId.Equals(model.Id) && rs.IsDeleted).ToListAsync();
+            resources.ForEach(item =>
+            {
+                item.IsDeleted = true;
+            });
+
+            var entityDelete = await _unitOfWork.ProductRepository.FindByCondition(e => e.Id.Equals(model.Id)).FirstOrDefaultAsync();
+            resources.AddRange(entityDelete.Images);
+
+
+            resources.ForEach(item =>
+            {
+                _unitOfWork.ResourceRepository.Update(item);
+            });
+
+            _unitOfWork.ProductRepository.Delete(entityDelete);
         }
 
         public async Task<IEnumerable<ProductModel>> GetAllAsync()
         {
-            var entities = await _unitOfWork.ProductRepository.DbSet.Include(item => item.Category).Include(item => item.Supplier).AsNoTracking().ToListAsync();
+            var entities = await _unitOfWork.ProductRepository.DbSet.Include(item => item.Category).Include(item => item.Supplier).Include(item => item.Images).AsNoTracking().ToListAsync();
             return _mapper.Map<IEnumerable<ProductModel>>(entities);
         }
 
@@ -94,15 +108,23 @@ namespace Infrastructure.Services
         {
             if (!string.IsNullOrWhiteSpace(id))
             {
-                var resources = await _unitOfWork.ResourceRepository.FindByCondition(rs => rs.ProductId.Equals(id)&&rs.IsDeleted).ToListAsync();
+                var resources = await _unitOfWork.ResourceRepository.FindByCondition(rs => rs.ProductId.Equals(id)&&!rs.IsDeleted).ToListAsync();
 
-                resources.ForEach(item =>
-                {
-                    item.IsDeleted = true;
-                });
+           
 
 
                 var originEntity = _unitOfWork.ProductRepository.FindByCondition(cat => cat.Id.Equals(model.Id)).FirstOrDefault();
+
+
+                List<Resource> imagesProduct = originEntity.Images.ToList();
+                resources.ForEach(item =>
+                {
+                    if (!imagesProduct.Exists(e =>e.Id == item.Id))
+                    {
+                        item.IsDeleted = true;
+                    }
+                });
+
                 var entityUpdate = _mapper.Map(model, originEntity);
                 entityUpdate.Id = model.Id;
 

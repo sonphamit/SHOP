@@ -62,18 +62,30 @@
                                        @ondragleave="HandleDragLeave"
                                        multiple />
                         </div>
-                        @if (images != null && images.Any())
-                        {
-                            <ol class="list-image">
+
+                        <ol class="list-image">
+                            @if (images != null && images.Any())
+                            {
                                 @foreach (var image in images)
                                 {
 
                                     <li class="mt-2">
-                                        <a href="@image.Key" target="_blank"> @image.Value.Name </a>
+                                        <a href="@image.Key" target="_blank"> @image.Value</a>
                                     </li>
                                 }
-                            </ol>
-                        }
+                            }
+
+                            @*@if (model.Images != null && model.Images.Any())
+                                {
+                                    @foreach (var image in model.Images)
+                                    {
+
+                                        <li class="mt-2">
+                                            <a href="@" target="_blank"> @image.Value.Name </a>
+                                        </li>
+                                    }
+                                }*@
+                        </ol>
 
                     </div>
                 </Field>
@@ -106,7 +118,8 @@
 
     List<string> urls = new List<string>();
 
-    Dictionary<string, IBrowserFile> images = new Dictionary<string, IBrowserFile>();
+    Dictionary<string, string> images = new Dictionary<string, string>();
+
 
 
     string dropClass = string.Empty;
@@ -150,16 +163,6 @@
         else
         {
 
-            foreach (var image in images)
-            {
-
-                model.Images.Add(new ResourceModel
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    PathName = image.Key,
-                    IsDeleted = false,
-                });
-            }
             var a = await productService.UpdateAsync(model.Id, model);
 
             if (a)
@@ -167,7 +170,6 @@
                 await OnSaveChange.InvokeAsync();
             }
         }
-
         HideModal();
 
     }
@@ -176,18 +178,27 @@
     {
         model = new ProductModel();
         modalTitle = "Add product";
+        images.Clear();
         modalRef.Show();
     }
 
     public void EditModal(ProductModel model)
     {
         modalTitle = "Edit product";
-        this.model = model;
+        this.model = new ProductModel();
+
+        model.Images.ForEach(item => {
+            images.Add(item.PathName, item.PathName.Split("_").Last());
+        });
+
+
         modalRef.Show();
     }
 
     public void HideModal()
     {
+        //images.Clear();
+        //files = null;
         modalRef.Hide();
     }
 
@@ -235,7 +246,7 @@
         foreach (var file in files)
         {
             var url = await SaveFile(file);
-            images.Add(url, file);
+            images.Add(url, file.Name);
         }
     }
 

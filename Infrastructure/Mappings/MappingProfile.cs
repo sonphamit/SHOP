@@ -30,6 +30,9 @@ namespace Infrastructure.Mappings
             CreateMap<Supplier, SupplierModel>();
             CreateMap<SupplierModel, Supplier>().ForMember(x => x.Id, opt => opt.Ignore());
 
+            CreateMap<Resource, ResourceModel>();
+            CreateMap<ResourceModel, Resource>().ForMember(x => x.Id, opt => opt.Ignore());
+
         }
 
 
