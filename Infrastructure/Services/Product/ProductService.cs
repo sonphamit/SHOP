@@ -61,7 +61,9 @@ namespace Infrastructure.Services
 
         public async Task<IEnumerable<ProductModel>> GetAllAsync()
         {
-            var entities = await _unitOfWork.ProductRepository.DbSet.Include(item => item.Category).Include(item => item.Supplier).Include(item => item.Images).AsNoTracking().ToListAsync();
+            var entities = await _unitOfWork.ProductRepository.DbSet
+                .Include(item => item.Category).Include(item => item.Supplier)
+                .Include(item => item.Images).AsNoTracking().ToListAsync();
             return _mapper.Map<IEnumerable<ProductModel>>(entities);
         }
 
@@ -111,20 +113,13 @@ namespace Infrastructure.Services
             {
                 var resources = await _unitOfWork.ResourceRepository.FindByCondition(rs => rs.ProductId.Equals(id)&&!rs.IsDeleted).ToListAsync();
 
-           
-
+                resources.ForEach(item =>
+                {
+                    item.IsDeleted = true;
+                });
 
                 var originEntity = _unitOfWork.ProductRepository.FindByCondition(cat => cat.Id.Equals(model.Id)).FirstOrDefault();
 
-
-                List<Resource> imagesProduct = originEntity.Images.ToList();
-                resources.ForEach(item =>
-                {
-                    if (!imagesProduct.Exists(e =>e.Id == item.Id))
-                    {
-                        item.IsDeleted = true;
-                    }
-                });
 
                 var entityUpdate = _mapper.Map(model, originEntity);
                 entityUpdate.Id = model.Id;

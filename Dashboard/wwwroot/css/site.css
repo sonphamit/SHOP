@@ -130,7 +130,7 @@ header nav.navbar {
     font-size: 1.5rem;
     cursor: pointer;
     position: relative;
-    min-height: 200px;
+    min-height: 50px;
 }
 
     .dropArea:hover {

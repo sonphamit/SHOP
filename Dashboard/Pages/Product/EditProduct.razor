@@ -140,6 +140,8 @@
     {
         if (images.Values.Any())
         {
+            model.Images.Clear();
+
             foreach (var image in images)
             {
 
@@ -190,10 +192,12 @@
 
     public void EditModal(ProductModel model)
     {
+        images.Clear();
         modalTitle = "Edit product";
         this.model = new ProductModel();
+        this.model = model;
 
-        model.Images.ForEach(item => {
+        this.model.Images.ForEach(item => {
             images.Add(item.PathName, item.PathName.Split("_").Last());
         });
 
@@ -230,6 +234,7 @@
         {
             if (e.FileCount > 0)
             {
+                images.Clear();
                 //urls.Clear();
                 files = null;
                 files = e.GetMultipleFiles();
