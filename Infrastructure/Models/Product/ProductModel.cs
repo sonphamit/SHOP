@@ -19,7 +19,7 @@ namespace Infrastructure.Models
         public int UnitsOnOrder { get; set; }
         public CategoryModel Category { get; set; }
         public SupplierModel Supplier { get; set; }
-        public virtual ICollection<ResourceModel> Images { get; set; }
+        public virtual List<ResourceModel> Images { get; set; }
 
     }
     public class ProductAddModel
