@@ -1,0 +1,68 @@
+﻿@inject IRoleService service
+
+<Modal @ref="modalRef">
+    <ModalBackdrop />
+    <ModalContent IsCentered="true">
+        <form method="post">
+            <ModalHeader>
+                <ModalTitle>@modalTitle</ModalTitle>
+                <CloseButton Clicked="@HideModal" />
+            </ModalHeader>
+            <ModalBody>
+                
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary" Clicked="@HideModal">Close</Button>
+                <Button Color="Color.Primary" Clicked="@(async () => await SaveChange())">Save Changes</Button>
+            </ModalFooter>
+        </form>
+    </ModalContent>
+</Modal>
+
+
+@code {
+    //inject services
+
+
+
+    // reference to the modal component
+    public Modal modalRef;
+    public string modalTitle = "";
+
+    List<RoleClaim> claims;
+
+    protected override void OnInitialized()
+    {
+        claims = new List<RoleClaim>();
+    }
+
+    private async Task SaveChange()
+    {
+        //if (String.IsNullOrWhiteSpace(model.Id))
+        //{
+        //    await service.AddRoleAsync(model);
+        //}
+
+        HideModal();
+
+    }
+
+    public async Task ConfigPermission(string roleId)
+    {
+        claims = new List<RoleClaim>();
+        await GetRoleClaimsByRoleId(roleId);
+        modalTitle = "Permissions Setting";
+        modalRef.Show();
+    }
+
+    public async Task GetRoleClaimsByRoleId(string id)
+    {
+        claims = await service.GetRoleClaimsByRoleId(id);
+    }
+
+    public void HideModal()
+    {
+        modalRef.Hide();
+    }
+
+}

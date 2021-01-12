@@ -9,6 +9,8 @@
     <div class="col-10">
         <h3 class="mr-5">Role</h3>
         <RoleDetail @ref="child" OnSaveChange="@(async () => await GetAllRoleAsync())" />
+        <PermissonDetail @ref="childConf" />
+
         <Button Color="Color.Primary" Size="Size.Medium" Clicked="@AddModal">
             <Icon Name="IconName.Add" />
             Add
@@ -37,7 +39,7 @@
                     <td>@(item.index+1)</td>
                     <td>@item.value.Name</td>
                     <td>
-                        <Button Color="Color.Primary" Size="Size.Small" Clicked="@(() => EditModal(item.value))">
+                        <Button Color="Color.Primary" Size="Size.Small" Clicked="@(() => ConfigPermission(item.value.Id))">
                             <Icon Name="@("fa-users-cog")" />
                             Configuration
                         </Button>
@@ -62,6 +64,9 @@
     //inject services
 
     RoleDetail child;
+
+    PermissonDetail childConf;
+
     void AddModal()
     {
         child.AddModal();
@@ -70,6 +75,11 @@
     void EditModal(RoleModel model)
     {
         child.EditModal(model);
+    }
+
+    void ConfigPermission(string id)
+    {
+        childConf.ConfigPermission(id);
     }
 
     public IEnumerable<RoleModel> roles;

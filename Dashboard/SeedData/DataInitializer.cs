@@ -1,24 +1,38 @@
 ﻿using Infrastructure.Entities;
+using Infrastructure.Models;
 using Microsoft.AspNetCore.Identity;
 
 namespace Dashboard.SeedData
 {
     public static class DataInitializer
     {
-        public static void SeedData(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public static void SeedData(
+            UserManager<ApplicationUser> userManager,
+            RoleManager<IdentityRole> roleManager)
         {
             SeedRoles(roleManager);
             SeedUsers(userManager);
         }
         private static void SeedRoles(RoleManager<IdentityRole> roleManager)
         {
-            if (!roleManager.RoleExistsAsync("Admin").Result)
+            var adminRole = roleManager.FindByNameAsync("Admin").Result;
+            if (adminRole == null)
             {
                 IdentityRole role = new IdentityRole
                 {
                     Name = "Admin"
                 };
                 _ = roleManager.CreateAsync(role).Result;
+            }
+            else
+            {
+                if (roleManager.GetClaimsAsync(adminRole).Result.Count < 1)
+                {
+                    ClaimsStore.AllClaims.ForEach(claim =>
+                    {
+                    _ = roleManager.AddClaimAsync(adminRole, claim).Result;
+                    });
+                }
             }
 
             if (!roleManager.RoleExistsAsync("Customer").Result)
@@ -29,6 +43,11 @@ namespace Dashboard.SeedData
                 };
                 _ = roleManager.CreateAsync(role).Result;
             }
+
+            
+
+            
+
 
         }
 

@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using Infrastructure.Entities;
 using Infrastructure.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Infrastructure.Services
@@ -11,6 +13,7 @@ namespace Infrastructure.Services
     public class RoleService : IRoleService
     {
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly RoleManager<ApplicationUser> _userManager;
         private readonly IMapper _mapper;
 
         public RoleService(RoleManager<IdentityRole> roleManager, IMapper mapper)
@@ -19,13 +22,32 @@ namespace Infrastructure.Services
             _mapper = mapper;
         }
 
+        public async Task<List<RoleClaim>> GetRoleClaimsByRoleId(string id)
+        {
+            var role = await _roleManager.FindByIdAsync(id);
+            var existingRoleClaims = await _roleManager.GetClaimsAsync(role);
+            List<RoleClaim> roleClaims = new List<RoleClaim>();
+            foreach (Claim item in ClaimsStore.AllClaims)
+            {
+                RoleClaim roleClaim = new RoleClaim
+                {
+                    ClaimType = item.Type
+                };
+
+                if (existingRoleClaims.Any(c => c.Type == item.Type))
+                {
+                    roleClaim.IsSelected = true;
+                }
+                roleClaims.Add(roleClaim);
+            }
+            return roleClaims;
+        }
 
         public async Task<IEnumerable<RoleModel>> GetAllRoleAsync()
         {
             var roleList = await _roleManager.Roles.ToListAsync();
             var roles = _mapper.Map<IEnumerable<RoleModel>>(roleList);
             return roles;
-
         }
 
         public async Task AddRoleAsync(RoleModel model)

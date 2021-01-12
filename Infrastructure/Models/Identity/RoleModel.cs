@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Infrastructure.Models
 {
@@ -7,5 +8,6 @@ namespace Infrastructure.Models
         [Required]
         public string Name { get; set; }
         public string Id { get; set; }
+        public List<RoleClaim> Claims { get; set; }
     }
 }

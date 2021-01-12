@@ -6,6 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Pages\Permission\**" />
+    <Content Remove="Pages\Permission\**" />
+    <EmbeddedResource Remove="Pages\Permission\**" />
+    <None Remove="Pages\Permission\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
     <PackageReference Include="Blazorise.Bootstrap" Version="0.9.2.4" />
@@ -35,7 +42,6 @@
     <Folder Include="Pages\Customer\" />
     <Folder Include="Pages\Employee\" />
     <Folder Include="Pages\User\" />
-    <Folder Include="Pages\Permission\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -12,5 +12,6 @@ namespace Infrastructure.Services
         Task UpdateAsync(string id, string name);
         Task<RoleModel> FindByIdAsync(string id);
         Task<RoleModel> FindByNameAsync(string name);
+        Task<List<RoleClaim>> GetRoleClaimsByRoleId(string id);
     }
 }
