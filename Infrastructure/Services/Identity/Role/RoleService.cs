@@ -43,6 +43,32 @@ namespace Infrastructure.Services
             return roleClaims;
         }
 
+        public async Task UpdateRoleClaimsAsync(string id, List<RoleClaim> roleClaims)
+        {
+            
+            var role = await _roleManager.FindByIdAsync(id);
+            if(role != null)
+            {
+                //Delete old role claims
+                var claims = await _roleManager.GetClaimsAsync(role);
+                foreach(var claim in claims)
+                {
+                    await _roleManager.RemoveClaimAsync(role, claim);
+                }
+
+                var newClaims = roleClaims.Where(claim => claim.IsSelected).ToList();
+
+                //Add new role claims for role
+                newClaims.ForEach(async item =>
+                {
+                    var newclaim = new Claim(item.ClaimType, item.ClaimType);
+                    _ = await _roleManager.AddClaimAsync(role, newclaim);
+                });
+
+            }
+
+        }
+
         public async Task<IEnumerable<RoleModel>> GetAllRoleAsync()
         {
             var roleList = await _roleManager.Roles.ToListAsync();
