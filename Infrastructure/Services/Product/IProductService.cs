@@ -15,7 +15,7 @@ namespace Infrastructure.Services
         Task AddRangeAsync(IEnumerable<ProductModel> models);
         Task<IEnumerable<ProductModel>> GetAllAsync();
         IEnumerable<ProductModel> GetAll();
-        Task<ProductModel> GetByIdAsync(string id);
+        ProductModel FindByCondition(string id);
         Task<IEnumerable<ProductModel>> Pagination(Expression<Func<ProductModel, bool>> predicate);
         Task DeleteAsync(ProductModel model);
         Task<int> SaveChangesAsync();
