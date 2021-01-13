@@ -5,7 +5,7 @@
 <div class="row mb-4 mt-4">
     <div class="col-10">
         <h3 class="mr-5">Product</h3>
-        <EditProduct @ref="child" OnSaveChange="@(async () => await GetAllAsync())"  />
+        <ProductDetail @ref="child" OnSaveChange="@(async () => await GetAllAsync())"  />
         <Button Color="Color.Primary" Size="Size.Medium" Clicked="@AddModal">
             <Icon Name="IconName.Add" />
             Add
@@ -62,7 +62,7 @@
 
 @code {
 
-    EditProduct child;
+    ProductDetail child;
     void AddModal()
     {
         child.AddModal();
