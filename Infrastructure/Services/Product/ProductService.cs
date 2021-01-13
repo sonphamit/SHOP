@@ -73,10 +73,11 @@ namespace Infrastructure.Services
             return _mapper.Map<IEnumerable<ProductModel>>(entities);
         }
 
-        public async Task<ProductModel> GetByIdAsync(string id)
+        public ProductModel FindByCondition(string id)
         {
-            var entity = await _unitOfWork.ProductRepository.GetByIdAsync(id);
-            return _mapper.Map<ProductModel>(entity);
+            var entity = _unitOfWork.ProductRepository.FindByCondition(e => e.Id == id).FirstOrDefault();
+            var model = _mapper.Map<ProductModel>(entity);
+            return model;
         }
 
         public Task<IEnumerable<ProductModel>> Pagination(Expression<Func<ProductModel, bool>> predicate)

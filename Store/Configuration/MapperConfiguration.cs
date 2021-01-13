@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Infrastructure.Mappings;
 using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
 
 namespace Store.Configuration
 {

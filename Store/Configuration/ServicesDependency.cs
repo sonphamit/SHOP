@@ -11,7 +11,7 @@ namespace Store.Configuration
         {
             //services.Scan(scan => scan
             //    .FromCallingAssembly()
-            //    .AddClasses(classes => classes.AssignableTo(typeof(ICategoryService)))
+            //    .AddClasses(classes => classes.AssignableTo(typeof(IService)))
             //    .AsSelf()
             //    .WithTransientLifetime()
             //);
@@ -25,6 +25,7 @@ namespace Store.Configuration
             services.AddScoped<IRepository<Product>, Repository<Product>>();
             services.AddScoped<IRepository<Order>, Repository<Order>>();
             services.AddScoped<IRepository<OrderDetail>, Repository<OrderDetail>>();
+            services.AddScoped<IRepository<Resource>, Repository<Resource>>();
 
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ICustomerService, CustomerService>();
@@ -32,10 +33,11 @@ namespace Store.Configuration
             services.AddScoped<IIdentityService, IdentityService>();
             services.AddScoped<IShipperService, ShipperService>();
             services.AddScoped<ISupplierService, SupplierService>();
-            services.AddScoped<IUserService, UserService>();
             services.AddScoped<IProductService, ProductService>();
 
             services.AddScoped<IOrderService, OrderService>();
+
+            services.AddScoped<IRoleService, RoleService>();
         }
     }
 }
