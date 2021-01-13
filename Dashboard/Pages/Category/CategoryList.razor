@@ -83,7 +83,7 @@
         }
 
 
-        await service.DeleteAsync(model);
+        await service.DeleteAsync(model.Id);
         await service.SaveChangesAsync();
         data = await service.GetAllAsync();
     }

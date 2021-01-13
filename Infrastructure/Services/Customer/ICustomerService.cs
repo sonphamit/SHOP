@@ -12,7 +12,7 @@ namespace Infrastructure.Services
         Task<IEnumerable<CustomerModel>> GetAllAsync();
         Task<CustomerModel> GetByIdAsync(string id);
         Task<IEnumerable<CustomerModel>> Pagination(Expression<Func<CustomerModel, bool>> predicate);
-        Task DeleteAsync(CustomerModel model);
+        Task DeleteAsync(string id);
         Task<int> SaveChangesAsync();
         int SaveChanges();
 

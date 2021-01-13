@@ -12,7 +12,7 @@ namespace Infrastructure.Services
         Task<IEnumerable<ShipperModel>> GetAllAsync();
         IEnumerable<ShipperModel> GetAll();
         Task<ShipperModel> GetByIdAsync(string id);
-        Task DeleteAsync(ShipperModel model);
+        Task DeleteAsync(string id);
         Task<int> SaveChangesAsync();
         int SaveChanges();
     }

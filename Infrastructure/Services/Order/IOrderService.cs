@@ -13,7 +13,7 @@ namespace Infrastructure.Services
         Task<IEnumerable<OrderModel>> GetAllAsync();
         Task<OrderModel> GetByIdAsync(string id);
         Task<IEnumerable<OrderModel>> Pagination(Expression<Func<OrderModel, bool>> predicate);
-        Task DeleteAsync(OrderModel model);
+        Task DeleteAsync(string id);
         Task<int> SaveChangesAsync();
         int SaveChanges();
     }

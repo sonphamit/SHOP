@@ -16,7 +16,7 @@ namespace Infrastructure.Services
         IEnumerable<SupplierModel> GetAll();
         Task<SupplierModel> GetByIdAsync(string id);
         Task<IEnumerable<SupplierModel>> Pagination(Expression<Func<SupplierModel, bool>> predicate);
-        Task DeleteAsync(SupplierModel model);
+        Task DeleteAsync(string id);
         Task<int> SaveChangesAsync();
         int SaveChanges();
 

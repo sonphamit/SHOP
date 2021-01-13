@@ -36,9 +36,9 @@ namespace Infrastructure.Services
             throw new NotImplementedException();
         }
 
-        public async Task DeleteAsync(SupplierModel model)
+        public async Task DeleteAsync(string id)
         {
-            var entity = await _unitOfWork.SupplierRepository.FindByCondition(cat => cat.Id.Equals(model.Id)).FirstOrDefaultAsync();
+            var entity = await _unitOfWork.SupplierRepository.FindByCondition(e => e.Id.Equals(id)).FirstOrDefaultAsync();
             _unitOfWork.SupplierRepository.Delete(entity);
         }
 

@@ -39,15 +39,15 @@ namespace Infrastructure.Services
             throw new NotImplementedException();
         }
 
-        public async Task DeleteAsync(ProductModel model)
+        public async Task DeleteAsync(string id)
         {
-            var resources = await _unitOfWork.ResourceRepository.FindByCondition(rs => rs.ProductId.Equals(model.Id) && rs.IsDeleted).ToListAsync();
+            var resources = await _unitOfWork.ResourceRepository.FindByCondition(rs => rs.ProductId.Equals(id) && rs.IsDeleted).ToListAsync();
             resources.ForEach(item =>
             {
                 item.IsDeleted = true;
             });
 
-            var entityDelete = await _unitOfWork.ProductRepository.FindByCondition(e => e.Id.Equals(model.Id)).FirstOrDefaultAsync();
+            var entityDelete = await _unitOfWork.ProductRepository.FindByCondition(e => e.Id.Equals(id)).FirstOrDefaultAsync();
             resources.AddRange(entityDelete.Images);
 
 

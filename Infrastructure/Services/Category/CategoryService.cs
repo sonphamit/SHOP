@@ -26,9 +26,9 @@ namespace Infrastructure.Services
             SaveChanges();
         }
 
-        public async Task DeleteAsync(CategoryModel model)
+        public async Task DeleteAsync(string id)
         {
-            var entity = await _unitOfWork.CategoryRepository.FindByCondition(cat => cat.Id.Equals(model.Id)).FirstOrDefaultAsync();
+            var entity = await _unitOfWork.CategoryRepository.FindByCondition(cat => cat.Id.Equals(id)).FirstOrDefaultAsync();
             _unitOfWork.CategoryRepository.Delete(entity);
         }
 

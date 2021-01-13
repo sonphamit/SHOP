@@ -89,7 +89,7 @@
             return;
         }
 
-        await productService.DeleteAsync(model);
+        await productService.DeleteAsync(model.Id);
         await productService.SaveChangesAsync();
         products = await productService.GetAllAsync();
     }

@@ -28,9 +28,9 @@ namespace Infrastructure.Services
             _unitOfWork.ShipperRepository.Detach(entity);
         }
 
-        public async Task DeleteAsync(ShipperModel model)
+        public async Task DeleteAsync(string id)
         {
-            var entity = await _unitOfWork.ShipperRepository.FindByCondition(cat => cat.Id.Equals(model.Id)).FirstOrDefaultAsync();
+            var entity = await _unitOfWork.ShipperRepository.FindByCondition(cat => cat.Id.Equals(id)).FirstOrDefaultAsync();
             _unitOfWork.ShipperRepository.Delete(entity);
         }
 

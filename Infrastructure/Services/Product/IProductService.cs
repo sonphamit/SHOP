@@ -17,7 +17,7 @@ namespace Infrastructure.Services
         IEnumerable<ProductModel> GetAll();
         ProductModel FindByCondition(string id);
         Task<IEnumerable<ProductModel>> Pagination(Expression<Func<ProductModel, bool>> predicate);
-        Task DeleteAsync(ProductModel model);
+        Task DeleteAsync(string id);
         Task<int> SaveChangesAsync();
         int SaveChanges();
 

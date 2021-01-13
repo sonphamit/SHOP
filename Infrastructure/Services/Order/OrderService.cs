@@ -30,9 +30,9 @@ namespace Infrastructure.Services
             throw new NotImplementedException();
         }
 
-        public async Task DeleteAsync(OrderModel model)
+        public async Task DeleteAsync(string id)
         {
-            var entity = await _unitOfWork.OrderRepository.GetByIdAsync(model.Id);
+            var entity = await _unitOfWork.OrderRepository.GetByIdAsync(id);
             _unitOfWork.OrderRepository.Delete(entity);
         }
 
