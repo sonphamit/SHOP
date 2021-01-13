@@ -37,13 +37,13 @@ namespace Infrastructure.Services
         public IEnumerable<ShipperModel> GetAll()
         {
             var entities = _unitOfWork.ShipperRepository.GetAll();
-            return _mapper.Map<IEnumerable<ShipperModel>>(entities);
+            return _mapper.Map<IEnumerable<ShipperModel>>(entities).OrderBy(e => e.ShipperName);
         }
 
         public async Task<IEnumerable<ShipperModel>> GetAllAsync()
         {
             var entities = await _unitOfWork.ShipperRepository.GetAllAsync();
-            return _mapper.Map<IEnumerable<ShipperModel>>(entities);
+            return _mapper.Map<IEnumerable<ShipperModel>>(entities).OrderBy(e => e.ShipperName);
         }
 
         public async Task<ShipperModel> GetByIdAsync(string id)

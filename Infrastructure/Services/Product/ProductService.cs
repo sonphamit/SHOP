@@ -58,13 +58,13 @@ namespace Infrastructure.Services
             var entities = await _unitOfWork.ProductRepository.DbSet
                 .Include(item => item.Category).Include(item => item.Supplier)
                 .Include(item => item.Images).AsNoTracking().ToListAsync();
-            return _mapper.Map<IEnumerable<ProductModel>>(entities);
+            return _mapper.Map<IEnumerable<ProductModel>>(entities).OrderBy(e => e.Name);
         }
 
         public IEnumerable<ProductModel> GetAll()
         {
             var entities = _unitOfWork.ProductRepository.GetAll();
-            return _mapper.Map<IEnumerable<ProductModel>>(entities);
+            return _mapper.Map<IEnumerable<ProductModel>>(entities).OrderBy(e => e.Name);
         }
 
         public ProductModel FindByCondition(string id)

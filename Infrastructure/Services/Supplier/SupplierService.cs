@@ -40,13 +40,13 @@ namespace Infrastructure.Services
         public async Task<IEnumerable<SupplierModel>> GetAllAsync()
         {
             var entities = await _unitOfWork.SupplierRepository.GetAllAsync();
-            return _mapper.Map<IEnumerable<SupplierModel>>(entities);
+            return _mapper.Map<IEnumerable<SupplierModel>>(entities).OrderBy(e => e.CompanyName);
         }
 
         public IEnumerable<SupplierModel> GetAll()
         {
             var entities = _unitOfWork.SupplierRepository.GetAll();
-            return _mapper.Map<IEnumerable<SupplierModel>>(entities);
+            return _mapper.Map<IEnumerable<SupplierModel>>(entities).OrderBy(e => e.CompanyName);
         }
 
         public async Task<SupplierModel> GetByIdAsync(string id)

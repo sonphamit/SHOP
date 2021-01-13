@@ -6,7 +6,7 @@
 @inject ISupplierService supplierService
 @inject IWebHostEnvironment _env;
 
-<Modal @ref="modalRef" >
+<Modal @ref="modalRef">
     <ModalBackdrop />
     <ModalContent IsCentered="true" Size="ModalSize.Large">
         <form method="post">
@@ -49,56 +49,59 @@
                         <MemoEdit Placeholder="Enter description..." @bind-Text="model.Description" />
                     </FieldBody>
                 </Field>
-
-                <Field Horizontal="true">
-                    <FieldLabel ColumnSize="ColumnSize.Is2">Price</FieldLabel>
-                    <FieldBody ColumnSize="ColumnSize.Is10">
-                        <NumericEdit Placeholder="Enter Unit Price" @bind-Value="model.UnitPrice" />
-                    </FieldBody>
-                </Field>
-                <Field Horizontal="true">
-                    <FieldLabel ColumnSize="ColumnSize.Is2">Discount</FieldLabel>
-                    <FieldBody ColumnSize="ColumnSize.Is10">
-                        <NumericEdit Placeholder="Enter Discount" @bind-Value="model.Discount" />
-                    </FieldBody>
-                </Field>
-                <Field Horizontal="true">
-                    <FieldLabel ColumnSize="ColumnSize.Is2">Units In Stock</FieldLabel>
-                    <FieldBody ColumnSize="ColumnSize.Is10">
-                        <NumericEdit Placeholder="Enter Units In Stock" @bind-Value="model.UnitsInStock" />
-                    </FieldBody>
-                </Field>
-                <Field Horizontal="true">
-                    <FieldLabel ColumnSize="ColumnSize.Is2">Category</FieldLabel>
-                    <FieldBody ColumnSize="ColumnSize.Is10">
-                        <Select TValue="string" Multiple="false" @bind-SelectedValue="model.CategoryId">
-                            @if (categories != null)
-                            {
-                                @foreach (var item in categories)
+                <Fields>
+                    <Field ColumnSize="ColumnSize.Is4">
+                        <FieldLabel>Price</FieldLabel>
+                        <FieldBody>
+                            <NumericEdit Placeholder="Enter Unit Price" @bind-Value="model.UnitPrice" />
+                        </FieldBody>
+                    </Field>
+                    <Field ColumnSize="ColumnSize.Is4">
+                        <FieldLabel>Discount</FieldLabel>
+                        <FieldBody ColumnSize="ColumnSize.Is10">
+                            <NumericEdit Placeholder="Enter Discount" @bind-Value="model.Discount" />
+                        </FieldBody>
+                    </Field>
+                    <Field ColumnSize="ColumnSize.Is4">
+                        <FieldLabel>Units In Stock</FieldLabel>
+                        <FieldBody>
+                            <NumericEdit Placeholder="Enter Units In Stock" @bind-Value="model.UnitsInStock" />
+                        </FieldBody>
+                    </Field>
+                </Fields>
+                <Fields>
+                    <Field ColumnSize="ColumnSize.Is4">
+                        <FieldLabel>Category</FieldLabel>
+                        <FieldBody>
+                            <Select TValue="string" Multiple="false" @bind-SelectedValue="model.CategoryId">
+                                @if (categories != null)
                                 {
-                                    <SelectItem Value="@item.Id">@item.Name</SelectItem>
+                                    @foreach (var item in categories)
+                                    {
+                                        <SelectItem Value="@item.Id">@item.Name</SelectItem>
+                                    }
                                 }
-                            }
-                        </Select>
-                    </FieldBody>
-                </Field>
-                <Field Horizontal="true">
-                    <FieldLabel ColumnSize="ColumnSize.Is2">Supplier</FieldLabel>
-                    <FieldBody ColumnSize="ColumnSize.Is10">
-                        <Select TValue="string" Multiple="false" @bind-SelectedValue="model.SupplierId">
-                            @if (suppliers != null)
-                            {
-                                @foreach (var item in suppliers)
+                            </Select>
+                        </FieldBody>
+                    </Field>
+                    <Field ColumnSize="ColumnSize.Is4">
+                        <FieldLabel>Supplier</FieldLabel>
+                        <FieldBody>
+                            <Select TValue="string" Multiple="false" @bind-SelectedValue="model.SupplierId">
+                                @if (suppliers != null)
                                 {
-                                    <SelectItem Value="@item.Id">@item.CompanyName</SelectItem>
+                                    @foreach (var item in suppliers)
+                                    {
+                                        <SelectItem Value="@item.Id">@item.CompanyName</SelectItem>
+                                    }
                                 }
-                            }
-                        </Select>
-                    </FieldBody>
-                </Field>
-                <Field Horizontal="true">
-                    <FieldLabel ColumnSize="ColumnSize.Is2">Images</FieldLabel>
-                    <FieldBody ColumnSize="ColumnSize.Is10">
+                            </Select>
+                        </FieldBody>
+                    </Field>
+                </Fields>
+                <Field >
+                    <FieldLabel>Images</FieldLabel>
+                    <FieldBody >
                         <div>
                             <div class="dropArea @dropClass">
                                 Drag and drop your files here or click to open file loading dialogue...
@@ -109,13 +112,13 @@
                                            multiple />
                             </div>
 
-                            <ol class="list-image">
+                            <ol class="mt-1">
                                 @if (images != null && images.Any())
                                 {
                                     @foreach (var image in images)
                                     {
 
-                                        <li class="mt-2">
+                                        <li class="mt-1">
                                             <a href="@image.Key" target="_blank"> @image.Value</a>
                                         </li>
                                     }

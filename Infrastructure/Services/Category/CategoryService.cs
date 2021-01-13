@@ -35,13 +35,13 @@ namespace Infrastructure.Services
         public async Task<IEnumerable<CategoryModel>> GetAllAsync()
         {
             var entities = await _unitOfWork.CategoryRepository.GetAllAsync();
-            return _mapper.Map<IEnumerable<CategoryModel>>(entities);
+            return _mapper.Map<IEnumerable<CategoryModel>>(entities).OrderBy(e => e.Name);
         }
 
         public IEnumerable<CategoryModel> GetAll()
         {
             var entities = _unitOfWork.CategoryRepository.GetAll();
-            return _mapper.Map<IEnumerable<CategoryModel>>(entities);
+            return _mapper.Map<IEnumerable<CategoryModel>>(entities).OrderBy(e => e.Name);
         }
 
         public async Task<CategoryModel> GetByIdAsync(string id)
