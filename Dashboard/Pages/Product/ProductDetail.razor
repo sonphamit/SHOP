@@ -20,8 +20,32 @@
                     <TextEdit Placeholder="Enter name..." @bind-Text="model.Name" />
                 </Field>
                 <Field>
+                    <FieldLabel>Code</FieldLabel>
+                    <TextEdit Placeholder="Enter code..." @bind-Text="model.ProductionCode" />
+                </Field>
+                <Field>
+                    <FieldLabel>Description</FieldLabel>
+                    <MemoEdit Placeholder="Enter description..." @bind-Text="model.Description" />
+                </Field>
+                <Field>
+                    <FieldLabel>Gender</FieldLabel>
+                    <Select TValue="Gender" Multiple="false" @bind-SelectedValue="model.Gender">
+                        @if (GenderList != null)
+                        {
+                            @foreach (var item in GenderList)
+                            {
+                                <SelectItem Value="@item.Key">@item.Value</SelectItem>
+                            }
+                        }
+                    </Select>
+                </Field>
+                <Field>
                     <FieldLabel>Unit Price</FieldLabel>
                     <NumericEdit Placeholder="Enter Unit Price" @bind-Value="model.UnitPrice" />
+                </Field>
+                <Field>
+                    <FieldLabel>Discount</FieldLabel>
+                    <NumericEdit Placeholder="Enter Discount" @bind-Value="model.Discount" />
                 </Field>
                 <Field>
                     <FieldLabel>Units In Stock</FieldLabel>
@@ -75,16 +99,6 @@
                                 }
                             }
 
-                            @*@if (model.Images != null && model.Images.Any())
-                                {
-                                    @foreach (var image in model.Images)
-                                    {
-
-                                        <li class="mt-2">
-                                            <a href="@" target="_blank"> @image.Value.Name </a>
-                                        </li>
-                                    }
-                                }*@
                         </ol>
 
                     </div>
@@ -125,6 +139,7 @@
     string dropClass = string.Empty;
     const int maxFileSize = 10485760;
 
+    List<KeyValuePair<Gender, string>> GenderList;
 
     protected override async Task OnInitializedAsync()
     {
@@ -134,6 +149,11 @@
     protected override void OnInitialized()
     {
         model = new ProductModel();
+    }
+
+    public void GetAllGender()
+    {
+        GenderList = EnumHelper.GetEnumAndDescriptions<Gender>();
     }
 
     private async Task SaveChangeAsync()
