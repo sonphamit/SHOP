@@ -6,102 +6,125 @@
 @inject ISupplierService supplierService
 @inject IWebHostEnvironment _env;
 
-<Modal @ref="modalRef">
+<Modal @ref="modalRef" >
     <ModalBackdrop />
-    <ModalContent IsCentered="true">
+    <ModalContent IsCentered="true" Size="ModalSize.Large">
         <form method="post">
             <ModalHeader>
                 <ModalTitle>@modalTitle</ModalTitle>
                 <CloseButton Clicked="@HideModal" />
             </ModalHeader>
             <ModalBody>
-                <Field>
-                    <FieldLabel>Name</FieldLabel>
-                    <TextEdit Placeholder="Enter name..." @bind-Text="model.Name" />
+                <Field Horizontal="true">
+                    <FieldLabel ColumnSize="ColumnSize.Is2">Name</FieldLabel>
+                    <FieldBody ColumnSize="ColumnSize.Is10">
+                        <TextEdit Placeholder="Enter name..." @bind-Text="model.Name" />
+                    </FieldBody>
                 </Field>
                 <Field>
-                    <FieldLabel>Code</FieldLabel>
-                    <TextEdit Placeholder="Enter code..." @bind-Text="model.ProductionCode" />
-                </Field>
-                <Field>
-                    <FieldLabel>Description</FieldLabel>
-                    <MemoEdit Placeholder="Enter description..." @bind-Text="model.Description" />
-                </Field>
-                <Field>
-                    <FieldLabel>Gender</FieldLabel>
-                    <Select TValue="Gender" Multiple="false" @bind-SelectedValue="model.Gender">
-                        @if (GenderList != null)
-                        {
-                            @foreach (var item in GenderList)
-                            {
-                                <SelectItem Value="@item.Key">@item.Value</SelectItem>
-                            }
-                        }
-                    </Select>
-                </Field>
-                <Field>
-                    <FieldLabel>Unit Price</FieldLabel>
-                    <NumericEdit Placeholder="Enter Unit Price" @bind-Value="model.UnitPrice" />
-                </Field>
-                <Field>
-                    <FieldLabel>Discount</FieldLabel>
-                    <NumericEdit Placeholder="Enter Discount" @bind-Value="model.Discount" />
-                </Field>
-                <Field>
-                    <FieldLabel>Units In Stock</FieldLabel>
-                    <NumericEdit Placeholder="Enter Unit Price" @bind-Value="model.UnitsInStock" />
-                </Field>
-                <Field>
-                    <FieldLabel>Category</FieldLabel>
-                    <Select TValue="string" Multiple="false" @bind-SelectedValue="model.CategoryId">
-                        @if (categories != null)
-                        {
-                            @foreach (var item in categories)
-                            {
-                                <SelectItem Value="@item.Id">@item.Name</SelectItem>
-                            }
-                        }
-                    </Select>
-                </Field>
-                <Field>
-                    <FieldLabel>Supplier</FieldLabel>
-                    <Select TValue="string" Multiple="false" @bind-SelectedValue="model.SupplierId">
-                        @if (suppliers != null)
-                        {
-                            @foreach (var item in suppliers)
-                            {
-                                <SelectItem Value="@item.Id">@item.CompanyName</SelectItem>
-                            }
-                        }
-                    </Select>
-                </Field>
-                <Field>
-                    <FieldLabel>Images</FieldLabel>
-                    <div>
-                        <div class="dropArea @dropClass">
-                            Drag and drop your files here or click to open file loading dialogue...
-                            <InputFile id="inputDrop"
-                                       OnChange="OnInputFileChange"
-                                       @ondragenter="HandleDragEnter"
-                                       @ondragleave="HandleDragLeave"
-                                       multiple />
-                        </div>
-
-                        <ol class="list-image">
-                            @if (images != null && images.Any())
-                            {
-                                @foreach (var image in images)
+                    <Field Horizontal="true">
+                        <FieldLabel ColumnSize="ColumnSize.Is2">Code</FieldLabel>
+                        <FieldBody ColumnSize="ColumnSize.Is10">
+                            <TextEdit Placeholder="Enter code..." @bind-Text="model.ProductionCode" />
+                        </FieldBody>
+                    </Field>
+                    <Field Horizontal="true">
+                        <FieldLabel ColumnSize="ColumnSize.Is2">Gender</FieldLabel>
+                        <FieldBody ColumnSize="ColumnSize.Is10">
+                            <Select TValue="Gender" Multiple="false" @bind-SelectedValue="model.Gender">
+                                @if (GenderList != null)
                                 {
+                                    @foreach (var item in GenderList)
+                                    {
+                                        <SelectItem Value="@item.Key">@item.Value</SelectItem>
+                                    }
+                                }
+                            </Select>
+                        </FieldBody>
+                    </Field>
+                </Field>
+                <Field Horizontal="true">
+                    <FieldLabel ColumnSize="ColumnSize.Is2">Description</FieldLabel>
+                    <FieldBody ColumnSize="ColumnSize.Is10">
+                        <MemoEdit Placeholder="Enter description..." @bind-Text="model.Description" />
+                    </FieldBody>
+                </Field>
 
-                                    <li class="mt-2">
-                                        <a href="@image.Key" target="_blank"> @image.Value</a>
-                                    </li>
+                <Field Horizontal="true">
+                    <FieldLabel ColumnSize="ColumnSize.Is2">Price</FieldLabel>
+                    <FieldBody ColumnSize="ColumnSize.Is10">
+                        <NumericEdit Placeholder="Enter Unit Price" @bind-Value="model.UnitPrice" />
+                    </FieldBody>
+                </Field>
+                <Field Horizontal="true">
+                    <FieldLabel ColumnSize="ColumnSize.Is2">Discount</FieldLabel>
+                    <FieldBody ColumnSize="ColumnSize.Is10">
+                        <NumericEdit Placeholder="Enter Discount" @bind-Value="model.Discount" />
+                    </FieldBody>
+                </Field>
+                <Field Horizontal="true">
+                    <FieldLabel ColumnSize="ColumnSize.Is2">Units In Stock</FieldLabel>
+                    <FieldBody ColumnSize="ColumnSize.Is10">
+                        <NumericEdit Placeholder="Enter Units In Stock" @bind-Value="model.UnitsInStock" />
+                    </FieldBody>
+                </Field>
+                <Field Horizontal="true">
+                    <FieldLabel ColumnSize="ColumnSize.Is2">Category</FieldLabel>
+                    <FieldBody ColumnSize="ColumnSize.Is10">
+                        <Select TValue="string" Multiple="false" @bind-SelectedValue="model.CategoryId">
+                            @if (categories != null)
+                            {
+                                @foreach (var item in categories)
+                                {
+                                    <SelectItem Value="@item.Id">@item.Name</SelectItem>
                                 }
                             }
+                        </Select>
+                    </FieldBody>
+                </Field>
+                <Field Horizontal="true">
+                    <FieldLabel ColumnSize="ColumnSize.Is2">Supplier</FieldLabel>
+                    <FieldBody ColumnSize="ColumnSize.Is10">
+                        <Select TValue="string" Multiple="false" @bind-SelectedValue="model.SupplierId">
+                            @if (suppliers != null)
+                            {
+                                @foreach (var item in suppliers)
+                                {
+                                    <SelectItem Value="@item.Id">@item.CompanyName</SelectItem>
+                                }
+                            }
+                        </Select>
+                    </FieldBody>
+                </Field>
+                <Field Horizontal="true">
+                    <FieldLabel ColumnSize="ColumnSize.Is2">Images</FieldLabel>
+                    <FieldBody ColumnSize="ColumnSize.Is10">
+                        <div>
+                            <div class="dropArea @dropClass">
+                                Drag and drop your files here or click to open file loading dialogue...
+                                <InputFile id="inputDrop"
+                                           OnChange="OnInputFileChange"
+                                           @ondragenter="HandleDragEnter"
+                                           @ondragleave="HandleDragLeave"
+                                           multiple />
+                            </div>
 
-                        </ol>
+                            <ol class="list-image">
+                                @if (images != null && images.Any())
+                                {
+                                    @foreach (var image in images)
+                                    {
 
-                    </div>
+                                        <li class="mt-2">
+                                            <a href="@image.Key" target="_blank"> @image.Value</a>
+                                        </li>
+                                    }
+                                }
+
+                            </ol>
+
+                        </div>
+                    </FieldBody>
                 </Field>
             </ModalBody>
             <ModalFooter>
@@ -144,6 +167,7 @@
     protected override async Task OnInitializedAsync()
     {
         await GetAllAsync();
+        GetAllGender();
     }
 
     protected override void OnInitialized()
@@ -181,7 +205,7 @@
             {
                 await productService.AddAsync(model);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 throw e;
             }
@@ -217,7 +241,8 @@
         this.model = new ProductModel();
         this.model = model;
 
-        this.model.Images.ForEach(item => {
+        this.model.Images.ForEach(item =>
+        {
             images.Add(item.PathName, item.PathName.Split("_").Last());
         });
 
