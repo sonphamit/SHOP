@@ -4,13 +4,13 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace Dashboard.Middlewares
+namespace Store.Middlewares
 {
-    public class CustomMiddleware
+    public class ExceptionHandlingMiddleware
     {
         private readonly RequestDelegate _next;
 
-        public CustomMiddleware(RequestDelegate next)
+        public ExceptionHandlingMiddleware(RequestDelegate next)
         {
             _next = next;
         }
