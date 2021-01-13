@@ -43,4 +43,14 @@ namespace Infrastructure.Enums
         [Description("Nhân Viên")]
         EMPLOYEE_TYPE = 1,
     }
+
+    public enum Gender
+    {
+        [Description("Tất cả")]
+        ALL = 0,
+        [Description("Nữ")]
+        GIRL = 1,
+        [Description("Nam")]
+        BOY = 2,
+    }
 }
