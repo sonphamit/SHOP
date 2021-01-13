@@ -11,7 +11,7 @@ namespace Infrastructure.Services
         Task AddRangeAsync(IEnumerable<CustomerModel> models);
         Task<IEnumerable<CustomerModel>> GetAllAsync();
         Task<CustomerModel> GetByIdAsync(string id);
-        Task<IEnumerable<CustomerModel>> Pagination(Expression<Func<CustomerModel, bool>> predicate);
+        Task<IEnumerable<CustomerModel>> Pagination(string categoryId, string keyword, string orderCol, string orderType, int? page = null, int? size = null);
         Task DeleteAsync(string id);
         Task<int> SaveChangesAsync();
         int SaveChanges();

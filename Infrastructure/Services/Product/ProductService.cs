@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Infrastructure.Services
@@ -32,11 +31,6 @@ namespace Infrastructure.Services
             await _unitOfWork.ResourceRepository.AddRangeAsync(entity.Images);
             SaveChanges();
             _unitOfWork.ProductRepository.Detach(entity);
-        }
-
-        public Task AddRangeAsync(IEnumerable<ProductModel> models)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task DeleteAsync(string id)
@@ -80,7 +74,7 @@ namespace Infrastructure.Services
             return model;
         }
 
-        public Task<IEnumerable<ProductModel>> Pagination(Expression<Func<ProductModel, bool>> predicate)
+        public Task<IEnumerable<ProductModel>> Pagination(string categoryId, string keyword, string orderCol, string orderType, int? page = null, int? size = null)
         {
             throw new NotImplementedException();
         }

@@ -31,11 +31,6 @@ namespace Infrastructure.Services
             _unitOfWork.SupplierRepository.Detach(entity);
         }
 
-        public Task AddRangeAsync(IEnumerable<SupplierModel> models)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task DeleteAsync(string id)
         {
             var entity = await _unitOfWork.SupplierRepository.FindByCondition(e => e.Id.Equals(id)).FirstOrDefaultAsync();
@@ -56,7 +51,7 @@ namespace Infrastructure.Services
 
         public async Task<SupplierModel> GetByIdAsync(string id)
         {
-            var entity = await _unitOfWork.SupplierRepository.GetByIdAsync(id);
+            var entity = await _unitOfWork.SupplierRepository.FindByCondition(e => e.Id.Equals(id)).FirstOrDefaultAsync();
             return _mapper.Map<SupplierModel>(entity);
         }
 

@@ -134,28 +134,6 @@ namespace Infrastructure.Database
         }
 
         /// <summary>
-        /// Get a entity by Id
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="allowTracking"></param>
-        /// <returns></returns>
-        public TEntity GetById(string id, bool allowTracking = true)
-        {
-            return DbSet.FirstOrDefault(e => (e.GetType().GetProperty("Id").GetValue(e) as string) == id);
-        }
-
-        /// <summary>
-        /// Get a entity by Id
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="allowTracking"></param>
-        /// <returns></returns>
-        public async Task<TEntity> GetByIdAsync(string id, bool allowTracking = true)
-        {
-            return await DbSet.Where(e => (e.GetType().GetProperty("Id").GetValue(e) as string) == id).FirstOrDefaultAsync();
-        }
-
-        /// <summary>
         /// Get many entities by predicate
         /// </summary>
         /// <param name="predicate"></param>

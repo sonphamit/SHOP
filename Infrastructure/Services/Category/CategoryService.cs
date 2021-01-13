@@ -28,7 +28,7 @@ namespace Infrastructure.Services
 
         public async Task DeleteAsync(string id)
         {
-            var entity = await _unitOfWork.CategoryRepository.FindByCondition(cat => cat.Id.Equals(id)).FirstOrDefaultAsync();
+            var entity = await _unitOfWork.CategoryRepository.FindByCondition(e => e.Id.Equals(id)).FirstOrDefaultAsync();
             _unitOfWork.CategoryRepository.Delete(entity);
         }
 
@@ -46,7 +46,7 @@ namespace Infrastructure.Services
 
         public async Task<CategoryModel> GetByIdAsync(string id)
         {
-            var entity = await _unitOfWork.CategoryRepository.GetByIdAsync(id);
+            var entity = await _unitOfWork.CategoryRepository.FindByCondition(e => e.Id.Equals(id)).FirstOrDefaultAsync();
             return _mapper.Map<CategoryModel>(entity);
         }
 
@@ -64,7 +64,7 @@ namespace Infrastructure.Services
         {
             if (!string.IsNullOrWhiteSpace(id))
             {
-                var originEntity =  _unitOfWork.CategoryRepository.FindByCondition(cat => cat.Id.Equals(model.Id)).FirstOrDefault();
+                var originEntity =  _unitOfWork.CategoryRepository.FindByCondition(e => e.Id.Equals(model.Id)).FirstOrDefault();
                 var entityUpdate = _mapper.Map(model, originEntity);
                 entityUpdate.Id = model.Id;
                 _unitOfWork.CategoryRepository.Update(entityUpdate);

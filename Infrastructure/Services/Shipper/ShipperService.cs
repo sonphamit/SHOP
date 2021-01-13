@@ -48,7 +48,7 @@ namespace Infrastructure.Services
 
         public async Task<ShipperModel> GetByIdAsync(string id)
         {
-            var entity = await _unitOfWork.ShipperRepository.GetByIdAsync(id);
+            var entity = await _unitOfWork.ShipperRepository.FindByCondition(e => e.Id.Equals(id)).FirstOrDefaultAsync();
             return _mapper.Map<ShipperModel>(entity);
         }
 
@@ -66,7 +66,7 @@ namespace Infrastructure.Services
         {
             if (!string.IsNullOrWhiteSpace(id))
             {
-                var originEntity = _unitOfWork.ShipperRepository.FindByCondition(cat => cat.Id.Equals(model.Id)).FirstOrDefault();
+                var originEntity = _unitOfWork.ShipperRepository.FindByCondition(e => e.Id.Equals(model.Id)).FirstOrDefault();
                 var entityUpdate = _mapper.Map(model, originEntity);
                 entityUpdate.Id = model.Id;
                 _unitOfWork.ShipperRepository.Update(entityUpdate);
