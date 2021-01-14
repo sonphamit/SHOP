@@ -23,7 +23,7 @@ namespace Store.Controllers
 
         public  IActionResult DetailsAsync(string id)
         {
-            ProductModel product = _productService.FindByCondition(id);
+            var product = _productService.GetById(id);
             if (product == null)
             {
                 return View("NotFound");

@@ -5200,6 +5200,12 @@ h6 {
 	text-decoration: line-through;
 }
 
+.font-size-13 {
+	font-size: 13px;
+}
+.font-size-15 {
+	font-size: 15px;
+}
 /*=============================
 	23. End Detail CSS
 ===============================*/

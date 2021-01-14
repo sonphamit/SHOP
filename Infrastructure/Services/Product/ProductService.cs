@@ -68,6 +68,7 @@ namespace Infrastructure.Services
             return _mapper.Map<IEnumerable<ProductResponseModel>>(entities).OrderBy(e => e.Name);
         }
 
+        
         public ProductResponseModel GetById(string id)
         {
             var entity = _unitOfWork.ProductRepository.FindByCondition(e => e.Id == id).Include(i => i.Images).FirstOrDefault();

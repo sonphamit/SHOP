@@ -1,5 +1,5 @@
-﻿@model Infrastructure.Models.ProductModel
-
+﻿@model Infrastructure.Models.ProductResponseModel
+@using Infrastructure.Constants
 @{
     ViewData["Title"] = "View";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -11,18 +11,22 @@
                 <div class="preview col-md-6">
 
                     <div class="preview-pic tab-content">
-                        <div class="tab-pane active" id="pic-1"><img src="http://placekitten.com/400/252" /></div>
-                        <div class="tab-pane" id="pic-2"><img src="http://placekitten.com/400/252" /></div>
-                        <div class="tab-pane" id="pic-3"><img src="http://placekitten.com/400/252" /></div>
-                        <div class="tab-pane" id="pic-4"><img src="http://placekitten.com/400/252" /></div>
-                        <div class="tab-pane" id="pic-5"><img src="http://placekitten.com/400/252" /></div>
+                        @foreach (var image in Model.Images)
+                        {
+                            <div class="tab-pane" id="pic-1">
+                            <img src="@(TextConstant.DashboardDomain + "/" + image.PathName)" />
+                            </div>
+                        }
                     </div>
                     <ul class="preview-thumbnail nav nav-tabs">
-                        <li class="active"><a data-target="#pic-1" data-toggle="tab"><img src="http://placekitten.com/200/126" /></a></li>
+                        @foreach (var image in Model.Images)
+                        {
+                            <li><a data-target="#pic-2" data-toggle="tab"><img src="@(TextConstant.DashboardDomain + "/" + image.PathName)" /></a></li>
+                        }
+                        @*<li class="active"><a data-target="#pic-1" data-toggle="tab"><img src="http://placekitten.com/200/126" /></a></li>
                         <li><a data-target="#pic-2" data-toggle="tab"><img src="http://placekitten.com/200/126" /></a></li>
                         <li><a data-target="#pic-3" data-toggle="tab"><img src="http://placekitten.com/200/126" /></a></li>
-                        <li><a data-target="#pic-4" data-toggle="tab"><img src="http://placekitten.com/200/126" /></a></li>
-                        <li><a data-target="#pic-5" data-toggle="tab"><img src="http://placekitten.com/200/126" /></a></li>
+                        <li><a data-target="#pic-4" data-toggle="tab"><img src="http://placekitten.com/200/126" /></a></li>*@
                     </ul>
 
                 </div>
@@ -31,17 +35,17 @@
                     <h6>Mã hàng: 1234</h6>
                     @if (Model.Discount > 0)
                     {
-                        <h3 class="price mt-2">
-                            <span class="pl-3">@(Model.Discount/100* float.Parse(Model.UnitPrice.ToString()))</span>
-                            <span class="pl-2 text-decoration">@(Model.UnitPrice.ToString())</span>
-                            <span class="text-danger">@Model.Discount % Giảm</span>
-                        </h3>
+                        <div class="mt-2">
+                            <span class="pl-3 font-size-15">@Model.DiscountPriceString</span>
+                            <span class="pl-2 text-decoration font-size-13">@(Model.DiscountPriceString)</span>
+                            <span class="text-danger">@(Model.Discount) % Giảm</span>
+                        </div>
 
                     }
                     else
                     {
                         <h3 class="price mt-2">
-                            <span>@(Model.UnitPrice.ToString())</span>
+                            <span>@(String.Format("{0:0.0 VND}", Model.UnitPrice))</span>
                         </h3>
                     }
 
@@ -67,12 +71,18 @@
                         <span class="color blue"></span>
                     </h6>
 
-                    <div class="def-number-input number-input safari_only mb-0 mt-3">
-                        <button onclick="this.parentNode.querySelector('input[type=number]').stepDown()"
-                                class="minus"></button>
-                        <input class="quantity" min="0" name="quantity" value="1" type="number">
-                        <button onclick="this.parentNode.querySelector('input[type=number]').stepUp()"
-                                class="plus"></button>
+                    <div class="input-group">
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default btn-number" disabled="disabled" data-type="minus" data-field="quant[1]">
+                                <span class="glyphicon glyphicon-minus"></span>
+                            </button>
+                        </span>
+                        <input type="text" name="quant[1]" class="form-control input-number" value="1" min="1" max="10">
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default btn-number" data-type="plus" data-field="quant[1]">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                        </span>
                     </div>
 
                     <div class="action mt-3">
