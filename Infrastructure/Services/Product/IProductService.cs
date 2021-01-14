@@ -7,13 +7,15 @@ namespace Infrastructure.Services
 {
     public interface IProductService
     {
-        Task AddAsync(ProductModel model);
-        void Update(string id, ProductModel model);
-        Task<bool> UpdateAsync(string id, ProductModel model);
-        Task<IEnumerable<ProductModel>> GetAllAsync();
-        IEnumerable<ProductModel> GetAll();
-        ProductModel FindByCondition(string id);
-        Task<IEnumerable<ProductModel>> Pagination(string categoryId, string keyword, string orderCol, string orderType, int? page = null, int? size = null);
+        Task AddAsync(ProductRequestModel model);
+        void Update(string id, ProductRequestModel model);
+        Task<bool> UpdateAsync(string id, ProductRequestModel model);
+        Task<IEnumerable<ProductResponseModel>> GetAllAsync();
+        IEnumerable<ProductResponseModel> GetAll();
+        ProductResponseModel GetById(string id);
+        Task<ProductResponseModel> GetByIdAsync(string id);
+        Task<IEnumerable<ProductResponseModel>> 
+            Pagination(string categoryId, string keyword, string orderCol, string orderType, int? page = null, int? size = null);
         Task DeleteAsync(string id);
         Task<int> SaveChangesAsync();
         int SaveChanges();

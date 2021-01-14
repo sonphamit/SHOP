@@ -4,7 +4,8 @@
 @inject IProductService productService
 @inject ICategoryService categoryService
 @inject ISupplierService supplierService
-@inject IWebHostEnvironment _env;
+@inject IWebHostEnvironment _env
+@inject IMapper _mapper
 
 <Modal @ref="modalRef">
     <ModalBackdrop />
@@ -99,9 +100,9 @@
                         </FieldBody>
                     </Field>
                 </Fields>
-                <Field >
+                <Field>
                     <FieldLabel>Images</FieldLabel>
-                    <FieldBody >
+                    <FieldBody>
                         <div>
                             <div class="dropArea @dropClass">
                                 Drag and drop your files here or click to open file loading dialogue...
@@ -147,7 +148,7 @@
     public Modal modalRef;
     public string modalTitle = "";
 
-    ProductModel model;
+    ProductRequestModel model;
 
 
     public IEnumerable<CategoryModel> categories;
@@ -169,13 +170,9 @@
 
     protected override async Task OnInitializedAsync()
     {
+        model = new ProductRequestModel();
         await GetAllAsync();
         GetAllGender();
-    }
-
-    protected override void OnInitialized()
-    {
-        model = new ProductModel();
     }
 
     public void GetAllGender()
@@ -204,15 +201,7 @@
 
         if (String.IsNullOrWhiteSpace(model.Id))
         {
-            try
-            {
-                await productService.AddAsync(model);
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-
+            await productService.AddAsync(model);
             await OnSaveChange.InvokeAsync();
         }
         else
@@ -231,18 +220,24 @@
 
     public void AddModal()
     {
-        model = new ProductModel();
+        model = new ProductRequestModel();
         modalTitle = "Add product";
         images.Clear();
         modalRef.Show();
     }
 
-    public void EditModal(ProductModel model)
+    public ProductRequestModel GetById(string id)
+    {
+        var responseModel = productService.GetById(id);
+        return _mapper.Map<ProductRequestModel>(responseModel);
+    }
+
+    public void EditModal(string productId)
     {
         images.Clear();
         modalTitle = "Edit product";
-        this.model = new ProductModel();
-        this.model = model;
+        
+        model = GetById(productId);
 
         this.model.Images.ForEach(item =>
         {

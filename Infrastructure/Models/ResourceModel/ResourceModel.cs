@@ -13,6 +13,6 @@ namespace Infrastructure.Models
          public bool IsDeleted { get; set; }
         public string PathName { get; set; }
         public string ProductId { get; set; }
-        public virtual ProductModel Product { get; set; }
+        //public virtual ProductModel Product { get; set; }
     }
 }

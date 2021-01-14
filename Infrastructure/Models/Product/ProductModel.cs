@@ -8,8 +8,6 @@ namespace Infrastructure.Models
     {
         public ProductModel()
         {
-            Category = new CategoryModel();
-            Supplier = new SupplierModel();
             Images = new List<ResourceModel>();
         }
         public string Id { get; set; }
@@ -31,8 +29,6 @@ namespace Infrastructure.Models
         [Required(ErrorMessage = "Units In Stock is required")]
         public int UnitsInStock { get; set; }
         public int UnitsOnOrder { get; set; }
-        public CategoryModel Category { get; set; }
-        public SupplierModel Supplier { get; set; }
         public virtual List<ResourceModel> Images { get; set; }
 
     }

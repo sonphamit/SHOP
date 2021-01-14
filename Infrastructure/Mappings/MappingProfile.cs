@@ -24,6 +24,9 @@ namespace Infrastructure.Mappings
             CreateMap<ProductModel, Product>().ForMember(x => x.Id, opt => opt.Ignore())
                                                 .ForMember(x => x.Category, opt => opt.Ignore())
                                                 .ForMember(x => x.Supplier, opt => opt.Ignore());
+            CreateMap<ProductResponseModel, ProductRequestModel>();
+            CreateMap<Product, ProductResponseModel>();
+            CreateMap<ProductRequestModel, Product>().ForMember(x => x.Id, opt => opt.Ignore());
 
             CreateMap<Shipper, ShipperModel>();
             CreateMap<ShipperModel, Shipper>().ForMember(x => x.Id, opt => opt.Ignore());

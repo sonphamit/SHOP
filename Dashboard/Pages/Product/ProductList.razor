@@ -48,7 +48,7 @@
             <td>@item.value.Supplier?.CompanyName</td>
 
             <td>
-                <Button Color="Color.Primary" Size="Size.Small" Clicked="@(() => EditModal(item.value))">
+                <Button Color="Color.Primary" Size="Size.Small" Clicked="@(() => EditModal(item.value.Id))">
                     <Icon Name="IconName.Edit" />
                     Edit
                 </Button>
@@ -72,12 +72,12 @@
         child.AddModal();
     }
 
-    void EditModal(ProductModel model)
+    void EditModal(string id)
     {
-        child.EditModal(model);
+        child.EditModal(id);
     }
 
-    public IEnumerable<ProductModel> products;
+    public IEnumerable<ProductResponseModel> products;
     int total = 0;
     protected override async Task OnInitializedAsync()
     {

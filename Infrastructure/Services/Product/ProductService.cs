@@ -22,7 +22,7 @@ namespace Infrastructure.Services
             _mapper = mapper;
         }
 
-        public async Task AddAsync(ProductModel model)
+        public async Task AddAsync(ProductRequestModel model)
         {
             //model.CategoryId = model.Category.Id;
             var entity = _mapper.Map<Product>(model);
@@ -35,15 +35,16 @@ namespace Infrastructure.Services
 
         public async Task DeleteAsync(string id)
         {
-            var resources = await _unitOfWork.ResourceRepository.FindByCondition(rs => rs.ProductId.Equals(id) && rs.IsDeleted).ToListAsync();
-            resources.ForEach(item =>
+            var resources = await _unitOfWork.ResourceRepository.FindByCondition(rs => rs.ProductId.Equals(id)).ToListAsync();
+            if (resources.Any())
             {
-                item.IsDeleted = true;
-            });
+                resources.ForEach(item =>
+                {
+                    item.IsDeleted = true;
+                });
+            }
 
             var entityDelete = await _unitOfWork.ProductRepository.FindByCondition(e => e.Id.Equals(id)).FirstOrDefaultAsync();
-            resources.AddRange(entityDelete.Images);
-
 
             resources.ForEach(item =>
             {
@@ -53,28 +54,35 @@ namespace Infrastructure.Services
             _unitOfWork.ProductRepository.Delete(entityDelete);
         }
 
-        public async Task<IEnumerable<ProductModel>> GetAllAsync()
+        public async Task<IEnumerable<ProductResponseModel>> GetAllAsync()
         {
             var entities = await _unitOfWork.ProductRepository.DbSet
                 .Include(item => item.Category).Include(item => item.Supplier)
                 .Include(item => item.Images).AsNoTracking().ToListAsync();
-            return _mapper.Map<IEnumerable<ProductModel>>(entities).OrderBy(e => e.Name);
+            return _mapper.Map<IEnumerable<ProductResponseModel>>(entities).OrderBy(e => e.Name);
         }
 
-        public IEnumerable<ProductModel> GetAll()
+        public IEnumerable<ProductResponseModel> GetAll()
         {
             var entities = _unitOfWork.ProductRepository.GetAll();
-            return _mapper.Map<IEnumerable<ProductModel>>(entities).OrderBy(e => e.Name);
+            return _mapper.Map<IEnumerable<ProductResponseModel>>(entities).OrderBy(e => e.Name);
         }
 
-        public ProductModel FindByCondition(string id)
+        public ProductResponseModel GetById(string id)
         {
-            var entity = _unitOfWork.ProductRepository.FindByCondition(e => e.Id == id).FirstOrDefault();
-            var model = _mapper.Map<ProductModel>(entity);
+            var entity = _unitOfWork.ProductRepository.FindByCondition(e => e.Id == id).Include(i => i.Images).FirstOrDefault();
+            var model = _mapper.Map<ProductResponseModel>(entity);
             return model;
         }
 
-        public Task<IEnumerable<ProductModel>> Pagination(string categoryId, string keyword, string orderCol, string orderType, int? page = null, int? size = null)
+        public async Task<ProductResponseModel> GetByIdAsync(string id)
+        {
+            var entity = await _unitOfWork.ProductRepository.FindByCondition(e => e.Id == id).FirstOrDefaultAsync();
+            var model = _mapper.Map<ProductResponseModel>(entity);
+            return model;
+        }
+
+        public Task<IEnumerable<ProductResponseModel>> Pagination(string categoryId, string keyword, string orderCol, string orderType, int? page = null, int? size = null)
         {
             throw new NotImplementedException();
         }
@@ -89,7 +97,7 @@ namespace Infrastructure.Services
             return await _unitOfWork.SaveChangesAsync();
         }
 
-        public void Update(string id, ProductModel model)
+        public void Update(string id, ProductRequestModel model)
         {
             if (!string.IsNullOrWhiteSpace(id))
             {
@@ -102,7 +110,7 @@ namespace Infrastructure.Services
             }
 
         }
-        public async Task<bool> UpdateAsync(string id, ProductModel model)
+        public async Task<bool> UpdateAsync(string id, ProductRequestModel model)
         {
             if (!string.IsNullOrWhiteSpace(id))
             {
