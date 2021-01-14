@@ -17,6 +17,8 @@ namespace Infrastructure.Models
         public decimal UnitPrice { get; set; }
         public int UnitsInStock { get; set; }
         public int UnitsOnOrder { get; set; }
+        public bool Discontinued { get; set; }
+        public float Discount { get; set; }
         public CategoryModel Category { get; set; }
         public SupplierModel Supplier { get; set; }
         public virtual List<ResourceModel> Images { get; set; }
