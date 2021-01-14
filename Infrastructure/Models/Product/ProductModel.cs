@@ -29,6 +29,7 @@ namespace Infrastructure.Models
         [Required(ErrorMessage = "Units In Stock is required")]
         public int UnitsInStock { get; set; }
         public int UnitsOnOrder { get; set; }
+        public bool Discontinued { get; set; }
         public virtual List<ResourceModel> Images { get; set; }
 
     }
