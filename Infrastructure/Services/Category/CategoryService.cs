@@ -26,27 +26,27 @@ namespace Infrastructure.Services
             SaveChanges();
         }
 
-        public async Task DeleteAsync(CategoryModel model)
+        public async Task DeleteAsync(string id)
         {
-            var entity = await _unitOfWork.CategoryRepository.FindByCondition(cat => cat.Id.Equals(model.Id)).FirstOrDefaultAsync();
+            var entity = await _unitOfWork.CategoryRepository.FindByCondition(e => e.Id.Equals(id)).FirstOrDefaultAsync();
             _unitOfWork.CategoryRepository.Delete(entity);
         }
 
         public async Task<IEnumerable<CategoryModel>> GetAllAsync()
         {
             var entities = await _unitOfWork.CategoryRepository.GetAllAsync();
-            return _mapper.Map<IEnumerable<CategoryModel>>(entities);
+            return _mapper.Map<IEnumerable<CategoryModel>>(entities).OrderBy(e => e.Name);
         }
 
         public IEnumerable<CategoryModel> GetAll()
         {
             var entities = _unitOfWork.CategoryRepository.GetAll();
-            return _mapper.Map<IEnumerable<CategoryModel>>(entities);
+            return _mapper.Map<IEnumerable<CategoryModel>>(entities).OrderBy(e => e.Name);
         }
 
         public async Task<CategoryModel> GetByIdAsync(string id)
         {
-            var entity = await _unitOfWork.CategoryRepository.GetByIdAsync(id);
+            var entity = await _unitOfWork.CategoryRepository.FindByCondition(e => e.Id.Equals(id)).FirstOrDefaultAsync();
             return _mapper.Map<CategoryModel>(entity);
         }
 
@@ -64,7 +64,7 @@ namespace Infrastructure.Services
         {
             if (!string.IsNullOrWhiteSpace(id))
             {
-                var originEntity =  _unitOfWork.CategoryRepository.FindByCondition(cat => cat.Id.Equals(model.Id)).FirstOrDefault();
+                var originEntity =  _unitOfWork.CategoryRepository.FindByCondition(e => e.Id.Equals(model.Id)).FirstOrDefault();
                 var entityUpdate = _mapper.Map(model, originEntity);
                 entityUpdate.Id = model.Id;
                 _unitOfWork.CategoryRepository.Update(entityUpdate);

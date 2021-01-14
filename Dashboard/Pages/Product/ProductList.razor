@@ -5,7 +5,7 @@
 <div class="row mb-4 mt-4">
     <div class="col-10">
         <h3 class="mr-5">Product</h3>
-        <EditProduct @ref="child" OnSaveChange="@(async () => await GetAllAsync())"  />
+        <ProductDetail @ref="child" OnSaveChange="@(async () => await GetAllAsync())"  />
         <Button Color="Color.Primary" Size="Size.Medium" Clicked="@AddModal">
             <Icon Name="IconName.Add" />
             Add
@@ -21,6 +21,8 @@
         <tr>
             <th>No.</th>
             <th>Name</th>
+            <th>Code</th>
+            <th>Gender</th>
             <th>UnitPrice</th>
             <th>UnitsInStock</th>
             <th>UnitsOnOrder</th>
@@ -37,6 +39,8 @@
         <tr>
             <td>@(item.index + 1)</td>
             <td>@item.value.Name</td>
+            <td>@item.value.ProductionCode</td>
+            <td>@item.value.Gender</td>
             <td>@item.value.UnitPrice</td>
             <td>@item.value.UnitsInStock</td>
             <td>@item.value.UnitsOnOrder</td>
@@ -62,7 +66,7 @@
 
 @code {
 
-    EditProduct child;
+    ProductDetail child;
     void AddModal()
     {
         child.AddModal();
@@ -89,7 +93,7 @@
             return;
         }
 
-        await productService.DeleteAsync(model);
+        await productService.DeleteAsync(model.Id);
         await productService.SaveChangesAsync();
         products = await productService.GetAllAsync();
     }

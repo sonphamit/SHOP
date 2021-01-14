@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Infrastructure.Services
@@ -34,20 +33,15 @@ namespace Infrastructure.Services
             _unitOfWork.ProductRepository.Detach(entity);
         }
 
-        public Task AddRangeAsync(IEnumerable<ProductModel> models)
+        public async Task DeleteAsync(string id)
         {
-            throw new NotImplementedException();
-        }
-
-        public async Task DeleteAsync(ProductModel model)
-        {
-            var resources = await _unitOfWork.ResourceRepository.FindByCondition(rs => rs.ProductId.Equals(model.Id) && rs.IsDeleted).ToListAsync();
+            var resources = await _unitOfWork.ResourceRepository.FindByCondition(rs => rs.ProductId.Equals(id) && rs.IsDeleted).ToListAsync();
             resources.ForEach(item =>
             {
                 item.IsDeleted = true;
             });
 
-            var entityDelete = await _unitOfWork.ProductRepository.FindByCondition(e => e.Id.Equals(model.Id)).FirstOrDefaultAsync();
+            var entityDelete = await _unitOfWork.ProductRepository.FindByCondition(e => e.Id.Equals(id)).FirstOrDefaultAsync();
             resources.AddRange(entityDelete.Images);
 
 
@@ -64,13 +58,13 @@ namespace Infrastructure.Services
             var entities = await _unitOfWork.ProductRepository.DbSet
                 .Include(item => item.Category).Include(item => item.Supplier)
                 .Include(item => item.Images).AsNoTracking().ToListAsync();
-            return _mapper.Map<IEnumerable<ProductModel>>(entities);
+            return _mapper.Map<IEnumerable<ProductModel>>(entities).OrderBy(e => e.Name);
         }
 
         public IEnumerable<ProductModel> GetAll()
         {
             var entities = _unitOfWork.ProductRepository.GetAll();
-            return _mapper.Map<IEnumerable<ProductModel>>(entities);
+            return _mapper.Map<IEnumerable<ProductModel>>(entities).OrderBy(e => e.Name);
         }
 
         public ProductModel FindByCondition(string id)
@@ -80,7 +74,7 @@ namespace Infrastructure.Services
             return model;
         }
 
-        public Task<IEnumerable<ProductModel>> Pagination(Expression<Func<ProductModel, bool>> predicate)
+        public Task<IEnumerable<ProductModel>> Pagination(string categoryId, string keyword, string orderCol, string orderType, int? page = null, int? size = null)
         {
             throw new NotImplementedException();
         }

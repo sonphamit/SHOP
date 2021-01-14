@@ -2,9 +2,9 @@
 using Infrastructure.Database;
 using Infrastructure.Entities;
 using Infrastructure.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Infrastructure.Services
@@ -25,30 +25,25 @@ namespace Infrastructure.Services
             await _unitOfWork.OrderRepository.AddAsync(entity);
         }
 
-        public async Task AddRangeAsync(IEnumerable<OrderModel> models)
+        public async Task DeleteAsync(string id)
         {
-            throw new NotImplementedException();
-        }
-
-        public async Task DeleteAsync(OrderModel model)
-        {
-            var entity = await _unitOfWork.OrderRepository.GetByIdAsync(model.Id);
+            var entity =  await _unitOfWork.OrderRepository.FindByCondition(e => e.Id.Equals(id)).FirstOrDefaultAsync();
             _unitOfWork.OrderRepository.Delete(entity);
         }
 
         public async Task<IEnumerable<OrderModel>> GetAllAsync()
         {
-            var entities = _unitOfWork.OrderRepository.GetAll();
+            var entities = await _unitOfWork.OrderRepository.GetAllAsync();
             return _mapper.Map<IEnumerable<OrderModel>>(entities);
         }
 
         public async Task<OrderModel> GetByIdAsync(string id)
         {
-            var entity = await _unitOfWork.OrderRepository.GetByIdAsync(id);
+            var entity = await _unitOfWork.OrderRepository.FindByCondition(e => e.Id.Equals(id)).FirstOrDefaultAsync();
             return _mapper.Map<OrderModel>(entity);
         }
 
-        public Task<IEnumerable<OrderModel>> Pagination(Expression<Func<OrderModel, bool>> predicate)
+        public Task<IEnumerable<OrderModel>> Pagination(string categoryId, string keyword, string orderCol, string orderType, int? page = null, int? size = null)
         {
             throw new NotImplementedException();
         }

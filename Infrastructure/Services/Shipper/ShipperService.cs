@@ -28,27 +28,27 @@ namespace Infrastructure.Services
             _unitOfWork.ShipperRepository.Detach(entity);
         }
 
-        public async Task DeleteAsync(ShipperModel model)
+        public async Task DeleteAsync(string id)
         {
-            var entity = await _unitOfWork.ShipperRepository.FindByCondition(cat => cat.Id.Equals(model.Id)).FirstOrDefaultAsync();
+            var entity = await _unitOfWork.ShipperRepository.FindByCondition(cat => cat.Id.Equals(id)).FirstOrDefaultAsync();
             _unitOfWork.ShipperRepository.Delete(entity);
         }
 
         public IEnumerable<ShipperModel> GetAll()
         {
             var entities = _unitOfWork.ShipperRepository.GetAll();
-            return _mapper.Map<IEnumerable<ShipperModel>>(entities);
+            return _mapper.Map<IEnumerable<ShipperModel>>(entities).OrderBy(e => e.ShipperName);
         }
 
         public async Task<IEnumerable<ShipperModel>> GetAllAsync()
         {
             var entities = await _unitOfWork.ShipperRepository.GetAllAsync();
-            return _mapper.Map<IEnumerable<ShipperModel>>(entities);
+            return _mapper.Map<IEnumerable<ShipperModel>>(entities).OrderBy(e => e.ShipperName);
         }
 
         public async Task<ShipperModel> GetByIdAsync(string id)
         {
-            var entity = await _unitOfWork.ShipperRepository.GetByIdAsync(id);
+            var entity = await _unitOfWork.ShipperRepository.FindByCondition(e => e.Id.Equals(id)).FirstOrDefaultAsync();
             return _mapper.Map<ShipperModel>(entity);
         }
 
@@ -66,7 +66,7 @@ namespace Infrastructure.Services
         {
             if (!string.IsNullOrWhiteSpace(id))
             {
-                var originEntity = _unitOfWork.ShipperRepository.FindByCondition(cat => cat.Id.Equals(model.Id)).FirstOrDefault();
+                var originEntity = _unitOfWork.ShipperRepository.FindByCondition(e => e.Id.Equals(model.Id)).FirstOrDefault();
                 var entityUpdate = _mapper.Map(model, originEntity);
                 entityUpdate.Id = model.Id;
                 _unitOfWork.ShipperRepository.Update(entityUpdate);

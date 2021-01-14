@@ -15,7 +15,6 @@ namespace Infrastructure.Database
         #region SYNC_FUNCTION
 
         IEnumerable<TEntity> GetAll(bool allowTracking = true);
-        TEntity GetById(string id, bool allowTracking = true);
         IQueryable<TEntity> FindByCondition(Expression<Func<TEntity, bool>> predicate, bool allowTracking = true);
         void Add(TEntity entity);
         void AddRange(IEnumerable<TEntity> entities);
@@ -32,7 +31,6 @@ namespace Infrastructure.Database
         Task AddAsync(TEntity entity);
         Task AddRangeAsync(IEnumerable<TEntity> entities);
         Task<IEnumerable<TEntity>> GetAllAsync(bool allowTracking = true);
-        Task<TEntity> GetByIdAsync(string id, bool allowTracking = true);
         Task<IEnumerable<TEntity>> FromSqlQueryAsync(string sql, bool allowTracking = true);
 
         #endregion

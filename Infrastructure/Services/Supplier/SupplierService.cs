@@ -31,32 +31,27 @@ namespace Infrastructure.Services
             _unitOfWork.SupplierRepository.Detach(entity);
         }
 
-        public Task AddRangeAsync(IEnumerable<SupplierModel> models)
+        public async Task DeleteAsync(string id)
         {
-            throw new NotImplementedException();
-        }
-
-        public async Task DeleteAsync(SupplierModel model)
-        {
-            var entity = await _unitOfWork.SupplierRepository.FindByCondition(cat => cat.Id.Equals(model.Id)).FirstOrDefaultAsync();
+            var entity = await _unitOfWork.SupplierRepository.FindByCondition(e => e.Id.Equals(id)).FirstOrDefaultAsync();
             _unitOfWork.SupplierRepository.Delete(entity);
         }
 
         public async Task<IEnumerable<SupplierModel>> GetAllAsync()
         {
             var entities = await _unitOfWork.SupplierRepository.GetAllAsync();
-            return _mapper.Map<IEnumerable<SupplierModel>>(entities);
+            return _mapper.Map<IEnumerable<SupplierModel>>(entities).OrderBy(e => e.CompanyName);
         }
 
         public IEnumerable<SupplierModel> GetAll()
         {
             var entities = _unitOfWork.SupplierRepository.GetAll();
-            return _mapper.Map<IEnumerable<SupplierModel>>(entities);
+            return _mapper.Map<IEnumerable<SupplierModel>>(entities).OrderBy(e => e.CompanyName);
         }
 
         public async Task<SupplierModel> GetByIdAsync(string id)
         {
-            var entity = await _unitOfWork.SupplierRepository.GetByIdAsync(id);
+            var entity = await _unitOfWork.SupplierRepository.FindByCondition(e => e.Id.Equals(id)).FirstOrDefaultAsync();
             return _mapper.Map<SupplierModel>(entity);
         }
 

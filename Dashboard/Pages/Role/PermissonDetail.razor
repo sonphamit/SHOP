@@ -2,18 +2,25 @@
 
 <Modal @ref="modalRef">
     <ModalBackdrop />
-    <ModalContent IsCentered="true">
+    <ModalContent IsCentered="true" Size=@ModalSize.Large>
         <form method="post">
             <ModalHeader>
                 <ModalTitle>@modalTitle</ModalTitle>
                 <CloseButton Clicked="@HideModal" />
             </ModalHeader>
             <ModalBody>
-                
+                <div class="row">
+                    @foreach (var claim in claims)
+                    {
+                        <div class="col-3 mb-3">
+                            <Check TValue="bool" @bind-Checked="@claim.IsSelected" @onchange="CheckeBoxOnChanged">@claim.ClaimType</Check>
+                        </div>
+                    }
+                </div>
             </ModalBody>
             <ModalFooter>
                 <Button Color="Color.Secondary" Clicked="@HideModal">Close</Button>
-                <Button Color="Color.Primary" Clicked="@(async () => await SaveChange())">Save Changes</Button>
+                <Button Color="Color.Primary" Clicked="@(async () => await SaveChange())" Disabled="@buttonDisabled">Save Changes</Button>
             </ModalFooter>
         </form>
     </ModalContent>
@@ -27,24 +34,32 @@
 
     // reference to the modal component
     public Modal modalRef;
-    public string modalTitle = "";
 
+    public string modalTitle = "";
+    private bool buttonDisabled;
+    private string roleId;
     List<RoleClaim> claims;
 
     protected override void OnInitialized()
     {
+
+        buttonDisabled = true;
         claims = new List<RoleClaim>();
     }
 
     private async Task SaveChange()
     {
-        //if (String.IsNullOrWhiteSpace(model.Id))
-        //{
-        //    await service.AddRoleAsync(model);
-        //}
+        if (!buttonDisabled)
+        {
+            await service.UpdateRoleClaimsAsync(roleId, claims);
+        }
 
         HideModal();
+    }
 
+    public void CheckeBoxOnChanged()
+    {
+        buttonDisabled = false;
     }
 
     public async Task ConfigPermission(string roleId)
@@ -57,11 +72,14 @@
 
     public async Task GetRoleClaimsByRoleId(string id)
     {
+        roleId = id;
         claims = await service.GetRoleClaimsByRoleId(id);
     }
 
     public void HideModal()
     {
+        buttonDisabled = true;
+        roleId = null;
         modalRef.Hide();
     }
 
