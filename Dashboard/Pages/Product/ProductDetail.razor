@@ -16,129 +16,176 @@
                 <CloseButton Clicked="@HideModal" />
             </ModalHeader>
             <ModalBody>
-                <Field Horizontal="true">
-                    <FieldLabel ColumnSize="ColumnSize.Is2">Name</FieldLabel>
-                    <FieldBody ColumnSize="ColumnSize.Is10">
-                        <TextEdit Placeholder="Enter name..." @bind-Text="model.Name" />
-                    </FieldBody>
-                </Field>
-                <Field>
-                    <Field Horizontal="true">
-                        <FieldLabel ColumnSize="ColumnSize.Is2">Code</FieldLabel>
-                        <FieldBody ColumnSize="ColumnSize.Is10">
-                            <TextEdit Placeholder="Enter code..." @bind-Text="model.ProductionCode" />
-                        </FieldBody>
-                    </Field>
-                    <Field Horizontal="true">
-                        <FieldLabel ColumnSize="ColumnSize.Is2">Gender</FieldLabel>
-                        <FieldBody ColumnSize="ColumnSize.Is10">
-                            <Select TValue="Gender" Multiple="false" @bind-SelectedValue="model.Gender">
-                                @if (GenderList != null)
-                                {
-                                    @foreach (var item in GenderList)
+                <Validations @ref="validations" Model="model" Mode="ValidationMode.Auto" ValidateOnLoad="false">
+                    <Validation>
+                        <Field Horizontal="true">
+                            <FieldLabel ColumnSize="ColumnSize.Is2">Name</FieldLabel>
+                            <FieldBody ColumnSize="ColumnSize.Is10">
+                                <TextEdit Placeholder="Enter name..." @bind-Text="model.Name">
+                                    <Feedback><ValidationError /></Feedback>
+                                </TextEdit>
+                            </FieldBody>
+                        </Field>
+                    </Validation>
+
+                    <Validation>
+                        <Field Horizontal="true">
+                            <FieldLabel ColumnSize="ColumnSize.Is2">Code</FieldLabel>
+                            <FieldBody ColumnSize="ColumnSize.Is10">
+                                <TextEdit Placeholder="Enter code..." @bind-Text="model.ProductionCode" Casing="CharacterCasing.Upper">
+                                    <Feedback><ValidationError /></Feedback>
+                                </TextEdit>
+                            </FieldBody>
+                        </Field>
+                    </Validation>
+                    <Validation>
+                        <Field Horizontal="true">
+                            <FieldLabel ColumnSize="ColumnSize.Is2">Gender</FieldLabel>
+                            <FieldBody ColumnSize="ColumnSize.Is10">
+                                <Select TValue="Gender" Multiple="false" @bind-SelectedValue="model.Gender">
+                                    @if (GenderList != null)
                                     {
-                                        <SelectItem Value="@item.Key">@item.Value</SelectItem>
+                                        @foreach (var item in GenderList)
+                                        {
+                                            <SelectItem Value="@item.Key">@item.Value</SelectItem>
+                                        }
                                     }
-                                }
-                            </Select>
-                        </FieldBody>
-                    </Field>
-                </Field>
-                <Field Horizontal="true">
-                    <FieldLabel ColumnSize="ColumnSize.Is2">Description</FieldLabel>
-                    <FieldBody ColumnSize="ColumnSize.Is10">
-                        <MemoEdit Placeholder="Enter description..." @bind-Text="model.Description" />
-                    </FieldBody>
-                </Field>
-                <Fields>
-                    <Field ColumnSize="ColumnSize.Is4">
-                        <FieldLabel>Price</FieldLabel>
+                                </Select>
+                            </FieldBody>
+                        </Field>
+                    </Validation>
+                    <Validation>
+                        <Field Horizontal="true">
+                            <FieldLabel ColumnSize="ColumnSize.Is2">Description</FieldLabel>
+                            <FieldBody ColumnSize="ColumnSize.Is10">
+                                <MemoEdit Placeholder="Enter description..." @bind-Text="model.Description">
+                                    <Feedback><ValidationError /></Feedback>
+                                </MemoEdit>
+                            </FieldBody>
+                        </Field>
+                    </Validation>
+                    <Fields>
+                        <Validation>
+                            <Field ColumnSize="ColumnSize.Is4">
+                                <FieldLabel>Price</FieldLabel>
+                                <FieldBody>
+                                    <NumericEdit Placeholder="Enter Unit Price" @bind-Value="model.UnitPrice" TValue="uint">
+                                        <Feedback><ValidationError /></Feedback>
+                                    </NumericEdit>
+                                </FieldBody>
+                            </Field>
+                        </Validation>
+                        <Validation>
+                            <Field ColumnSize="ColumnSize.Is4">
+                                <FieldLabel>Discount</FieldLabel>
+                                <FieldBody ColumnSize="ColumnSize.Is10">
+                                    <NumericEdit Placeholder="Enter Discount" @bind-Value="model.Discount" Min="0" Max="100">
+                                        <Feedback><ValidationError /></Feedback>
+                                    </NumericEdit>
+                                </FieldBody>
+                            </Field>
+                        </Validation>
+                        <Validation>
+                            <Field ColumnSize="ColumnSize.Is4">
+                                <FieldLabel>Units In Stock</FieldLabel>
+                                <FieldBody>
+                                    <NumericEdit Placeholder="Enter Units In Stock" @bind-Value="model.UnitsInStock">
+                                        <Feedback><ValidationError /></Feedback>
+                                    </NumericEdit>
+                                </FieldBody>
+                            </Field>
+                        </Validation>
+                    </Fields>
+                    <Fields>
+                        <Validation>
+                            <Field ColumnSize="ColumnSize.Is4">
+                                <FieldLabel>Category</FieldLabel>
+                                <FieldBody>
+
+                                    <Select TValue="string" Multiple="false" @bind-SelectedValue="model.CategoryId">
+                                        <ChildContent>
+                                            @if (categories != null)
+                                            {
+                                                <SelectItem Value="@(String.Empty)" Disabled="true">Please Select</SelectItem>
+                                                @foreach (var item in categories)
+                                                {
+                                                    <SelectItem Value="@item.Id">@item.Name</SelectItem>
+                                                }
+                                            }
+                                        </ChildContent>
+                                        <Feedback><ValidationError /></Feedback>
+                                    </Select>
+
+                                </FieldBody>
+                            </Field>
+                        </Validation>
+                        <Validation>
+                            <Field ColumnSize="ColumnSize.Is4">
+                                <FieldLabel>Supplier</FieldLabel>
+                                <FieldBody>
+                                    <Select TValue="string" Multiple="false" @bind-SelectedValue="model.SupplierId">
+                                        <ChildContent>
+                                            @if (suppliers != null)
+                                            {
+                                                <SelectItem Value="@(String.Empty)" Disabled="true">Please Select</SelectItem>
+                                                @foreach (var item in suppliers)
+                                                {
+                                                    <SelectItem Value="@item.Id">@item.CompanyName</SelectItem>
+                                                }
+                                            }
+                                        </ChildContent>
+                                        <Feedback><ValidationError /></Feedback>
+                                    </Select>
+                                </FieldBody>
+                            </Field>
+                        </Validation>
+                    </Fields>
+                    <Field>
+                        <FieldLabel>Images</FieldLabel>
                         <FieldBody>
-                            <NumericEdit Placeholder="Enter Unit Price" @bind-Value="model.UnitPrice" />
-                        </FieldBody>
-                    </Field>
-                    <Field ColumnSize="ColumnSize.Is4">
-                        <FieldLabel>Discount</FieldLabel>
-                        <FieldBody ColumnSize="ColumnSize.Is10">
-                            <NumericEdit Placeholder="Enter Discount" @bind-Value="model.Discount" />
-                        </FieldBody>
-                    </Field>
-                    <Field ColumnSize="ColumnSize.Is4">
-                        <FieldLabel>Units In Stock</FieldLabel>
-                        <FieldBody>
-                            <NumericEdit Placeholder="Enter Units In Stock" @bind-Value="model.UnitsInStock" />
-                        </FieldBody>
-                    </Field>
-                </Fields>
-                <Fields>
-                    <Field ColumnSize="ColumnSize.Is4">
-                        <FieldLabel>Category</FieldLabel>
-                        <FieldBody>
-                            <Select TValue="string" Multiple="false" @bind-SelectedValue="model.CategoryId">
-                                @if (categories != null)
-                                {
-                                    @foreach (var item in categories)
+                            <div>
+                                <div class="dropArea @dropClass">
+                                    Drag and drop your files here or click to open file loading dialogue...
+                                    <InputFile id="inputDrop"
+                                               OnChange="OnInputFileChange"
+                                               @ondragenter="HandleDragEnter"
+                                               @ondragleave="HandleDragLeave"
+                                               multiple />
+                                </div>
+
+                                <ol class="mt-1">
+                                    @if (images != null && images.Any())
                                     {
-                                        <SelectItem Value="@item.Id">@item.Name</SelectItem>
+                                        @foreach (var image in images)
+                                        {
+
+                                            <li class="mt-1">
+                                                <a href="@image.Key" target="_blank"> @image.Value</a>
+                                            </li>
+                                        }
                                     }
-                                }
-                            </Select>
-                        </FieldBody>
-                    </Field>
-                    <Field ColumnSize="ColumnSize.Is4">
-                        <FieldLabel>Supplier</FieldLabel>
-                        <FieldBody>
-                            <Select TValue="string" Multiple="false" @bind-SelectedValue="model.SupplierId">
-                                @if (suppliers != null)
-                                {
-                                    @foreach (var item in suppliers)
-                                    {
-                                        <SelectItem Value="@item.Id">@item.CompanyName</SelectItem>
-                                    }
-                                }
-                            </Select>
-                        </FieldBody>
-                    </Field>
-                </Fields>
-                <Field>
-                    <FieldLabel>Images</FieldLabel>
-                    <FieldBody>
-                        <div>
-                            <div class="dropArea @dropClass">
-                                Drag and drop your files here or click to open file loading dialogue...
-                                <InputFile id="inputDrop"
-                                           OnChange="OnInputFileChange"
-                                           @ondragenter="HandleDragEnter"
-                                           @ondragleave="HandleDragLeave"
-                                           multiple />
+
+                                </ol>
+
                             </div>
-
-                            <ol class="mt-1">
-                                @if (images != null && images.Any())
-                                {
-                                    @foreach (var image in images)
-                                    {
-
-                                        <li class="mt-1">
-                                            <a href="@image.Key" target="_blank"> @image.Value</a>
-                                        </li>
-                                    }
-                                }
-
-                            </ol>
-
-                        </div>
-                    </FieldBody>
-                </Field>
+                        </FieldBody>
+                    </Field>
+                </Validations>
             </ModalBody>
             <ModalFooter>
                 <Button Color="Color.Secondary" Clicked="@HideModal">Close</Button>
-                <Button Color="Color.Primary" Clicked="@(async () => await SaveChangeAsync())">Save Changes</Button>
+                <Button Color="Color.Primary" Clicked="@(async () => await SaveChangeAsync())">
+                    Save Changes
+                </Button>
             </ModalFooter>
         </form>
     </ModalContent>
 </Modal>
-
+<Snackbar @ref="snackbar">
+    <SnackbarBody>
+        The input data is invaled.
+    </SnackbarBody>
+</Snackbar>
 
 @code {
     [Parameter]
@@ -150,6 +197,7 @@
 
     ProductRequestModel model;
 
+    Validations validations;
 
     public IEnumerable<CategoryModel> categories;
     public IEnumerable<SupplierModel> suppliers;
@@ -161,12 +209,13 @@
 
     Dictionary<string, string> images = new Dictionary<string, string>();
 
-
+    Snackbar snackbar;
 
     string dropClass = string.Empty;
     const int maxFileSize = 10485760;
 
     List<KeyValuePair<Gender, string>> GenderList;
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -182,40 +231,46 @@
 
     private async Task SaveChangeAsync()
     {
-        if (images.Values.Any())
+        if (validations.ValidateAll())
         {
-            model.Images.Clear();
+            if (images.Values.Any())
+            {
+                model.Images.Clear();
 
-            foreach (var image in images)
+                foreach (var image in images)
+                {
+
+                    model.Images.Add(new ResourceModel
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        PathName = image.Key,
+                        IsDeleted = false,
+                        ProductId = model.Id
+                    });
+                }
+            }
+
+            if (String.IsNullOrWhiteSpace(model.Id))
+            {
+                await productService.AddAsync(model);
+                await OnSaveChange.InvokeAsync();
+            }
+            else
             {
 
-                model.Images.Add(new ResourceModel
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    PathName = image.Key,
-                    IsDeleted = false,
-                    ProductId = model.Id
-                });
-            }
-        }
+                var a = await productService.UpdateAsync(model.Id, model);
 
-        if (String.IsNullOrWhiteSpace(model.Id))
-        {
-            await productService.AddAsync(model);
-            await OnSaveChange.InvokeAsync();
+                if (a)
+                {
+                    await OnSaveChange.InvokeAsync();
+                }
+            }
+            HideModal();
         }
         else
         {
-
-            var a = await productService.UpdateAsync(model.Id, model);
-
-            if (a)
-            {
-                await OnSaveChange.InvokeAsync();
-            }
+            snackbar.Show();
         }
-        HideModal();
-
     }
 
     public void AddModal()
@@ -236,7 +291,7 @@
     {
         images.Clear();
         modalTitle = "Edit product";
-        
+
         model = GetById(productId);
 
         this.model.Images.ForEach(item =>

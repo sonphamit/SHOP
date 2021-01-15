@@ -17,12 +17,12 @@ namespace Infrastructure.Entities
         [Required]
         public string Description { get; set; }
         [Column(TypeName = "decimal(18, 2)")]
-        public decimal UnitPrice { get; set; }
+        public uint UnitPrice { get; set; }
         public bool Discontinued { get; set; }
         [Column(TypeName = "decimal(18, 2)")]
         public decimal Discount { get; set; }
-        public int UnitsInStock { get; set; }
-        public int UnitsOnOrder { get; set; }
+        public uint UnitsInStock { get; set; }
+        public uint UnitsOnOrder { get; set; }
         [ForeignKey("CategoryId")]
         public Gender Gender { get; set; }
         public virtual Category Category { get; set; }
