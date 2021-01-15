@@ -71,8 +71,12 @@ namespace Infrastructure.Services
         
         public ProductResponseModel GetById(string id)
         {
-            var entity = _unitOfWork.ProductRepository.FindByCondition(e => e.Id == id).Include(i => i.Images).FirstOrDefault();
+            var entity = _unitOfWork.ProductRepository.FindByCondition(e => e.Id == id)
+                .Include(i => i.Images).FirstOrDefault();
+            var Images = entity.Images.Where(img => !img.IsDeleted);
+            entity.Images = Images.ToList();
             var model = _mapper.Map<ProductResponseModel>(entity);
+            _unitOfWork.ProductRepository.Detach(entity);
             return model;
         }
 
@@ -122,25 +126,24 @@ namespace Infrastructure.Services
                     item.IsDeleted = true;
                 });
 
+                resources.ForEach(item =>
+                {
+                    _unitOfWork.ResourceRepository.Update(item);
+                });
+
                 var originEntity = _unitOfWork.ProductRepository.FindByCondition(cat => cat.Id.Equals(model.Id)).FirstOrDefault();
 
 
                 var entityUpdate = _mapper.Map(model, originEntity);
                 entityUpdate.Id = model.Id;
 
-                resources.AddRange(entityUpdate.Images);
-
-
-                resources.ForEach(item =>
-                {
-                    _unitOfWork.ResourceRepository.Update(item);
-                });
+                await _unitOfWork.ResourceRepository.AddRangeAsync(entityUpdate.Images);
 
                 _unitOfWork.ProductRepository.Update(entityUpdate);
 
                 await SaveChangesAsync();
                 _unitOfWork.ProductRepository.Detach(entityUpdate);
-               
+                entityUpdate.Images.ToList().ForEach(item => _unitOfWork.ResourceRepository.Detach(item));
                 return true;
             }
             return false;
