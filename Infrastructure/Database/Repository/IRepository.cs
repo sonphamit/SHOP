@@ -14,6 +14,10 @@ namespace Infrastructure.Database
 
         #region SYNC_FUNCTION
 
+        IQueryable<TEntity> Query(
+            Expression<Func<TEntity, bool>> predicate = null
+            , Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null
+        );
         IEnumerable<TEntity> GetAll(bool allowTracking = true);
         IQueryable<TEntity> FindByCondition(Expression<Func<TEntity, bool>> predicate, bool allowTracking = true);
         void Add(TEntity entity);

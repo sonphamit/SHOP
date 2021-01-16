@@ -144,6 +144,16 @@ namespace Infrastructure.Database
             return DbSet.Where(predicate).AsNoTracking();
         }
 
+        public IQueryable<TEntity> Query(
+            Expression<Func<TEntity, bool>> predicate = null
+            , Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null
+        )
+        {
+            var query = DbSet.AsQueryable();
+            if (predicate != null) query = query.Where(predicate).AsNoTracking();
+            return orderBy == null ? query : orderBy(query);
+        }
+
         /// <summary>
         /// Update an entity
         /// </summary>

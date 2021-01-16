@@ -1,11 +1,13 @@
 ﻿@page "/products"
 @inject IProductService productService
+@inject ICategoryService categoryService
+@inject ISupplierService supplierService
 @inject IJSRuntime JsRuntime
 
-<div class="row mb-4 mt-4">
+<div class="row">
     <div class="col-10">
         <h3 class="mr-5">Product</h3>
-        <ProductDetail @ref="child" OnSaveChange="@(async () => await GetAllAsync())"  />
+        <ProductDetail @ref="child" OnSaveChange="@(async () => await GetAllAsync())" />
         <Button Color="Color.Primary" Size="Size.Medium" Clicked="@AddModal">
             <Icon Name="IconName.Add" />
             Add
@@ -13,6 +15,72 @@
     </div>
     <div class="col-2">
 
+    </div>
+</div>
+
+<div class="row mb-4 mt-4">
+    <div class="col-2">
+        <Addons>
+            <Addon AddonType="AddonType.Start"></Addon>
+            <Addon AddonType="AddonType.Body">
+                <Select TValue="Gender" Multiple="false">
+                    @if (GenderList != null)
+                    {
+                        @foreach (var item in GenderList)
+                        {
+                            <SelectItem Value="@item.Key">@item.Value</SelectItem>
+                        }
+                    }
+                </Select>
+            </Addon>
+        </Addons>
+
+    </div>
+    <div class="col-3">
+        <Addons>
+            <Addon AddonType="AddonType.Start">Category</Addon>
+            <Addon AddonType="AddonType.Body">
+                <Select TValue="string" Multiple="false">
+                    @if (categories != null)
+                    {
+                        <SelectItem Value="@(String.Empty)">Please Select</SelectItem>
+                        @foreach (var item in categories)
+                        {
+                            <SelectItem Value="@item.Id">@item.Name</SelectItem>
+                        }
+                    }
+                </Select>
+            </Addon>
+        </Addons>
+    </div>
+    <div class="col-3">
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel>Supplier</AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <Select TValue="string" Multiple="false">
+                    @if (suppliers != null)
+                    {
+                        <SelectItem Value="@(String.Empty)">Please Select</SelectItem>
+                        @foreach (var item in suppliers)
+                        {
+                            <SelectItem Value="@item.Id">@item.CompanyName</SelectItem>
+                        }
+                    }
+                </Select>
+            </Addon>
+        </Addons>
+    </div>
+    <div class="col-4">
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel><Icon Name="IconName.Search" /></AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <TextEdit Placeholder="Search"></TextEdit>
+            </Addon>
+        </Addons>
     </div>
 </div>
 
@@ -35,36 +103,72 @@
         @if (products != null)
         {
             @foreach (var item in products.Select((value, index) => new { value, index }))
-                {
-        <tr>
-            <td>@(item.index + 1)</td>
-            <td>@item.value.Name</td>
-            <td>@item.value.ProductionCode</td>
-            <td>@item.value.Gender</td>
-            <td>@item.value.UnitPrice</td>
-            <td>@item.value.UnitsInStock</td>
-            <td>@item.value.UnitsOnOrder</td>
-            <td>@item.value.Category?.Name</td>
-            <td>@item.value.Supplier?.CompanyName</td>
+            {
+                <tr>
+                    <td>@(item.index + 1)</td>
+                    <td>@item.value.Name</td>
+                    <td>@item.value.ProductionCode</td>
+                    <td>@item.value.Gender</td>
+                    <td>@item.value.UnitPrice</td>
+                    <td>@item.value.UnitsInStock</td>
+                    <td>@item.value.UnitsOnOrder</td>
+                    <td>@item.value.Category?.Name</td>
+                    <td>@item.value.Supplier?.CompanyName</td>
 
-            <td>
-                <Button Color="Color.Primary" Size="Size.Small" Clicked="@(() => EditModal(item.value.Id))">
-                    <Icon Name="IconName.Edit" />
-                    Edit
-                </Button>
-                <Button Color="Color.Danger" Size="Size.Small" Clicked="@(async () => await Delete(item.value))">
-                    <Icon Name="IconName.Delete" />
-                    Delete
-                </Button>
-            </td>
-        </tr>
-                }
+                    <td>
+                        <Button Color="Color.Primary" Size="Size.Small" Clicked="@(() => EditModal(item.value.Id))">
+                            <Icon Name="IconName.Edit" />
+                            Edit
+                        </Button>
+                        <Button Color="Color.Danger" Size="Size.Small" Clicked="@(async () => await Delete(item.value))">
+                            <Icon Name="IconName.Delete" />
+                            Delete
+                        </Button>
+                    </td>
+                </tr>
+            }
         }
     </tbody>
 </table>
+<Pagination>
+    <PaginationItem>
+        <PaginationLink>
+            <span aria-hidden="true">«</span>
+        </PaginationLink>
+    </PaginationItem>
+    <PaginationItem Active="true">
+        <PaginationLink>
+            1
+        </PaginationLink>
+    </PaginationItem>
+    <PaginationItem>
+        <PaginationLink>
+            2
+        </PaginationLink>
+    </PaginationItem>
+    <PaginationItem>
+        <PaginationLink>
+            3
+        </PaginationLink>
+    </PaginationItem>
+    <PaginationItem>
+        <PaginationLink>
+            <span aria-hidden="true">»</span>
+        </PaginationLink>
+    </PaginationItem>
+</Pagination>
 
 
 @code {
+
+    List<KeyValuePair<Gender, string>> GenderList;
+    public IEnumerable<CategoryModel> categories;
+    public IEnumerable<SupplierModel> suppliers;
+
+    public void GetAllGender()
+    {
+        GenderList = EnumHelper.GetEnumAndDescriptions<Gender>();
+    }
 
     ProductDetail child;
     void AddModal()
@@ -81,9 +185,10 @@
     int total = 0;
     protected override async Task OnInitializedAsync()
     {
-
         await GetAllAsync();
-
+        GetAllGender();
+        categories = await categoryService.GetAllAsync();
+        suppliers = await supplierService.GetAllAsync();
     }
 
     async Task Delete(ProductModel model)
@@ -100,8 +205,32 @@
 
     public async Task GetAllAsync()
     {
-        products = await productService.GetAllAsync();
+        await Search();
+    }
+
+    #region PAGINATION
+
+    string selectedCategory = String.Empty;
+    string selectedSupplier = String.Empty;
+    Gender selectedGender = Gender.ALL;
+    string searchKeyword = String.Empty;
+    int pageNumber = 1;
+
+    int pageSize = 10;
+    string orderCol = nameof(ProductModel.Name);
+    string orderType = "Descending"; //or Ascending
+
+    public async Task Search()
+    {
+        var result = await productService.Search(
+            selectedCategory, selectedSupplier,
+            selectedGender, searchKeyword,
+            orderCol, orderType,
+            pageNumber, pageSize
+            );
+        products = result.Items;
         total = products.Count();
     }
 
+    #endregion
 }

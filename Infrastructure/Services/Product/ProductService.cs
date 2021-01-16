@@ -1,11 +1,15 @@
 ﻿using AutoMapper;
 using Infrastructure.Database;
 using Infrastructure.Entities;
+using Infrastructure.Enums;
+using Infrastructure.Extentions;
 using Infrastructure.Models;
 using Microsoft.EntityFrameworkCore;
+using SharedCore.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace Infrastructure.Services
@@ -27,7 +31,7 @@ namespace Infrastructure.Services
             //model.CategoryId = model.Category.Id;
             var entity = _mapper.Map<Product>(model);
             await _unitOfWork.ProductRepository.AddAsync(entity);
-            entity.Images.ToList().ForEach( item => item.ProductId = entity.Id);
+            entity.Images.ToList().ForEach(item => item.ProductId = entity.Id);
             await _unitOfWork.ResourceRepository.AddRangeAsync(entity.Images);
             SaveChanges();
             _unitOfWork.ProductRepository.Detach(entity);
@@ -68,7 +72,7 @@ namespace Infrastructure.Services
             return _mapper.Map<IEnumerable<ProductResponseModel>>(entities).OrderBy(e => e.Name);
         }
 
-        
+
         public ProductResponseModel GetById(string id)
         {
             var entity = _unitOfWork.ProductRepository.FindByCondition(e => e.Id == id)
@@ -87,9 +91,68 @@ namespace Infrastructure.Services
             return model;
         }
 
-        public Task<IEnumerable<ProductResponseModel>> Pagination(string categoryId, string keyword, string orderCol, string orderType, int? page = null, int? size = null)
+        public async Task<Pagination<ProductResponseModel>> Search(
+            string categoryId,
+            string supplierId,
+            Gender gender,
+            string keyword,
+            string orderCol,
+            string orderType,
+            int? page = 1,
+            int? size = 10
+            )
         {
-            throw new NotImplementedException();
+            var listPredicates = new List<Expression<Func<Product, bool>>>();
+            Func<IQueryable<Product>, IOrderedQueryable<Product>> orderBy = null;
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                var keywords = keyword.Trim().Split(" ").ToList().Where(x => !string.IsNullOrEmpty(x));
+                if (keywords.Any())
+                {
+                    foreach (var word in keywords)
+                    {
+                        //var wordLower = word.ToLower();
+                        Expression<Func<Product, bool>> predicate = t =>
+                            t.Name.ToLower().Contains(word, StringComparison.OrdinalIgnoreCase)
+                            || t.Description.ToLower().Contains(word, StringComparison.OrdinalIgnoreCase)
+                            ;
+                        listPredicates.Add(predicate);
+                    }
+                }
+            }
+            else
+            {
+                listPredicates.Add(x => true);
+            }
+
+            if (!string.IsNullOrEmpty(categoryId))
+            {
+                listPredicates.Add(x => x.CategoryId == categoryId);
+            }
+
+            if (!string.IsNullOrEmpty(supplierId))
+            {
+                listPredicates.Add(x => x.SupplierId == supplierId);
+            }
+
+            if (!gender.Equals(Gender.ALL))
+            {
+                listPredicates.Add(x => x.Gender == gender);
+            }
+
+            if (!string.IsNullOrEmpty(orderCol) && !string.IsNullOrEmpty(orderType))
+            {
+                orderBy = OrderByHelper.GetOrderBy<Product>(orderCol, orderType.ToString());
+            }
+            else
+            {
+                orderBy = OrderByHelper.GetOrderBy<Product>(nameof(Product.Name), "Descending");
+            }
+
+            var query = _unitOfWork.ProductRepository.Query(listPredicates.Aggregate((a, b) => a.And(b)), orderBy);
+
+            return await query.ToPagingAsync<Product, ProductResponseModel>( _mapper,page, size, 0);
+
         }
 
         public int SaveChanges()
@@ -119,7 +182,7 @@ namespace Infrastructure.Services
         {
             if (!string.IsNullOrWhiteSpace(id))
             {
-                var resources = await _unitOfWork.ResourceRepository.FindByCondition(rs => rs.ProductId.Equals(id)&&!rs.IsDeleted).ToListAsync();
+                var resources = await _unitOfWork.ResourceRepository.FindByCondition(rs => rs.ProductId.Equals(id) && !rs.IsDeleted).ToListAsync();
 
                 resources.ForEach(item =>
                 {

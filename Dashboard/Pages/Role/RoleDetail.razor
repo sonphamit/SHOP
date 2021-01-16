@@ -9,9 +9,9 @@
                 <CloseButton Clicked="@HideModal" />
             </ModalHeader>
             <ModalBody>
-                <Validations @ref="validations" Mode="ValidationMode.Auto" Model="@model" 
-                             ValidateOnLoad="false" >
-                    <Validation >
+                <Validations @ref="validations" Mode="ValidationMode.Auto" Model="@model"
+                             ValidateOnLoad="false">
+                    <Validation>
                         <Field>
                             <FieldLabel>Name</FieldLabel>
                             <TextEdit Placeholder="Enter name..." @bind-Text="model.Name" ChangeTextOnKeyPress="true" KeyPress="OnDirty">
@@ -27,15 +27,21 @@
             <ModalFooter>
                 <Button Color="Color.Secondary" Clicked="@HideModal">Close</Button>
                 <Button Type="ButtonType.Submit" PreventDefaultOnSubmit="true" Disabled="isDisabled"
-                        Color="Color.Primary" Clicked="@(async () => await Submit())" >Save Changes</Button>
+                        Color="Color.Primary" Clicked="@(async () => await Submit())">
+                    Save Changes
+                </Button>
             </ModalFooter>
         </Form>
+        <Snackbar @ref="snackbar" Color="SnackbarColor.Danger" Location="SnackbarLocation.Right">
+            <SnackbarBody>
+                The input data is invalid.
+            </SnackbarBody>
+        </Snackbar>
     </ModalContent>
 </Modal>
 
 
 @code {
-    //inject services
 
     [Parameter]
     public EventCallback OnSaveChange { get; set; }
@@ -47,6 +53,8 @@
     Validations validations;
 
     private bool isDisabled = true;
+
+    Snackbar snackbar;
 
     RoleModel model = new();
     protected override void OnInitialized()
@@ -70,6 +78,10 @@
             await OnSaveChange.InvokeAsync();
 
             HideModal();
+        }
+        else
+        {
+            snackbar.Show();
         }
     }
 

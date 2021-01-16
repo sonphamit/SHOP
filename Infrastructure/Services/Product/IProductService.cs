@@ -1,4 +1,6 @@
-﻿using Infrastructure.Models;
+﻿using Infrastructure.Enums;
+using Infrastructure.Extentions;
+using Infrastructure.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -14,8 +16,17 @@ namespace Infrastructure.Services
         IEnumerable<ProductResponseModel> GetAll();
         ProductResponseModel GetById(string id);
         Task<ProductResponseModel> GetByIdAsync(string id);
-        Task<IEnumerable<ProductResponseModel>> 
-            Pagination(string categoryId, string keyword, string orderCol, string orderType, int? page = null, int? size = null);
+        Task<Pagination<ProductResponseModel>>
+            Search(
+            string categoryId,
+            string supplierId,
+            Gender Gender,
+            string keyword,
+            string orderCol,
+            string orderType,
+            int? page = null,
+            int? size = null
+            );
         Task DeleteAsync(string id);
         Task<int> SaveChangesAsync();
         int SaveChanges();

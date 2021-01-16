@@ -44,8 +44,10 @@
                 </BarMenu>
             </Bar>
         </LayoutHeader>
-        <LayoutContent Padding="Padding.Is4.OnAll" >
-            @Body
+        <LayoutContent Padding="Padding.Is4.OnAll">
+            <Blazorise.Container Fluid="true">
+                @Body
+            </Blazorise.Container>
         </LayoutContent>
     </Layout>
 </Layout>

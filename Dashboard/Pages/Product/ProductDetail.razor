@@ -179,13 +179,15 @@
                 </Button>
             </ModalFooter>
         </form>
+        <Snackbar @ref="snackbar" Color="SnackbarColor.Danger" Location="SnackbarLocation.Right">
+            <SnackbarBody>
+                The input data is invalid.
+            </SnackbarBody>
+        </Snackbar>
+
+
     </ModalContent>
 </Modal>
-<Snackbar @ref="snackbar">
-    <SnackbarBody>
-        The input data is invaled.
-    </SnackbarBody>
-</Snackbar>
 
 @code {
     [Parameter]
