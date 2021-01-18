@@ -1,20 +1,25 @@
 ﻿@model Infrastructure.Models.ProductResponseModel
+@inject IProductService productService
 @using Infrastructure.Constants
 @{
     ViewData["Title"] = "View";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var productInCategory = await productService.GetProductsCategoryAsync(Model.CategoryId, Model.Id);
 }
-<div class="container">
+<div class="container mt-lg-5">
     <div class="card">
         <div class="container-fliud">
             <div class="wrapper row">
                 <div class="preview col-md-6">
 
                     <div class="preview-pic tab-content">
-                        @foreach (var image in Model.Images)
+                        <div class="tab-pane active" id="pic-1">
+                            <img src="@(TextConstant.DashboardDomain + "/" + Model.Images.First().PathName)" />
+                        </div>
+                        @for (var i = 1; i < Model.Images.Count(); i++)
                         {
                             <div class="tab-pane" id="pic-1">
-                            <img src="@(TextConstant.DashboardDomain + "/" + image.PathName)" />
+                                <img src="@(TextConstant.DashboardDomain + "/" + Model.Images.ElementAt(i).PathName)" />
                             </div>
                         }
                     </div>
@@ -23,65 +28,90 @@
                         {
                             <li><a data-target="#pic-2" data-toggle="tab"><img src="@(TextConstant.DashboardDomain + "/" + image.PathName)" /></a></li>
                         }
-                        @*<li class="active"><a data-target="#pic-1" data-toggle="tab"><img src="http://placekitten.com/200/126" /></a></li>
-                        <li><a data-target="#pic-2" data-toggle="tab"><img src="http://placekitten.com/200/126" /></a></li>
-                        <li><a data-target="#pic-3" data-toggle="tab"><img src="http://placekitten.com/200/126" /></a></li>
-                        <li><a data-target="#pic-4" data-toggle="tab"><img src="http://placekitten.com/200/126" /></a></li>*@
+
                     </ul>
 
                 </div>
                 <div class="details col-md-6">
-                    <h3 class="product-title">@Model.Name</h3>
-                    <h6>Mã hàng: 1234</h6>
+                    <h4 class="product-title">@Model.Name</h4>
+                    <h6>Mã: 1234</h6>
                     @if (Model.Discount > 0)
                     {
-                        <div class="mt-2">
-                            <span class="pl-3 font-size-15">@Model.DiscountPriceString</span>
-                            <span class="pl-2 text-decoration font-size-13">@(Model.DiscountPriceString)</span>
-                            <span class="text-danger">@(Model.Discount) % Giảm</span>
+                        <div class="mt-3">
+                            <span class="pl-2 text-decoration font-size-17">@(Model.UnitPriceString)</span>
+                            <span class="pl-3 font-size-27">@Model.DiscountPriceString</span>
+                            <span class="pl-3 text-danger">@(Model.Discount) % Giảm</span>
                         </div>
 
                     }
                     else
                     {
-                        <h3 class="price mt-2">
+                        <h3 class="price mt-3">
                             <span>@(String.Format("{0:0.0 VND}", Model.UnitPrice))</span>
                         </h3>
                     }
 
-                    <div class="form-row">
-                        <div class="col-md-2 mb-3">
-                            <h6>Sizes:</h6>
+                    <div class="form-row mt-3">
+                        <div class="col-md-3 mb-2">
+                            <h6 class="mt-2">Giới tính:</h6>
                         </div>
-                        <div class="col-md-5 mb-3">
+                        <div class="col-md-4">
+                            <h6 class="mt-2">@Model.Gender</h6>
+                        </div>
+                    </div>
+                    <div class="form-row mt-3">
+                        <div class="col-md-3">
+                            <h6 class="mt-2">Sizes:</h6>
+                        </div>
+                        <div class="col-md-4 px-0">
                             <select class="form-control" id="exampleFormControlSelect1">
                                 <option>S</option>
                                 <option>M</option>
                                 <option>L</option>
                                 <option>XL</option>
-                                <option>XXL</option>
                             </select>
                         </div>
-
                     </div>
-                    <h6 class="mt-2">
-                        colors:
+                    <div class="form-row mt-3">
+                        <div class="col-md-3 mb-3">
+                            <h6 class="d-inline mt-2">Màu:</h6>
+                        </div>
                         <span class="color orange not-available" data-toggle="tooltip" title="Not In store"></span>
                         <span class="color green"></span>
                         <span class="color blue"></span>
-                    </h6>
-
-                    <div class="input-group">
-                        <span class="input-group-btn">
-                            <button type="button" class="btn btn-default btn-number" disabled="disabled" data-type="minus" data-field="quant[1]">
-                                <span class="glyphicon glyphicon-minus"></span>
-                            </button>
+                    </div>
+                    <div class="form-row mt-3">
+                        <h6 class="col-md-3 mt-2">Số lượng:</h6>
+                        <span class="quantity">
+                            <input class="input-quantity" type="number" value="1" />
                         </span>
-                        <input type="text" name="quant[1]" class="form-control input-number" value="1" min="1" max="10">
-                        <span class="input-group-btn">
-                            <button type="button" class="btn btn-default btn-number" data-type="plus" data-field="quant[1]">
-                                <span class="glyphicon glyphicon-plus"></span>
-                            </button>
+                        <span class="pl-2 mt-2 text-muted">@Model.UnitsInStock sản phẩm có sẵn</span>
+                    </div>
+                    <div class="mt-4">
+                        <span>
+                            @Model.Description
+                        </span>
+                    </div>
+
+                    <div class="mt-4">
+                        <h6>
+                            Hướng dẫn sử dụng
+                        </h6>
+                        <span>
+                            Giặt máy ở chế độ nhẹ, nhiệt độ thường.
+                            <br />
+                            Giặt với sản phẩm cùng màu.
+                            <br />
+                            Không sử dụng hóa chất tẩy có chứa Clo.
+                            <br />
+                            Phơi trong bóng mát.
+                            <br />
+                            Sấy thùng, chế độ nhẹ nhàng.
+                            <br />
+                            Là ở nhiệt độ trung bình 150 độ C.
+                            <br />
+                            Không là lên chi tiết trang trí.
+                            <br />
                         </span>
                     </div>
 
@@ -91,6 +121,64 @@
                     </div>
                 </div>
             </div>
+
+        </div>
+
+
+    </div>
+    <div class="mt-5 mb-5 pb-5">
+        <div class="tab-content" id="myTabContent">
+            <!-- Start Single Tab -->
+            <div class="tab-pane fade show active" id="man" role="tabpanel">
+                <div class="tab-single">
+                    <h5>SẢN PHẨM TƯƠNG TỰ</h5>
+                    <div class="row">
+                        @foreach (var product in productInCategory)
+                        {
+                            <div class="col-xl-3 col-lg-4 col-md-4 col-12">
+                                <div class="single-product">
+                                    <div class="product-img">
+                                        @if (product.Images.Count > 0)
+                                        {
+                                            <a href="product-details.html">
+                                                <img class="default-img" src="@(TextConstant.DashboardDomain + "/" + product.Images?.First().PathName)" alt="#">
+                                            </a>
+                                        }
+
+                                        <div class="button-head">
+                                            <div class="product-action">
+                                                <a data-toggle="modal" data-target="#exampleModal" title="Quick View" href="#">
+                                                    <i class=" ti-eye"></i><span>Quick Shop</span>
+                                                </a>
+                                                <a title="Wishlist" href="#"><i class=" ti-heart "></i><span>Add to Wishlist</span></a>
+                                                <a title="Compare" href="#"><i class="ti-bar-chart-alt"></i><span>Add to Compare</span></a>
+                                            </div>
+                                            <div class="product-action-2">
+                                                <a title="Add to cart" href="#">Add to cart</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="product-content">
+                                        <h3><a href="product-details.html">@product.Name</a></h3>
+                                        <div class="product-price">
+                                            @if (Model.Discount > 0)
+                                            {
+                                                <span class="text-decoration">@product.UnitPriceString</span>
+                                                <span class="sale">@product.DiscountPriceString</span>
+                                            } else
+                                            {
+                                                <span>@product.UnitPriceString</span>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <!--/ End Single Tab -->
         </div>
     </div>
 </div>

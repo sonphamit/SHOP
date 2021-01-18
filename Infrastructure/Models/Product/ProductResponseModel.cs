@@ -14,6 +14,23 @@
                 return string.Format("{0:0,0 VND}", UnitPrice * (1 - Discount / 100));
             }
         }
+
+        public string UnitPriceString
+        {
+            get
+            {
+                return string.Format("{0:0,0 VND}",UnitPrice);
+            }
+        }
+
+        public string DiscountString
+        {
+            get
+            {
+                return string.Format("{0:0,0 VND}", Discount);
+            }
+        }
+
         public CategoryModel Category { get; set; }
         public SupplierModel Supplier { get; set; }
 
