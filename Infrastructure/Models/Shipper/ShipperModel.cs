@@ -11,7 +11,7 @@ namespace Infrastructure.Models
         public string ShipperName { get; set; }
         [Required(ErrorMessage = "Shipper Phone is required")]
         public string ShipperPhone { get; set; }
-        [Required(ErrorMessage = "Company is required")]
+        [Required(ErrorMessage = "Delivery Company is required")]
         public DeliveryCompany Company { get; set; }
         public virtual ICollection<OrderModel> Orders { get; set; }
     }

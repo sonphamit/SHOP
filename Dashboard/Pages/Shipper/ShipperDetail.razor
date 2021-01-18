@@ -9,32 +9,58 @@
                 <CloseButton Clicked="@HideModal" />
             </ModalHeader>
             <ModalBody>
-                <Field>
-                    <FieldLabel>Full Name</FieldLabel>
-                    <TextEdit Placeholder="Enter Full Name..." @bind-Text="model.ShipperName" />
-                </Field>
-                <Field>
-                    <FieldLabel>Phone</FieldLabel>
-                    <TextEdit Rows="5" Placeholder="Enter Phone..." @bind-Text="model.ShipperPhone" />
-                </Field>
-                <Field>
-                    <FieldLabel>Delivery Company</FieldLabel>
-                    <Select TValue="DeliveryCompany" Multiple="false" @bind-SelectedValue="model.Company" >
-                        @if (CompanyList != null)
-                        {
-                            @foreach (var item in CompanyList)
-                            {
-                                <SelectItem Value="@item.Key">@item.Value</SelectItem>
-                            }
-                        }
-                    </Select>
-                </Field>
+                <Validations @ref="validations" Model="model" Mode="ValidationMode.Auto" ValidateOnLoad="false">
+                    <Validation>
+                        <Field>
+                            <FieldLabel>Full Name</FieldLabel>
+                            <TextEdit Placeholder="Enter Full Name..." @bind-Text="model.ShipperName">
+                                <Feedback>
+                                    <ValidationError />
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+                    <Validation>
+                        <Field>
+                            <FieldLabel>Phone</FieldLabel>
+                            <TextEdit Rows="5" Placeholder="Enter Phone..." @bind-Text="model.ShipperPhone">
+                                <Feedback>
+                                    <ValidationError />
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+                    <Validation>
+                        <Field>
+                            <FieldLabel>Delivery Company</FieldLabel>
+                            <Select TValue="DeliveryCompany" Multiple="false" @bind-SelectedValue="model.Company">
+                                <ChildContent>
+                                    @if (CompanyList != null)
+                                    {
+                                        @foreach (var item in CompanyList)
+                                        {
+                                            <SelectItem Value="@item.Key">@item.Value</SelectItem>
+                                        }
+                                    }
+                                </ChildContent>
+                                <Feedback>
+                                    <ValidationError />
+                                </Feedback>
+                            </Select>
+                        </Field>
+                    </Validation>
+                </Validations>
             </ModalBody>
             <ModalFooter>
                 <Button Color="Color.Secondary" Clicked="@HideModal">Close</Button>
                 <Button Color="Color.Primary" Clicked="@SaveChange">Save Changes</Button>
             </ModalFooter>
         </form>
+        <Snackbar @ref="snackbar" Color="SnackbarColor.Danger" Location="SnackbarLocation.Right">
+            <SnackbarBody>
+                The input data is invalid.
+            </SnackbarBody>
+        </Snackbar>
     </ModalContent>
 </Modal>
 
@@ -46,6 +72,9 @@
     // reference to the modal component
     public Modal modalRef;
     public string modalTitle = "";
+
+    Validations validations;
+    Snackbar snackbar;
 
     ShipperModel model;
 
@@ -59,19 +88,25 @@
 
     private void SaveChange()
     {
-        if (String.IsNullOrWhiteSpace(model.Id))
+        if (validations.ValidateAll())
         {
-            service.AddAsync(model);
+            if (String.IsNullOrWhiteSpace(model.Id))
+            {
+                service.AddAsync(model);
+            }
+            else
+            {
+                service.Update(model.Id, model);
+            }
+
+            OnSaveChange.InvokeAsync();
+
+            HideModal();
         }
         else
         {
-            service.Update(model.Id, model);
+            snackbar.Show();
         }
-
-        OnSaveChange.InvokeAsync();
-
-        HideModal();
-
     }
 
     public void AddModal()
