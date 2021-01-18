@@ -17,7 +17,7 @@ namespace Infrastructure.Extentions
         {
             if (index.HasValue && from > index.Value) throw new ArgumentException($"From: {from} > Index: {index.Value}, must From <= Index");
 
-            var count = source.Count();
+            var count = await source.CountAsync();
 
             if (index.HasValue && size.HasValue)
             {

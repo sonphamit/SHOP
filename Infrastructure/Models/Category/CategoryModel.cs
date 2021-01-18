@@ -9,7 +9,7 @@ namespace Infrastructure.Models
         [Required(ErrorMessage = "Name is required")]
         public string Name { get; set; }
         public string Description { get; set; }
-        public virtual ICollection<ProductModel> Products { get; set; }
+        //public virtual ICollection<ProductModel> Products { get; set; }
     }
 
 }

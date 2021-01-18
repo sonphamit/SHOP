@@ -111,12 +111,9 @@ namespace Infrastructure.Services
                 {
                     foreach (var word in keywords)
                     {
-                        //var wordLower = word.ToLower();
-                        Expression<Func<Product, bool>> predicate = t =>
-                            t.Name.ToLower().Contains(word, StringComparison.OrdinalIgnoreCase)
-                            || t.Description.ToLower().Contains(word, StringComparison.OrdinalIgnoreCase)
-                            ;
-                        listPredicates.Add(predicate);
+                        var wordLower = word.ToLower();
+                        //Expression<Func<Product, bool>> predicate = t => t.Name.Contains(word);
+                        listPredicates.Add(x => x.Name.ToLower().Contains(wordLower));
                     }
                 }
             }
@@ -151,7 +148,7 @@ namespace Infrastructure.Services
 
             var query = _unitOfWork.ProductRepository.Query(listPredicates.Aggregate((a, b) => a.And(b)), orderBy);
 
-            return await query.ToPagingAsync<Product, ProductResponseModel>( _mapper,page, size, 0);
+            return await query.ToPagingAsync<Product, ProductResponseModel>( _mapper, page, size, 0);
 
         }
 

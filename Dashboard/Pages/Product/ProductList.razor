@@ -25,7 +25,7 @@
                 <AddonLabel>Gender</AddonLabel>
             </Addon>
             <Addon AddonType="AddonType.Body">
-                <Select TValue="Gender" Multiple="false">
+                <Select TValue="Gender" Multiple="false" SelectedValue="@selectedGender" SelectedValueChanged="@genderOnChange">
                     @if (GenderList != null)
                     {
                         @foreach (var item in GenderList)
@@ -44,10 +44,10 @@
                 <AddonLabel>Category</AddonLabel>
             </Addon>
             <Addon AddonType="AddonType.Body">
-                <Select TValue="string" Multiple="false">
+                <Select TValue="string" Multiple="false" SelectedValue="@selectedCategory" SelectedValueChanged="@categoryOnChange">
                     @if (categories != null)
                     {
-                        <SelectItem Value="@(String.Empty)">Please Select</SelectItem>
+                        <SelectItem Value="@(String.Empty)">Select All</SelectItem>
                         @foreach (var item in categories)
                         {
                             <SelectItem Value="@item.Id">@item.Name</SelectItem>
@@ -63,10 +63,10 @@
                 <AddonLabel>Supplier</AddonLabel>
             </Addon>
             <Addon AddonType="AddonType.Body">
-                <Select TValue="string" Multiple="false">
+                <Select TValue="string" Multiple="false" SelectedValue="@selectedSupplier" SelectedValueChanged="@supplierOnChange">
                     @if (suppliers != null)
                     {
-                        <SelectItem Value="@(String.Empty)">Please Select</SelectItem>
+                        <SelectItem Value="@(String.Empty)">Select All</SelectItem>
                         @foreach (var item in suppliers)
                         {
                             <SelectItem Value="@item.Id">@item.CompanyName</SelectItem>
@@ -82,7 +82,7 @@
                 <AddonLabel><Icon Name="IconName.Search" /></AddonLabel>
             </Addon>
             <Addon AddonType="AddonType.Body">
-                <TextEdit Placeholder="Search"></TextEdit>
+                <TextEdit Placeholder="Search" TextChanged="keywordOnChange"></TextEdit>
             </Addon>
         </Addons>
     </div>
@@ -239,5 +239,28 @@
         lastPage = (int)Math.Ceiling((decimal)total / pageSize);
     }
 
+    async Task genderOnChange(Gender value)
+    {
+        selectedGender = value;
+        await Search();
+    }
+
+    async Task categoryOnChange(string value)
+    {
+        selectedCategory = value;
+        await Search();
+    }
+
+    async Task supplierOnChange(string value)
+    {
+        selectedSupplier = value;
+        await Search();
+    }
+
+    async Task keywordOnChange(string value)
+    {
+        searchKeyword = value;
+        await Search();
+    }
     #endregion
 }
