@@ -10,16 +10,29 @@
                 <CloseButton Clicked="@HideModal" />
             </ModalHeader>
             <ModalBody>
-                <Field>
-                    <FieldLabel>Name</FieldLabel>
-                    <TextEdit Placeholder="Enter name..." @bind-Text="model.CompanyName" />
-                </Field>
+                <Validations @ref="validations" Model="model" Mode="ValidationMode.Auto" ValidateOnLoad="false">
+                    <Validation>
+                        <Field>
+                            <FieldLabel>Name</FieldLabel>
+                            <TextEdit Placeholder="Enter name..." @bind-Text="model.CompanyName">
+                                <Feedback>
+                                    <ValidationError />
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+                </Validations>
             </ModalBody>
             <ModalFooter>
                 <Button Color="Color.Secondary" Clicked="@HideModal">Close</Button>
                 <Button Color="Color.Primary" Clicked="@(async ()=> await SaveChangeAsync())">Save Changes</Button>
             </ModalFooter>
         </form>
+        <Snackbar @ref="snackbar" Color="SnackbarColor.Danger" Location="SnackbarLocation.Right">
+            <SnackbarBody>
+                The input data is invalid.
+            </SnackbarBody>
+        </Snackbar>
     </ModalContent>
 </Modal>
 
@@ -31,41 +44,58 @@
     public Modal modalRef;
     public string modalTitle = "";
 
+    Validations validations;
+    Snackbar snackbar;
+
     SupplierModel model;
     protected override void OnInitialized()
     {
+        modalRef = new Modal();
         model = new SupplierModel();
     }
 
     private async Task SaveChangeAsync()
     {
-        if (String.IsNullOrWhiteSpace(model.Id))
+        if (validations.ValidateAll())
         {
-            await service.AddAsync(model);
+            if (String.IsNullOrWhiteSpace(model.Id))
+            {
+                await service.AddAsync(model);
+            }
+            else
+            {
+                await service.UpdateAsync(model.Id, model);
+            }
+
+            await OnSaveChange.InvokeAsync();
+
+            HideModal();
         }
         else
         {
-            await service.UpdateAsync(model.Id, model);
+            snackbar.Show();
         }
-
-        await OnSaveChange.InvokeAsync();
-
-        HideModal();
-
     }
 
     public void AddModal()
     {
+        //modalRef = new Modal();
         model = new SupplierModel();
         modalTitle = "Add Supplier";
         modalRef.Show();
     }
 
-    public void EditModal(SupplierModel model)
+    public void EditModal(string id)
     {
         modalTitle = "Edit Supplier";
-        this.model = model;
+        this.model = GetById(id);
         modalRef.Show();
+    }
+
+    public SupplierModel GetById(string id)
+    {
+        var responseModel = service.GetById(id);
+        return responseModel;
     }
 
     public void HideModal()

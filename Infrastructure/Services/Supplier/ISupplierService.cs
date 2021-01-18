@@ -14,6 +14,7 @@ namespace Infrastructure.Services
         Task<IEnumerable<SupplierModel>> GetAllAsync();
         IEnumerable<SupplierModel> GetAll();
         Task<SupplierModel> GetByIdAsync(string id);
+        SupplierModel GetById(string id);
         Task<IEnumerable<SupplierModel>> Pagination(Expression<Func<SupplierModel, bool>> predicate);
         Task DeleteAsync(string id);
         Task<int> SaveChangesAsync();

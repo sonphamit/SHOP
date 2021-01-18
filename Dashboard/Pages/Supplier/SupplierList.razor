@@ -36,7 +36,7 @@
                     <td>@(item.index+1)</td>
                     <td>@item.value.CompanyName</td>
                     <td>
-                        <Button Color="Color.Primary" Size="Size.Small" Clicked="@(() => EditModal(item.value))">
+                        <Button Color="Color.Primary" Size="Size.Small" Clicked="@(() => EditModal(item.value.Id))">
                             <Icon Name="IconName.Edit" />
                             Edit
                         </Button>
@@ -61,18 +61,16 @@
         child.AddModal();
     }
 
-    void EditModal(SupplierModel model)
+    void EditModal(string id)
     {
-        child.EditModal(model);
+        child.EditModal(id);
     }
 
     public IEnumerable<SupplierModel> data;
     int total = 0;
     protected override async Task OnInitializedAsync()
     {
-        //data = new List<SupplierModel>();
         await GetAllAsync();
-
     }
 
     async Task Delete(SupplierModel model)
@@ -81,7 +79,6 @@
         {
             return;
         }
-
 
         await service.DeleteAsync(model.Id);
         await service.SaveChangesAsync();

@@ -52,6 +52,12 @@ namespace Infrastructure.Services
             return _mapper.Map<ShipperModel>(entity);
         }
 
+        public ShipperModel GetById(string id)
+        {
+            var entity = _unitOfWork.ShipperRepository.FindByCondition(e => e.Id.Equals(id)).FirstOrDefault();
+            return _mapper.Map<ShipperModel>(entity);
+        }
+
         public int SaveChanges()
         {
             return _unitOfWork.SaveChanges();

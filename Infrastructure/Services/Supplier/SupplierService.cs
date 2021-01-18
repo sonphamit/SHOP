@@ -55,6 +55,12 @@ namespace Infrastructure.Services
             return _mapper.Map<SupplierModel>(entity);
         }
 
+        public SupplierModel GetById(string id)
+        {
+            var entity = _unitOfWork.SupplierRepository.FindByCondition(e => e.Id.Equals(id)).FirstOrDefault();
+            return _mapper.Map<SupplierModel>(entity);
+        }
+
         public Task<IEnumerable<SupplierModel>> Pagination(Expression<Func<SupplierModel, bool>> predicate)
         {
             throw new NotImplementedException();

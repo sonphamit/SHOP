@@ -81,11 +81,17 @@
         modalRef.Show();
     }
 
-    public void EditModal(ShipperModel model)
+    public void EditModal(string id)
     {
         modalTitle = "Edit Shipper";
-        this.model = model;
+        this.model = GetById(id);
         modalRef.Show();
+    }
+
+    public ShipperModel GetById(string id)
+    {
+        var responseModel = service.GetById(id);
+        return responseModel;
     }
 
     public void HideModal()

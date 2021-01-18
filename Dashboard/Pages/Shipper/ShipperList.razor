@@ -40,7 +40,7 @@
                     <td>@item.value.ShipperPhone</td>
                     <td>@item.value.Company.GetDescription()</td>
                     <td>
-                        <Button Color="Color.Primary" Size="Size.Small" Clicked="@(() => EditModal(item.value))">
+                        <Button Color="Color.Primary" Size="Size.Small" Clicked="@(() => EditModal(item.value.Id))">
                             <Icon Name="IconName.Edit" />
                             Edit
                         </Button>
@@ -65,9 +65,9 @@
         child.AddModal();
     }
 
-    void EditModal(ShipperModel model)
+    void EditModal(string id)
     {
-        child.EditModal(model);
+        child.EditModal(id);
     }
 
     public IEnumerable<ShipperModel> data;
@@ -85,7 +85,6 @@
         {
             return;
         }
-
 
         await service.DeleteAsync(model.Id);
         await service.SaveChangesAsync();
