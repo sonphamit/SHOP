@@ -12,6 +12,7 @@ namespace Infrastructure.Services
         Task<IEnumerable<CategoryModel>> GetAllAsync();
         IEnumerable<CategoryModel> GetAll();
         Task<CategoryModel> GetByIdAsync(string id);
+        CategoryModel GetById(string id);
         Task DeleteAsync(string id);
         Task<int> SaveChangesAsync();
         int SaveChanges();

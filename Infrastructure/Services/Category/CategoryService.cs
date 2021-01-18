@@ -50,6 +50,12 @@ namespace Infrastructure.Services
             return _mapper.Map<CategoryModel>(entity);
         }
 
+        public CategoryModel GetById(string id)
+        {
+            var entity = _unitOfWork.CategoryRepository.FindByCondition(e => e.Id.Equals(id)).FirstOrDefault();
+            return _mapper.Map<CategoryModel>(entity);
+        }
+
         public int SaveChanges()
         {
             return _unitOfWork.SaveChanges();

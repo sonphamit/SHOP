@@ -21,7 +21,9 @@
 <div class="row mb-4 mt-4">
     <div class="col-2">
         <Addons>
-            <Addon AddonType="AddonType.Start"></Addon>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel>Gender</AddonLabel>
+            </Addon>
             <Addon AddonType="AddonType.Body">
                 <Select TValue="Gender" Multiple="false">
                     @if (GenderList != null)
@@ -38,7 +40,9 @@
     </div>
     <div class="col-3">
         <Addons>
-            <Addon AddonType="AddonType.Start">Category</Addon>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel>Category</AddonLabel>
+            </Addon>
             <Addon AddonType="AddonType.Body">
                 <Select TValue="string" Multiple="false">
                     @if (categories != null)
@@ -130,34 +134,35 @@
         }
     </tbody>
 </table>
-<Pagination>
-    <PaginationItem>
-        <PaginationLink>
-            <span aria-hidden="true">«</span>
-        </PaginationLink>
-    </PaginationItem>
-    <PaginationItem Active="true">
-        <PaginationLink>
-            1
-        </PaginationLink>
-    </PaginationItem>
-    <PaginationItem>
-        <PaginationLink>
-            2
-        </PaginationLink>
-    </PaginationItem>
-    <PaginationItem>
-        <PaginationLink>
-            3
-        </PaginationLink>
-    </PaginationItem>
-    <PaginationItem>
-        <PaginationLink>
-            <span aria-hidden="true">»</span>
-        </PaginationLink>
-    </PaginationItem>
-</Pagination>
+@if (lastPage > 0)
+{
+    <Pagination>
+        <PaginationItem Disabled="@(pageNumber == 1)">
+            <PaginationLink>
+                <span aria-hidden="true">«</span>
+            </PaginationLink>
+        </PaginationItem>
+        <PaginationItem Disabled="@(pageNumber == 1)" Active="true">
+            <PaginationLink>
+                1
+            </PaginationLink>
+        </PaginationItem>
+        @for (var pg = 1; pg < lastPage; pg++)
+        {
+            <PaginationItem Disabled="@(pageNumber == pg)">
+                <PaginationLink>
+                    pg
+                </PaginationLink>
+            </PaginationItem>
+        }
 
+        <PaginationItem Disabled="@(pageNumber == lastPage)">
+            <PaginationLink>
+                <span aria-hidden="true">»</span>
+            </PaginationLink>
+        </PaginationItem>
+    </Pagination>
+}
 
 @code {
 
@@ -220,6 +225,7 @@
     string orderCol = nameof(ProductModel.Name);
     string orderType = "Descending"; //or Ascending
 
+    int lastPage = 0;
     public async Task Search()
     {
         var result = await productService.Search(
@@ -230,6 +236,7 @@
             );
         products = result.Items;
         total = products.Count();
+        lastPage = (int)Math.Ceiling((decimal)total / pageSize);
     }
 
     #endregion

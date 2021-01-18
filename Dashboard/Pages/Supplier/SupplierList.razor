@@ -2,7 +2,7 @@
 @inject ISupplierService service
 @inject IJSRuntime JsRuntime
 
-<div class="row mb-4 mt-4">
+<div class="row mb-4">
     <div class="col-10">
         <h3 class="mr-5">Supplier</h3>
         <SupplierDetail @ref="child" OnSaveChange="@(async () => await GetAllAsync())" />

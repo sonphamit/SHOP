@@ -2,7 +2,7 @@
 @inject ICategoryService service
 @inject IJSRuntime JsRuntime
 
-<div class="row mb-4 mt-4">
+<div class="row mb-4">
     <div class="col-10">
         <h3 class="mr-5">Category</h3>
         <CategoryDetail @ref="child" OnSaveChange="@(async () => await GetAllAsync())" />
@@ -38,7 +38,7 @@
                     <td>@item.value.Name</td>
                     <td>@item.value.Description</td>
                     <td>
-                        <Button Color="Color.Primary" Size="Size.Small" Clicked="@(() => EditModal(item.value))">
+                        <Button Color="Color.Primary" Size="Size.Small" Clicked="@(() => EditModal(item.value.Id))">
                             <Icon Name="IconName.Edit" />
                             Edit
                         </Button>
@@ -63,9 +63,9 @@
         child.AddModal();
     }
 
-    void EditModal(CategoryModel model)
+    void EditModal(string id)
     {
-        child.EditModal(model);
+        child.EditModal(id);
     }
 
     public IEnumerable<CategoryModel> data;
@@ -81,7 +81,6 @@
         {
             return;
         }
-
 
         await service.DeleteAsync(model.Id);
         await service.SaveChangesAsync();

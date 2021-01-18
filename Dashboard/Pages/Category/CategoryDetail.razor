@@ -9,20 +9,39 @@
                 <CloseButton Clicked="@HideModal" />
             </ModalHeader>
             <ModalBody>
-                <Field>
-                    <FieldLabel>Name</FieldLabel>
-                    <TextEdit Placeholder="Enter name..." @bind-Text="model.Name" />
-                </Field>
-                <Field>
-                    <FieldLabel>Desciption</FieldLabel>
-                    <MemoEdit Rows="5" Placeholder="Enter desciption..." @bind-Text="model.Description" />
-                </Field>
+                <Validations @ref="validations" Model="model" Mode="ValidationMode.Auto" ValidateOnLoad="false">
+                    <Validation>
+                        <Field>
+                            <FieldLabel>Name</FieldLabel>
+                            <TextEdit Placeholder="Enter name..." @bind-Text="model.Name">
+                                <Feedback>
+                                    <ValidationError />
+                                </Feedback>
+                            </TextEdit>
+                        </Field>
+                    </Validation>
+                    <Validation>
+                        <Field>
+                            <FieldLabel>Desciption</FieldLabel>
+                            <MemoEdit Rows="5" Placeholder="Enter desciption..." @bind-Text="model.Description">
+                                <Feedback>
+                                    <ValidationError />
+                                </Feedback>
+                            </MemoEdit>
+                        </Field>
+                    </Validation>
+                </Validations>
             </ModalBody>
             <ModalFooter>
                 <Button Color="Color.Secondary" Clicked="@HideModal">Close</Button>
                 <Button Color="Color.Primary" Clicked="@SaveChange">Save Changes</Button>
             </ModalFooter>
         </form>
+        <Snackbar @ref="snackbar" Color="SnackbarColor.Danger" Location="SnackbarLocation.Right">
+            <SnackbarBody>
+                The input data is invalid.
+            </SnackbarBody>
+        </Snackbar>
     </ModalContent>
 </Modal>
 
@@ -30,11 +49,14 @@
 @code {
     [Parameter] public EventCallback OnSaveChange { get; set; }
 
+    Validations validations;
     // reference to the modal component
     public Modal modalRef;
     public string modalTitle = "";
 
     CategoryModel model;
+
+    Snackbar snackbar;
     protected override void OnInitialized()
     {
         model = new CategoryModel();
@@ -42,33 +64,47 @@
 
     private void SaveChange()
     {
-        if (String.IsNullOrWhiteSpace(model.Id))
+        if(validations.ValidateAll())
         {
-            service.AddAsync(model);
+            if (String.IsNullOrWhiteSpace(model.Id))
+            {
+                service.AddAsync(model);
+            }
+            else
+            {
+                service.Update(model.Id, model);
+            }
+
+            OnSaveChange.InvokeAsync();
+
+            HideModal();
         }
         else
         {
-            service.Update(model.Id, model);
+            snackbar.Show();
         }
-
-        OnSaveChange.InvokeAsync();
-
-        HideModal();
-
     }
 
     public void AddModal()
     {
+        validations = new Validations();
         model = new CategoryModel();
         modalTitle = "Add Category";
         modalRef.Show();
     }
 
-    public void EditModal(CategoryModel model)
+    public void EditModal(string id)
     {
+        validations = new Validations();
         modalTitle = "Edit Category";
-        this.model = model;
+        this.model = GetById(id);
         modalRef.Show();
+    }
+
+    public CategoryModel GetById(string id)
+    {
+        var responseModel = service.GetById(id);
+        return responseModel;
     }
 
     public void HideModal()
