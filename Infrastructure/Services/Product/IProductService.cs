@@ -31,5 +31,7 @@ namespace Infrastructure.Services
         Task<int> SaveChangesAsync();
         int SaveChanges();
 
+        Task<List<ProductResponseModel>> GetProductsCategoryAsync(string categoryId, string? productId);
+
     }
 }

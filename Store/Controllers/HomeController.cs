@@ -33,5 +33,15 @@ namespace Store.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        public IActionResult Category(string catagoryId)
+        {
+            if (catagoryId == null)
+            {
+                return View("NotFound");
+            }
+
+            return View("Index");
+        }
     }
 }

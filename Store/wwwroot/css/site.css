@@ -63,7 +63,7 @@ body {
   margin-bottom: 60px;
 }
 .footer {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   width: 100%;
   white-space: nowrap;
@@ -205,10 +205,6 @@ img {
     width: 2em;
     border-radius: 2px;
 }
-
-    .color:first-of-type {
-        margin-left: 20px;
-    }
 
 .add-to-cart, .like {
     background: #ff9f1a;

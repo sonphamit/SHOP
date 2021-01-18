@@ -21,9 +21,10 @@ namespace Store.Controllers
             return View();
         }
 
-        public  IActionResult DetailsAsync(string id)
+        public IActionResult DetailsAsync(string id)
         {
             var product = _productService.GetById(id);
+
             if (product == null)
             {
                 return View("NotFound");
@@ -31,5 +32,6 @@ namespace Store.Controllers
 
             return View("Details", product);
         }
+
     }
 }

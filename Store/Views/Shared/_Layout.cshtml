@@ -97,12 +97,6 @@
                     <div class="col-lg-8 col-md-7 col-12">
                         <div class="search-bar-top">
                             <div class="search-bar">
-                                <select>
-                                    <option selected="selected">All Category</option>
-                                    <option>watch</option>
-                                    <option>mobile</option>
-                                    <option>kid’s item</option>
-                                </select>
                                 <form>
                                     <input name="search" placeholder="Search Products Here....." type="search">
                                     <button class="btnn"><i class="ti-search"></i></button>
@@ -168,25 +162,15 @@
                                     <div class="navbar-collapse">
                                         <div class="nav-inner">
                                             <ul class="nav main-menu menu navbar-nav">
-                                                <li class="active"><a href="#">Home</a></li>
-                                                <li><a href="#">Product</a></li>
-                                                <li><a href="#">Service</a></li>
+                                                <li class="active"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                                                <li><a href="#">Sản phẩm</a></li>
+                                                <li><a href="#">Bé trai</a></li>
+                                                <li><a href="#">Bé gái</a></li>
                                                 <li>
-                                                    <a href="#">Shop<i class="ti-angle-down"></i><span class="new">New</span></a>
-                                                    <ul class="dropdown">
-                                                        <li><a href="shop-grid.html">Shop Grid</a></li>
-                                                        <li><a href="cart.html">Cart</a></li>
-                                                        <li><a href="checkout.html">Checkout</a></li>
-                                                    </ul>
+                                                    <a href="#">Mới<i class="ti-angle-down"></i><span class="new">New</span></a>
                                                 </li>
-                                                <li><a href="#">Pages</a></li>
-                                                <li>
-                                                    <a href="#">Blog<i class="ti-angle-down"></i></a>
-                                                    <ul class="dropdown">
-                                                        <li><a href="blog-single-sidebar.html">Blog Single Sidebar</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li><a href="contact.html">Contact Us</a></li>
+                                                <li><a href="#">Giảm giá</a></li>
+                                                <li><a href="contact.html">Liên hệ</a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -209,7 +193,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2020 - Store - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2021 - Mint's Store - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
