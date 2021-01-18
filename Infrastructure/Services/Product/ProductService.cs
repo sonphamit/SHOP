@@ -149,5 +149,18 @@ namespace Infrastructure.Services
             return false;
         }
 
+        public async Task<List<ProductResponseModel>> GetProductsCategoryAsync(string categoryId, string? productionId)
+        {
+            if (!string.IsNullOrEmpty(productionId))
+            {
+                var entitiesExceptProduct = await _unitOfWork.ProductRepository.
+                    FindByCondition(e => e.CategoryId == categoryId && e.Id != productionId).Include(i => i.Images ).ToListAsync();
+                
+                return _mapper.Map<List<ProductResponseModel>>(entitiesExceptProduct);
+            }
+            var entities = await _unitOfWork.ProductRepository.FindByCondition(e => e.CategoryId == categoryId ).ToListAsync();
+            return _mapper.Map<List<ProductResponseModel>>(entities);
+        }
+
     }
 }

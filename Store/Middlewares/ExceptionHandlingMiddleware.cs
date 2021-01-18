@@ -61,9 +61,9 @@ namespace Store.Middlewares
                     message = "Server error. Please contact admin to support";
                 }
 
-                var response = context.Response;
-                response.ContentType = "application/json";
-                response.StatusCode = (int)code;
+                //var response = context.Response;
+                //response.ContentType = "application/json";
+                //response.StatusCode = (int)code;
                 
             }
 
