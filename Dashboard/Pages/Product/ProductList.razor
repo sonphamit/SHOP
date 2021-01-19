@@ -109,7 +109,7 @@
             @foreach (var item in products.Select((value, index) => new { value, index }))
             {
                 <tr>
-                    <td>@(item.index + 1)</td>
+                    <td>@(item.index + 1 + pageSize*(pageNumber-1))</td>
                     <td>@item.value.Name</td>
                     <td>@item.value.ProductionCode</td>
                     <td>@item.value.Gender</td>
@@ -138,26 +138,24 @@
 {
     <Pagination>
         <PaginationItem Disabled="@(pageNumber == 1)">
-            <PaginationLink>
+            <PaginationLink Clicked="preOnClick">
                 <span aria-hidden="true">«</span>
             </PaginationLink>
         </PaginationItem>
-        <PaginationItem Disabled="@(pageNumber == 1)" Active="true">
-            <PaginationLink>
-                1
-            </PaginationLink>
-        </PaginationItem>
-        @for (var pg = 1; pg < lastPage; pg++)
-        {
-            <PaginationItem Disabled="@(pageNumber == pg)">
-                <PaginationLink>
-                    pg
-                </PaginationLink>
-            </PaginationItem>
-        }
 
+        @if (lastPage >= 1)
+        {
+            @foreach (var pg in Enumerable.Range(1, lastPage).ToArray())
+            {
+                <PaginationItem Active="@(pageNumber == pg)">
+                    <PaginationLink Clicked="@(async () => await pageOnClick(pg))">
+                        @pg
+                    </PaginationLink>
+                </PaginationItem>
+            }
+        }
         <PaginationItem Disabled="@(pageNumber == lastPage)">
-            <PaginationLink>
+            <PaginationLink Clicked="nextOnClick" Page="Page.">
                 <span aria-hidden="true">»</span>
             </PaginationLink>
         </PaginationItem>
@@ -223,7 +221,7 @@
 
     int pageSize = 10;
     string orderCol = nameof(ProductModel.Name);
-    string orderType = "Descending"; //or Ascending
+    string orderType = "asc"; //or desc
 
     int lastPage = 0;
     public async Task Search()
@@ -235,7 +233,7 @@
             pageNumber, pageSize
             );
         products = result.Items;
-        total = products.Count();
+        total = result.Count;
         lastPage = (int)Math.Ceiling((decimal)total / pageSize);
     }
 
@@ -262,5 +260,32 @@
         searchKeyword = value;
         await Search();
     }
+
+    async Task preOnClick()
+    {
+        if (pageNumber > 1)
+        {
+            pageNumber = pageNumber - 1;
+        }
+
+        await Search();
+    }
+
+    async Task nextOnClick()
+    {
+        if (pageNumber < lastPage)
+        {
+            pageNumber = pageNumber + 1;
+        }
+
+        await Search();
+    }
+
+    async Task pageOnClick(int value)
+    {
+        pageNumber = value;
+        await Search();
+    }
+
     #endregion
 }

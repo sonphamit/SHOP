@@ -143,7 +143,7 @@ namespace Infrastructure.Services
             }
             else
             {
-                orderBy = OrderByHelper.GetOrderBy<Product>(nameof(Product.Name), "Descending");
+                orderBy = OrderByHelper.GetOrderBy<Product>(nameof(Product.Name), "asc");
             }
 
             var query = _unitOfWork.ProductRepository.Query(listPredicates.Aggregate((a, b) => a.And(b)), orderBy);
