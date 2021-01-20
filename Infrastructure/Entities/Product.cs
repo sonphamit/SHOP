@@ -10,11 +10,8 @@ namespace Infrastructure.Entities
     {
         public string SupplierId { get; set; }
         public string CategoryId { get; set; }
-        [Required]
         public string ProductionCode { get; set; }
-        [Required]
         public string Name { get; set; }
-        [Required]
         public string Description { get; set; }
         [Column(TypeName = "decimal(18, 2)")]
         public uint UnitPrice { get; set; }
@@ -23,8 +20,8 @@ namespace Infrastructure.Entities
         public decimal Discount { get; set; }
         public uint UnitsInStock { get; set; }
         public uint UnitsOnOrder { get; set; }
-        [ForeignKey("CategoryId")]
         public Gender Gender { get; set; }
+        [ForeignKey("CategoryId")]
         public virtual Category Category { get; set; }
         [ForeignKey("SupplierId")]
         public virtual Supplier Supplier { get; set; }
