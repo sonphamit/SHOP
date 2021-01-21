@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using Infrastructure.Enums
+@inject ICategoryService categoryService
+@{
+    var categories = await categoryService.GetAllAsync();
+}
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -59,7 +64,6 @@
                         <div class="right-content">
                             <ul class="list-main">
                                 <li><i class="ti-location-pin"></i> Store location</li>
-                                <li><i class="ti-alarm-clock"></i> <a href="#">Daily deal</a></li>
                                 <li><i class="ti-user"></i> <a href="#">My account</a></li>
                                 <li><i class="ti-power-off"></i><a href="login.html#">Login</a></li>
                             </ul>
@@ -163,13 +167,23 @@
                                         <div class="nav-inner">
                                             <ul class="nav main-menu menu navbar-nav">
                                                 <li class="active"><a asp-controller="Home" asp-action="Index">Home</a></li>
-                                                <li><a href="#">Sản phẩm</a></li>
-                                                <li><a href="#">Bé trai</a></li>
-                                                <li><a href="#">Bé gái</a></li>
                                                 <li>
-                                                    <a href="#">Mới<i class="ti-angle-down"></i><span class="new">New</span></a>
+                                                    <a href=@Url.Action("Index", "Home")>Sản phẩm<i class="ti-angle-down"></i></a>
+                                                    <ul class="dropdown">
+                                                        @foreach (var category in categories)
+                                                        {
+                                                            <li>
+                                                                @Html.ActionLink(@category.Name, "Products", "Home", new { catagoryId = @category.Id, gender = Gender.ALL })
+                                                            </li>
+                                                        }
+                                                    </ul>
                                                 </li>
-                                                <li><a href="#">Giảm giá</a></li>
+                                                <li>@Html.ActionLink("Bé trai", "Products", "Home", new { catagoryId = "", gender = Gender.BOY })</li>
+                                                <li>@Html.ActionLink("Bé gái", "Products", "Home", new { catagoryId = "", gender = Gender.GIRL })</li>
+                                                <li>
+                                                    <a href=@Url.Action("New", "Home")>New</a>
+                                                </li>
+                                                <li>@Html.ActionLink("Sale", "Sale", "Home")</li>
                                                 <li><a href="contact.html">Liên hệ</a></li>
                                             </ul>
                                         </div>

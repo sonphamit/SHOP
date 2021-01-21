@@ -152,6 +152,62 @@ namespace Infrastructure.Services
 
         }
 
+        public async Task<Pagination<ProductResponseModel>> getSale(
+            int? page = 1,
+            int? size = 10
+            )
+        {
+            var listPredicates = new List<Expression<Func<Product, bool>>>();
+            Func<IQueryable<Product>, IOrderedQueryable<Product>> orderBy = null;
+
+
+                orderBy = OrderByHelper.GetOrderBy<Product>(nameof(Product.Name), "desc");
+
+            listPredicates.Add(x => x.Discount != 0);
+
+            var query = _unitOfWork.ProductRepository.Query(listPredicates.Aggregate((a, b) => a.And(b)), orderBy);
+
+            return await query.ToPagingAsync<Product, ProductResponseModel>(_mapper, page, size, 0);
+
+        }     
+        public async Task<Pagination<ProductResponseModel>> getNew(
+            int? page = 1,
+            int? size = 10
+            )
+        {
+            var listPredicates = new List<Expression<Func<Product, bool>>>();
+            Func<IQueryable<Product>, IOrderedQueryable<Product>> orderBy = null;
+
+
+                orderBy = OrderByHelper.GetOrderBy<Product>(nameof(Product.Name), "desc");
+            var comparatedDate = DateTime.Now.AddDays(-7);
+            listPredicates.Add(x => comparatedDate <= x.CreatedAt);
+
+            var query = _unitOfWork.ProductRepository.Query(listPredicates.Aggregate((a, b) => a.And(b)), orderBy);
+
+            return await query.ToPagingAsync<Product, ProductResponseModel>(_mapper, page, size, 0);
+
+        }
+
+        public async Task<Pagination<ProductResponseModel>> getHotItem(
+           int? page = 1,
+           int? size = 10
+           )
+        {
+            var listPredicates = new List<Expression<Func<Product, bool>>>();
+            Func<IQueryable<Product>, IOrderedQueryable<Product>> orderBy = null;
+
+
+            orderBy = OrderByHelper.GetOrderBy<Product>(nameof(Product.UnitsOnOrder), "desc");
+            listPredicates.Add(x => x.UnitsOnOrder != 0);
+
+            var query = _unitOfWork.ProductRepository.Query(listPredicates.Aggregate((a, b) => a.And(b)), orderBy);
+
+            return await query.ToPagingAsync<Product, ProductResponseModel>(_mapper, page, size, 0);
+
+        }
+
+
         public int SaveChanges()
         {
             return _unitOfWork.SaveChanges();

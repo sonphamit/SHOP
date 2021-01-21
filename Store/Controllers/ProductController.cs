@@ -33,5 +33,37 @@ namespace Store.Controllers
             return View("Details", product);
         }
 
+         //add to cart
+        public IActionResult AddToCart([FromRoute] int productid)
+        {
+            return View();
+        }
+
+        //remove item in cart
+        public IActionResult RemoveCart([FromRoute] int productid)
+        {
+            return View();
+        }
+
+        //update item in cart
+        public IActionResult UpdateCart([FromRoute] int productid)
+        {
+            return View();
+        }
+
+        //show cart
+        public IActionResult Cart()
+        {
+            return View();
+        }
+
+        //checked out
+        public IActionResult CheckOut()
+        {
+            // Xử lý khi đặt hàng
+            return View();
+        }
+
+
     }
 }

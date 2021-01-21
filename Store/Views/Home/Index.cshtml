@@ -1,9 +1,14 @@
-﻿@inject ICategoryService categoryService
+﻿@using Infrastructure.Extentions
+@using Infrastructure.Enums
+@using Infrastructure.Models
+@model Tuple<Pagination<ProductResponseModel>, int>
+@inject ICategoryService categoryService
 @using Infrastructure.Constants
 @{
     ViewData["Title"] = "Home Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var categories = await categoryService.GetAllAsync();
+    var pageCount = Model.Item1.Count/9;
 }
 <!-- Breadcrumbs -->
 <div class="breadcrumbs">
@@ -30,9 +35,9 @@
                     <div class="single-widget category">
                         <h3 class="title">Giới tính</h3>
                         <ul class="categor-list">
-                            <li><a href="#">Bé trai</a></li>
-                            <li><a href="#">Bé gái</a></li>
-                            <li><a href="#">Cả hai</a></li>
+                            <li>@Html.ActionLink("Bé trai", "Products", "Home", new { catagoryId ="", gender = Gender.BOY })</li>
+                            <li>@Html.ActionLink("Bé gái", "Products", "Home", new { catagoryId = "",  gender = Gender.GIRL })</li>
+                            <li>@Html.ActionLink("Cả hai", "Products", "Home", new { catagoryId = "", gender = Gender.ALL })</li>
                         </ul>
                     </div>
                     <!--/ End Single Widget -->
@@ -42,7 +47,9 @@
                         <ul class="categor-list">
                             @foreach (var category in categories)
                             {
-                                <li><a asp-route-id=@category.Id>@category.Name</a></li>
+                                <li>
+                                    @Html.ActionLink(@category.Name, "Products", "Home", new { catagoryId = @category.Id, gender = Gender.ALL })
+                                </li>
                             }
                         </ul>
                     </div>
@@ -50,9 +57,13 @@
                     <div class="single-widget category">
                         <h3 class="title">Khác</h3>
                         <ul class="categor-list">
-                            <li><a>Giảm giá</a></li>
-                            <li><a>Sản phẩm mới</a></li>
-                            <li><a>Bán chạy</a></li>
+                            <li>
+                                @Html.ActionLink("Sale", "Sale", "Home")
+                            </li>
+                            <li>
+                                @Html.ActionLink("Sản phẩm mới", "New", "Home")
+                            </li>
+                            <li> @Html.ActionLink("Bán chạy", "HotItem", "Home")</li>
                         </ul>
                     </div>
 
@@ -60,32 +71,80 @@
             </div>
             <div class="col-lg-9 col-md-8 col-12">
                 <div class="row">
-                    <div class="col-lg-4 col-md-6 col-12">
-                        <div class="single-product">
-                            <div class="product-img">
-                                <a href="product-details.html">
-                                    <img class="default-img" src="https://via.placeholder.com/550x750" alt="#">
-                                    <img class="hover-img" src="https://via.placeholder.com/550x750" alt="#">
-                                </a>
-                                <div class="button-head">
-                                    <div class="product-action">
-                                        <a data-toggle="modal" data-target="#exampleModal" title="Quick View" href="#"><i class=" ti-eye"></i><span>Quick Shop</span></a>
-                                        <a title="Wishlist" href="#"><i class=" ti-heart "></i><span>Add to Wishlist</span></a>
-                                        <a title="Compare" href="#"><i class="ti-bar-chart-alt"></i><span>Add to Compare</span></a>
-                                    </div>
-                                    <div class="product-action-2">
-                                        <a title="Add to cart" href="#">Add to cart</a>
+                    @foreach (var item in Model.Item1.Items)
+                    {<div class="col-lg-4 col-md-6 col-12">
+                            <div class="single-product">
+                                <div class="product-img">
+                                    <a href="product-details.html">
+                                        <img class="default-img" src="@(TextConstant.DashboardDomain + "/" + item.Images[0].PathName)" alt="#">
+                                        <img class="hover-img" src="https://via.placeholder.com/550x750" alt="#">
+                                    </a>
+                                    <div class="button-head">
+                                        <div class="product-action">
+                                            <a data-toggle="modal" data-target="#exampleModal" title="Quick View" href="#"><i class=" ti-eye"></i><span>Quick Shop</span></a>
+                                            <a title="Wishlist" href="#"><i class=" ti-heart "></i><span>Add to Wishlist</span></a>
+                                            <a title="Compare" href="#"><i class="ti-bar-chart-alt"></i><span>Add to Compare</span></a>
+                                        </div>
+                                        <div class="product-action-2">
+                                            <a title="Add to cart" href="#">Add to cart</a>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="product-content">
-                                <h3><a href="product-details.html">Women Hot Collection</a></h3>
-                                <div class="product-price">
-                                    <span>$29.00</span>
+                                <div class="product-content">
+                                    <h3><a href="product-details.html">Women Hot Collection</a></h3>
+                                    <div class="product-price">
+                                        @if (item.Discount > 0)
+                                        {
+                                            <span class="text-decoration">@item.UnitPriceString</span>
+                                            <span class="sale">@item.DiscountPriceString</span>
+                                        }
+                                        else
+                                        {
+                                            <span>@item.UnitPriceString</span>
+                                        }
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+
+                    }
+
+                </div>
+                <div class="row">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+
+                            @for (int i = 1; i <= pageCount; i++)
+                            {
+                                @if (i > 1)
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                }
+
+                                <li class="page-item @(i==Model.Item2? "active":"")">
+                                    <a class="page-link">
+                                        @Html.ActionLink(@i.ToString(), "Products", "Home", new { catagoryId = "", gender = "", page = i, size = 9 })
+                                    </a>
+                                </li>
+
+                                @if (i < pageCount)
+                                {
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                }
+
+                            }
+
+
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </div>

@@ -27,6 +27,9 @@ namespace Infrastructure.Services
             int? page = null,
             int? size = null
             );
+        Task<Pagination<ProductResponseModel>>getSale(int? page = null, int? size = null);
+        Task<Pagination<ProductResponseModel>> getNew(int? page = null, int? size = null);
+        Task<Pagination<ProductResponseModel>> getHotItem(int? page = null, int? size = null);
         Task DeleteAsync(string id);
         Task<int> SaveChangesAsync();
         int SaveChanges();

@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Store.Models;
+using Infrastructure.Services;
+using Infrastructure.Enums;
+using Infrastructure.Models;
+using Infrastructure.Extentions;
 
 namespace Store.Controllers
 {
@@ -13,14 +17,22 @@ namespace Store.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        protected readonly IProductService _productService;
+
+
+        public HomeController(ILogger<HomeController> logger, IProductService productService)
         {
             _logger = logger;
+            _productService = productService;
+
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var products = await _productService.Search(null, null, Gender.ALL, null, null, null);
+
+            return View("Index", Tuple.Create(products, 1));
+
         }
 
         public IActionResult Privacy()
@@ -34,14 +46,59 @@ namespace Store.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public IActionResult Category(string catagoryId)
+        public async Task<IActionResult> Products([FromQuery]string catagoryId, Gender gender, int? page = 1,
+            int? size = null)
         {
-            if (catagoryId == null)
+
+            var products = await _productService.Search(catagoryId, null, gender, null, null, null, page, size);
+
+            var pageCurrent = 1;
+            if (page > 0 && page!=null)
             {
-                return View("NotFound");
+                pageCurrent = (int)page;
             }
 
-            return View("Index");
+            return View("Index", Tuple.Create(products, pageCurrent));
+        }
+
+        public async Task<IActionResult> Sale(int? page = 1, int? size = null)
+        {
+
+            var products = await _productService.getSale(page, size);
+
+            var pageCurrent = 1;
+            if (page > 0 && page != null)
+            {
+                pageCurrent = (int)page;
+            }
+
+            return View("Index", Tuple.Create(products, pageCurrent));
+        }
+
+        public async Task<IActionResult> New(string? catagoryId = null, int? page = 1, int? size = null)
+        {
+            var products = await _productService.getNew(page, size);
+
+            var pageCurrent = 1;
+            if (page > 0 && page != null)
+            {
+                pageCurrent = (int)page;
+            }
+
+            return View("Index", Tuple.Create(products, pageCurrent));
+        }
+
+        public async Task<IActionResult> HotItem(string? catagoryId = null, int? page = 1, int? size = null)
+        {
+            var products = await _productService.getNew(page, size);
+
+            var pageCurrent = 1;
+            if (page > 0 && page != null)
+            {
+                pageCurrent = (int)page;
+            }
+
+            return View("Index", Tuple.Create(products, pageCurrent));
         }
     }
 }
