@@ -20,6 +20,20 @@ namespace Infrastructure.Mappings
             CreateMap<ApplicationUser, UserModel>();
             CreateMap<UserModel, ApplicationUser>();
 
+            CreateMap<ApplicationUser, ApplicationUserModel>();
+            CreateMap<ApplicationUserModel, ApplicationUser>();
+
+            CreateMap<Customer, CustomerModel>();
+            CreateMap<CustomerModel, Customer>();
+            CreateMap<CustomerRequestModel, Customer>();
+            CreateMap<Customer, CustomerResponseModel>();
+
+            CreateMap<Employee, EmployeeModel>();
+            CreateMap<EmployeeModel, Employee>();
+            CreateMap<EmployeeRequestModel, Employee>();
+            CreateMap<Employee, EmployeeResponseModel>();
+
+
             CreateMap<Product, ProductModel>();
             CreateMap<ProductModel, Product>().ForMember(x => x.Id, opt => opt.Ignore())
                                                 .ForMember(x => x.Category, opt => opt.Ignore())

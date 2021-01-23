@@ -18,7 +18,7 @@ namespace Infrastructure.Entities
 
         [Timestamp]
         public byte[] RowVersion { get; set; }
-        public UserType UserType { get; set; }
+        
         public virtual ApplicationUser ApplicationUser { get; set; }
         public virtual ICollection<Order> Orders { get; set; }
     }

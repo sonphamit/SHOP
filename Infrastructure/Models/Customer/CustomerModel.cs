@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using Infrastructure.Entities;
 
 namespace Infrastructure.Models
 {
     public class CustomerModel
     {
         public string Id { get; set; }
-        public virtual ICollection<OrderModel> Orders { get; set; }
+        public virtual ApplicationUserModel User { get; set; }
     }
 }
