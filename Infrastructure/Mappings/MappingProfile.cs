@@ -37,6 +37,17 @@ namespace Infrastructure.Mappings
             CreateMap<Resource, ResourceModel>();
             CreateMap<ResourceModel, Resource>().ForMember(x => x.Id, opt => opt.Ignore());
 
+            CreateMap<Order, OrderModel>();
+            CreateMap<OrderModel, Order>().ForMember(x => x.Id, opt => opt.Ignore())
+                                                .ForMember(x => x.OrderDetails, opt => opt.Ignore());
+            CreateMap<OrderResponseModel, OrderRequestModel>();
+            CreateMap<Order, OrderResponseModel>();
+            CreateMap<OrderRequestModel, Order>().ForMember(x => x.Id, opt => opt.Ignore());
+
+            CreateMap<OrderDetail, OrderDetailModel>();
+            CreateMap<OrderDetailModel, OrderDetail>().ForMember(x => x.Order, opt => opt.Ignore())
+                .ForMember(x => x.Product, opt => opt.Ignore());
+
         }
 
 
