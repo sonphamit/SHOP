@@ -28,7 +28,6 @@ namespace Infrastructure.Services
 
         public async Task AddAsync(ProductRequestModel model)
         {
-            //model.CategoryId = model.Category.Id;
             var entity = _mapper.Map<Product>(model);
             await _unitOfWork.ProductRepository.AddAsync(entity);
             entity.Images.ToList().ForEach(item => item.ProductId = entity.Id);
@@ -77,8 +76,8 @@ namespace Infrastructure.Services
         {
             var entity = _unitOfWork.ProductRepository.FindByCondition(e => e.Id == id)
                 .Include(i => i.Images).FirstOrDefault();
-            var Images = entity.Images.Where(img => !img.IsDeleted);
-            entity.Images = Images.ToList();
+            var Images = entity.Images.Where(img => !img.IsDeleted).ToList();
+            entity.Images = Images;
             var model = _mapper.Map<ProductResponseModel>(entity);
             _unitOfWork.ProductRepository.Detach(entity);
             return model;

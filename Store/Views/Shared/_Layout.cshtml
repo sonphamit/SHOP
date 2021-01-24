@@ -1,15 +1,17 @@
 ﻿@using Infrastructure.Enums
 @inject ICategoryService categoryService
+@*@inject IOrderService orderService*@
 @{
     var categories = await categoryService.GetAllAsync();
+    //var orders = await orderService.GetAllAsync();
 }
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Store</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/~/css/bootstrap.min.css" />
+    <title>@ViewData["Title"] - Mint's Store</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 
     <!-- Bootstrap -->
@@ -41,8 +43,38 @@
 
 
     <link rel="stylesheet" href="~/css/responsive.css">
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
 </head>
 <body>
+    <script>
+        //$(document).ready(function () {
+        //    $("#add-to-cart").click(function () {
+        //        var quantity = $("#quantity").val();
+        //        var productId = $("#productId").val();
+
+        //        $.ajax({
+        //            url: "/Product/AddToCart",
+        //            type: "POST",
+        //            dataType: "text",
+        //            data: {
+        //                quantity, productId
+        //            },
+        //            contentType: 'application/json; charset=utf-8',
+
+        //            success: function (result) {
+        //                //alert("Thêm sdfsdvào giỏ hàng thành công!");
+        //                $("#total-count").text('1');
+        //            },
+        //            error: function (xhr, ajaxOptions, thrownError) {
+        //                //alert("Thêm vào giỏ hàng thành công!");
+        //            }
+        //        });
+        //    });
+
+        //});
+    </script>
     <!-- Header -->
     <header class="header shop">
         <!-- Topbar -->
@@ -118,33 +150,13 @@
                                 <a href="#" class="single-icon"><i class="fa fa-user-circle-o" aria-hidden="true"></i></a>
                             </div>
                             <div class="sinlge-bar shopping">
-                                <a href="#" class="single-icon"><i class="ti-bag"></i> <span class="total-count">2</span></a>
+                                <a href="#" class="single-icon"><i class="ti-bag"></i> <span id="total-count" class="total-count">0</span></a>
                                 <!-- Shopping Item -->
                                 <div class="shopping-item">
                                     <div class="dropdown-cart-header">
                                         <span>2 Items</span>
+                                        @*<a href=@Url.Action("New", "Home")>New</a>*@
                                         <a href="#">View Cart</a>
-                                    </div>
-                                    <ul class="shopping-list">
-                                        <li>
-                                            <a href="#" class="remove" title="Remove this item"><i class="fa fa-remove"></i></a>
-                                            <a class="cart-img" href="#"><img src="https://via.placeholder.com/70x70" alt="#"></a>
-                                            <h4><a href="#">Woman Ring</a></h4>
-                                            <p class="quantity">1x - <span class="amount">$99.00</span></p>
-                                        </li>
-                                        <li>
-                                            <a href="#" class="remove" title="Remove this item"><i class="fa fa-remove"></i></a>
-                                            <a class="cart-img" href="#"><img src="https://via.placeholder.com/70x70" alt="#"></a>
-                                            <h4><a href="#">Woman Necklace</a></h4>
-                                            <p class="quantity">1x - <span class="amount">$35.00</span></p>
-                                        </li>
-                                    </ul>
-                                    <div class="bottom">
-                                        <div class="total">
-                                            <span>Total</span>
-                                            <span class="total-amount">$134.00</span>
-                                        </div>
-                                        <a href="checkout.html" class="btn animate">Checkout</a>
                                     </div>
                                 </div>
                                 <!--/ End Shopping Item -->
@@ -210,9 +222,6 @@
             &copy; 2021 - Mint's Store - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

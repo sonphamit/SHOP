@@ -1,6 +1,9 @@
-﻿using Infrastructure.Models;
+﻿using Infrastructure.Enums;
+using Infrastructure.Models;
 using Infrastructure.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +15,12 @@ namespace Store.Controllers
     {
 
         protected readonly IProductService _productService;
-        public ProductController(IProductService productService)
+        protected readonly IOrderService _orderService;
+        public const string CARTKEY = "cart";
+        public ProductController(IProductService productService, IOrderService orderService)
         {
             _productService = productService;
+            _orderService = orderService;
         }
         public IActionResult Index()
         {
@@ -33,10 +39,21 @@ namespace Store.Controllers
             return View("Details", product);
         }
 
-         //add to cart
-        public IActionResult AddToCart([FromRoute] int productid)
+        //add to cart
+        [HttpGet]
+        public async Task AddToCart([FromQuery] string productId, [FromQuery] int quantity, [FromQuery] string? orderId = null)
         {
-            return View();
+
+            if (!string.IsNullOrWhiteSpace(orderId))
+            {
+                var order = await _orderService.GetByIdAsync(orderId);
+                if(order != null)
+                {
+                   await _orderService.UpdateExistingOrder(productId, quantity, orderId);
+                }
+            }
+
+            await _orderService.AddNewOrder(productId, quantity);
         }
 
         //remove item in cart
@@ -63,7 +80,5 @@ namespace Store.Controllers
             // Xử lý khi đặt hàng
             return View();
         }
-
-
     }
 }

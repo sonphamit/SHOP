@@ -4,16 +4,18 @@ namespace Infrastructure.Enums
 {
     public enum OrderStatus
     {
+        [Description("Đang trong giỏ hàng")]
+        ORDERING = 0,
         [Description("Đã đặt hàng")]
-        ORDERED = 0,
+        ORDERED = 1,
         [Description("Duyệt đơn")]
-        APPROVED = 1,
+        APPROVED = 2,
         [Description("Shipper đã nhận hàng")]
-        SHIPMENT_PICKED_UP = 2,
+        SHIPMENT_PICKED_UP = 3,
         [Description("Đang giao hàng")]
-        SHIPPING = 3,
+        SHIPPING = 4,
         [Description("Đã giao")]
-        DELIVERRED = 4
+        DELIVERRED = 5
     }
 
     public enum OrderPaymentStatus
