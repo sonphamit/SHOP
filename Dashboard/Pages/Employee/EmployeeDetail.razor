@@ -1,10 +1,4 @@
-﻿@inject IProductService productService
-﻿@using System.IO;
-@using Microsoft.AspNetCore.Hosting;
-@inject IProductService productService
-@inject ICategoryService categoryService
-@inject ISupplierService supplierService
-@inject IWebHostEnvironment _env
+﻿@inject IEmployeeService service
 @inject IMapper _mapper
 
 <Modal @ref="modalRef">
@@ -16,161 +10,97 @@
                 <CloseButton Clicked="@HideModal" />
             </ModalHeader>
             <ModalBody>
-                <Validations @ref="validations" Model="model" Mode="ValidationMode.Auto" ValidateOnLoad="false">
-                    <Validation>
-                        <Field Horizontal="true">
-                            <FieldLabel ColumnSize="ColumnSize.Is2">Name</FieldLabel>
-                            <FieldBody ColumnSize="ColumnSize.Is10">
-                                <TextEdit Placeholder="Enter name..." @bind-Text="model.Name">
-                                    <Feedback><ValidationError /></Feedback>
-                                </TextEdit>
-                            </FieldBody>
-                        </Field>
-                    </Validation>
 
-                    <Validation>
-                        <Field Horizontal="true">
-                            <FieldLabel ColumnSize="ColumnSize.Is2">Code</FieldLabel>
-                            <FieldBody ColumnSize="ColumnSize.Is10">
-                                <TextEdit Placeholder="Enter code..." @bind-Text="model.ProductionCode" Casing="CharacterCasing.Upper">
-                                    <Feedback><ValidationError /></Feedback>
-                                </TextEdit>
-                            </FieldBody>
-                        </Field>
-                    </Validation>
-                    <Validation>
-                        <Field Horizontal="true">
-                            <FieldLabel ColumnSize="ColumnSize.Is2">Gender</FieldLabel>
-                            <FieldBody ColumnSize="ColumnSize.Is10">
-                                <Select TValue="Gender" Multiple="false" @bind-SelectedValue="model.Gender">
-                                    @if (GenderList != null)
-                                    {
-                                        @foreach (var item in GenderList)
-                                        {
-                                            <SelectItem Value="@item.Key">@item.Value</SelectItem>
-                                        }
-                                    }
-                                </Select>
-                            </FieldBody>
-                        </Field>
-                    </Validation>
-                    <Validation>
-                        <Field Horizontal="true">
-                            <FieldLabel ColumnSize="ColumnSize.Is2">Description</FieldLabel>
-                            <FieldBody ColumnSize="ColumnSize.Is10">
-                                <MemoEdit Placeholder="Enter description..." @bind-Text="model.Description">
-                                    <Feedback><ValidationError /></Feedback>
-                                </MemoEdit>
-                            </FieldBody>
-                        </Field>
-                    </Validation>
-                    <Fields>
+                    <Validations @ref="validations" Model="model" Mode="ValidationMode.Auto" ValidateOnLoad="false">
                         <Validation>
-                            <Field ColumnSize="ColumnSize.Is4">
-                                <FieldLabel>Price</FieldLabel>
-                                <FieldBody>
-                                    <NumericEdit Placeholder="Enter Unit Price" @bind-Value="model.UnitPrice" TValue="uint">
-                                        <Feedback><ValidationError /></Feedback>
-                                    </NumericEdit>
-                                </FieldBody>
-                            </Field>
-                        </Validation>
-                        <Validation>
-                            <Field ColumnSize="ColumnSize.Is4">
-                                <FieldLabel>Discount</FieldLabel>
+                            <Field Horizontal="true">
+                                <FieldLabel ColumnSize="ColumnSize.Is2">UserName</FieldLabel>
                                 <FieldBody ColumnSize="ColumnSize.Is10">
-                                    <NumericEdit Placeholder="Enter Discount" @bind-Value="model.Discount" Min="0" Max="100">
+                                    <TextEdit Placeholder="Enter UserName" @bind-Text="model.User.UserName" 
+                                              MaskType="MaskType.RegEx" EditMask="^[a-zA-Z][a-zA-Z0-9]*$" MaxLength="20">
                                         <Feedback><ValidationError /></Feedback>
-                                    </NumericEdit>
+                                    </TextEdit>
+                                </FieldBody>
+                            </Field>
+                        </Validation>
+
+                        <Validation>
+                            <Field Horizontal="true">
+                                <FieldLabel ColumnSize="ColumnSize.Is2">Password</FieldLabel>
+                                <FieldBody ColumnSize="ColumnSize.Is10">
+                                    <TextEdit Placeholder="Enter Password" @bind-Text="model.Password" Role="TextRole.Password">
+                                        <Feedback><ValidationError /></Feedback>
+                                    </TextEdit>
+                                </FieldBody>
+                            </Field>
+                        </Validation>
+
+                        <Validation>
+                            <Field Horizontal="true">
+                                <FieldLabel ColumnSize="ColumnSize.Is2">Confirm</FieldLabel>
+                                <FieldBody ColumnSize="ColumnSize.Is10">
+                                    <TextEdit Placeholder="Enter Confirm Password" @bind-Text="model.ConfirmPassword" Role="TextRole.Password">
+                                        <Feedback><ValidationError /></Feedback>
+                                    </TextEdit>
+                                </FieldBody>
+                            </Field>
+                        </Validation>
+
+                        <Fields>
+                            <Validation Validator="@ValidationRule.IsNotEmpty">
+                                <Field ColumnSize="ColumnSize.Is4">
+                                    <FieldLabel>FirstName</FieldLabel>
+                                    <FieldBody>
+                                        <TextEdit Placeholder="Enter FirstName" @bind-Value="model.User.FirstName">
+                                            <Feedback><ValidationError /></Feedback>
+                                        </TextEdit>
+                                    </FieldBody>
+                                </Field>
+                            </Validation>
+                            <Validation>
+                                <Field ColumnSize="ColumnSize.Is4">
+                                    <FieldLabel>MiddleName</FieldLabel>
+                                    <FieldBody ColumnSize="ColumnSize.Is10">
+                                        <TextEdit Placeholder="Enter MiddleName" @bind-Value="model.User.MiddleName" Min="0" Max="100">
+                                            <Feedback><ValidationError /></Feedback>
+                                        </TextEdit>
+                                    </FieldBody>
+                                </Field>
+                            </Validation>
+                            <Validation Validator="@ValidationRule.IsNotEmpty">
+                                <Field ColumnSize="ColumnSize.Is4">
+                                    <FieldLabel>LastName</FieldLabel>
+                                    <FieldBody>
+                                        <TextEdit Placeholder="Enter LastName" @bind-Value="model.User.LastName" >
+                                            <Feedback><ValidationError /></Feedback>
+                                        </TextEdit>
+                                    </FieldBody>
+                                </Field>
+                            </Validation>
+                        </Fields>
+                        <Validation>
+                            <Field Horizontal="true">
+                                <FieldLabel ColumnSize="ColumnSize.Is2">Email</FieldLabel>
+                                <FieldBody ColumnSize="ColumnSize.Is10">
+                                    <TextEdit Placeholder="Enter Email" @bind-Text="model.User.Email" Role="TextRole.Email">
+                                        <Feedback><ValidationError /></Feedback>
+                                    </TextEdit>
                                 </FieldBody>
                             </Field>
                         </Validation>
                         <Validation>
-                            <Field ColumnSize="ColumnSize.Is4">
-                                <FieldLabel>Units In Stock</FieldLabel>
-                                <FieldBody>
-                                    <NumericEdit Placeholder="Enter Units In Stock" @bind-Value="model.UnitsInStock">
+                            <Field Horizontal="true">
+                                <FieldLabel ColumnSize="ColumnSize.Is2">Phone</FieldLabel>
+                                <FieldBody ColumnSize="ColumnSize.Is10">
+                                    <TextEdit Placeholder="Enter Phone Number" @bind-Text="model.User.PhoneNumber" 
+                                              MaxLength="13" MaskType="MaskType.RegEx" EditMask="^[+84]?[0-9]*$">
                                         <Feedback><ValidationError /></Feedback>
-                                    </NumericEdit>
+                                    </TextEdit>
                                 </FieldBody>
                             </Field>
                         </Validation>
-                    </Fields>
-                    <Fields>
-                        <Validation>
-                            <Field ColumnSize="ColumnSize.Is4">
-                                <FieldLabel>Category</FieldLabel>
-                                <FieldBody>
-
-                                    <Select TValue="string" Multiple="false" @bind-SelectedValue="model.CategoryId">
-                                        <ChildContent>
-                                            @if (categories != null)
-                                            {
-                                                <SelectItem Value="@(String.Empty)" Disabled="true">Please Select</SelectItem>
-                                                @foreach (var item in categories)
-                                                {
-                                                    <SelectItem Value="@item.Id">@item.Name</SelectItem>
-                                                }
-                                            }
-                                        </ChildContent>
-                                        <Feedback><ValidationError /></Feedback>
-                                    </Select>
-
-                                </FieldBody>
-                            </Field>
-                        </Validation>
-                        <Validation>
-                            <Field ColumnSize="ColumnSize.Is4">
-                                <FieldLabel>Supplier</FieldLabel>
-                                <FieldBody>
-                                    <Select TValue="string" Multiple="false" @bind-SelectedValue="model.SupplierId">
-                                        <ChildContent>
-                                            @if (suppliers != null)
-                                            {
-                                                <SelectItem Value="@(String.Empty)" Disabled="true">Please Select</SelectItem>
-                                                @foreach (var item in suppliers)
-                                                {
-                                                    <SelectItem Value="@item.Id">@item.CompanyName</SelectItem>
-                                                }
-                                            }
-                                        </ChildContent>
-                                        <Feedback><ValidationError /></Feedback>
-                                    </Select>
-                                </FieldBody>
-                            </Field>
-                        </Validation>
-                    </Fields>
-                    <Field>
-                        <FieldLabel>Images</FieldLabel>
-                        <FieldBody>
-                            <div>
-                                <div class="dropArea @dropClass">
-                                    Drag and drop your files here or click to open file loading dialogue...
-                                    <InputFile id="inputDrop"
-                                               OnChange="OnInputFileChange"
-                                               @ondragenter="HandleDragEnter"
-                                               @ondragleave="HandleDragLeave"
-                                               multiple />
-                                </div>
-
-                                <ol class="mt-1">
-                                    @if (images != null && images.Any())
-                                    {
-                                        @foreach (var image in images)
-                                        {
-
-                                            <li class="mt-1">
-                                                <a href="@image.Key" target="_blank"> @image.Value</a>
-                                            </li>
-                                        }
-                                    }
-
-                                </ol>
-
-                            </div>
-                        </FieldBody>
-                    </Field>
-                </Validations>
+                    </Validations>
+                
             </ModalBody>
             <ModalFooter>
                 <Button Color="Color.Secondary" Clicked="@HideModal">Close</Button>
@@ -197,75 +127,33 @@
     public Modal modalRef;
     public string modalTitle = "";
 
-    ProductRequestModel model;
+    EmployeeRequestModel model;
 
     Validations validations;
 
-    public IEnumerable<CategoryModel> categories;
-    public IEnumerable<SupplierModel> suppliers;
-
-    //upload file
-    IReadOnlyList<IBrowserFile> files;
-
-    List<string> urls = new List<string>();
-
-    Dictionary<string, string> images = new Dictionary<string, string>();
-
     Snackbar snackbar;
 
-    string dropClass = string.Empty;
-    const int maxFileSize = 10485760;
-
-    List<KeyValuePair<Gender, string>> GenderList;
-
-
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        model = new ProductRequestModel();
-        await GetAllAsync();
-        GetAllGender();
-    }
-
-    public void GetAllGender()
-    {
-        GenderList = EnumHelper.GetEnumAndDescriptions<Gender>();
+        model = new EmployeeRequestModel();
+        //model.User = new ApplicationUserModel();
     }
 
     private async Task SaveChangeAsync()
     {
         if (validations.ValidateAll())
         {
-            if (images.Values.Any())
-            {
-                model.Images.Clear();
-
-                foreach (var image in images)
-                {
-
-                    model.Images.Add(new ResourceModel
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        PathName = image.Key,
-                        IsDeleted = false,
-                        ProductId = model.Id
-                    });
-                }
-            }
 
             if (String.IsNullOrWhiteSpace(model.Id))
             {
-                await productService.AddAsync(model);
+                await service.AddAsync(model);
                 await OnSaveChange.InvokeAsync();
             }
             else
             {
 
-                var a = await productService.UpdateAsync(model.Id, model);
-
-                if (a)
-                {
-                    await OnSaveChange.InvokeAsync();
-                }
+                await service.UpdateAsync(model.Id, model);
+                await OnSaveChange.InvokeAsync();
             }
             HideModal();
         }
@@ -277,115 +165,30 @@
 
     public void AddModal()
     {
-        model = new ProductRequestModel();
-        modalTitle = "Add product";
-        images.Clear();
+        model = new EmployeeRequestModel();
+        //model.User = new ApplicationUserModel();
+        modalTitle = "Add employee";
         modalRef.Show();
     }
 
-    public ProductRequestModel GetById(string id)
+    public async Task<EmployeeRequestModel> GetById(string id)
     {
-        var responseModel = productService.GetById(id);
-        return _mapper.Map<ProductRequestModel>(responseModel);
+        var responseModel = await service.GetByIdAsync(id);
+        return _mapper.Map<EmployeeRequestModel>(responseModel);
     }
 
-    public void EditModal(string productId)
+    public void EditModal(string employeeId)
     {
-        images.Clear();
-        modalTitle = "Edit product";
+        modalTitle = "Edit employee";
 
-        model = GetById(productId);
-
-        this.model.Images.ForEach(item =>
-        {
-            images.Add(item.PathName, item.PathName.Split("_").Last());
-        });
-
+        //model = await GetById(employeeId);
 
         modalRef.Show();
     }
 
     public void HideModal()
     {
-        //images.Clear();
-        //files = null;
         modalRef.Hide();
-    }
-
-
-    public async Task GetAllAsync()
-    {
-        categories = await categoryService.GetAllAsync();
-        suppliers = await supplierService.GetAllAsync();
-    }
-
-    private void HandleDragEnter()
-    {
-        dropClass = "dropAreaDrug";
-    }
-    private void HandleDragLeave()
-    {
-        dropClass = string.Empty;
-    }
-    async Task OnInputFileChange(InputFileChangeEventArgs e)
-    {
-        dropClass = string.Empty;
-        try
-        {
-            if (e.FileCount > 0)
-            {
-                images.Clear();
-                //urls.Clear();
-                files = null;
-                files = e.GetMultipleFiles();
-                await SaveFiles(files);
-                //urls.AddRange(images);
-            }
-
-        }
-
-        catch (Exception ex)
-        {
-            System.Diagnostics.Debug.WriteLine(ex.Message);
-            throw;
-        }
-    }
-
-    private async Task SaveFiles(IReadOnlyList<IBrowserFile> files)
-    {
-
-        foreach (var file in files)
-        {
-            var url = await SaveFile(file);
-            images.Add(url, file.Name);
-        }
-    }
-
-    private async Task<string> SaveFile(IBrowserFile file)
-    {
-        var relativePath = Path.Combine("images/products");
-        var dirToSave = Path.Combine(_env.WebRootPath, relativePath);
-        var di = new DirectoryInfo(dirToSave);
-
-
-        if (!di.Exists)
-        {
-            di.Create();
-        }
-
-        var createFileName = $"{DateTime.UtcNow.ToString("ddMMyyyyss")}_{file.Name}";
-
-        var filePath = Path.Combine(dirToSave, createFileName);
-        using (var stream = file.OpenReadStream(maxFileSize))
-        {
-            using (var mstream = new MemoryStream())
-            {
-                await stream.CopyToAsync(mstream);
-                await File.WriteAllBytesAsync(filePath, mstream.ToArray());
-            }
-        }
-        var url = Path.Combine(relativePath, createFileName).Replace("\\", "/");
-        return url;
     }
 
 }

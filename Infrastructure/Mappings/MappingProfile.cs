@@ -32,7 +32,7 @@ namespace Infrastructure.Mappings
             CreateMap<EmployeeModel, Employee>();
             CreateMap<EmployeeRequestModel, Employee>();
             CreateMap<Employee, EmployeeResponseModel>();
-
+            CreateMap<EmployeeResponseModel, EmployeeRequestModel>();
 
             CreateMap<Product, ProductModel>();
             CreateMap<ProductModel, Product>().ForMember(x => x.Id, opt => opt.Ignore())
