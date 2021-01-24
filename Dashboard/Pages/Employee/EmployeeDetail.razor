@@ -1,0 +1,391 @@
+﻿@inject IProductService productService
+﻿@using System.IO;
+@using Microsoft.AspNetCore.Hosting;
+@inject IProductService productService
+@inject ICategoryService categoryService
+@inject ISupplierService supplierService
+@inject IWebHostEnvironment _env
+@inject IMapper _mapper
+
+<Modal @ref="modalRef">
+    <ModalBackdrop />
+    <ModalContent IsCentered="true" Size="ModalSize.Large">
+        <form method="post">
+            <ModalHeader>
+                <ModalTitle>@modalTitle</ModalTitle>
+                <CloseButton Clicked="@HideModal" />
+            </ModalHeader>
+            <ModalBody>
+                <Validations @ref="validations" Model="model" Mode="ValidationMode.Auto" ValidateOnLoad="false">
+                    <Validation>
+                        <Field Horizontal="true">
+                            <FieldLabel ColumnSize="ColumnSize.Is2">Name</FieldLabel>
+                            <FieldBody ColumnSize="ColumnSize.Is10">
+                                <TextEdit Placeholder="Enter name..." @bind-Text="model.Name">
+                                    <Feedback><ValidationError /></Feedback>
+                                </TextEdit>
+                            </FieldBody>
+                        </Field>
+                    </Validation>
+
+                    <Validation>
+                        <Field Horizontal="true">
+                            <FieldLabel ColumnSize="ColumnSize.Is2">Code</FieldLabel>
+                            <FieldBody ColumnSize="ColumnSize.Is10">
+                                <TextEdit Placeholder="Enter code..." @bind-Text="model.ProductionCode" Casing="CharacterCasing.Upper">
+                                    <Feedback><ValidationError /></Feedback>
+                                </TextEdit>
+                            </FieldBody>
+                        </Field>
+                    </Validation>
+                    <Validation>
+                        <Field Horizontal="true">
+                            <FieldLabel ColumnSize="ColumnSize.Is2">Gender</FieldLabel>
+                            <FieldBody ColumnSize="ColumnSize.Is10">
+                                <Select TValue="Gender" Multiple="false" @bind-SelectedValue="model.Gender">
+                                    @if (GenderList != null)
+                                    {
+                                        @foreach (var item in GenderList)
+                                        {
+                                            <SelectItem Value="@item.Key">@item.Value</SelectItem>
+                                        }
+                                    }
+                                </Select>
+                            </FieldBody>
+                        </Field>
+                    </Validation>
+                    <Validation>
+                        <Field Horizontal="true">
+                            <FieldLabel ColumnSize="ColumnSize.Is2">Description</FieldLabel>
+                            <FieldBody ColumnSize="ColumnSize.Is10">
+                                <MemoEdit Placeholder="Enter description..." @bind-Text="model.Description">
+                                    <Feedback><ValidationError /></Feedback>
+                                </MemoEdit>
+                            </FieldBody>
+                        </Field>
+                    </Validation>
+                    <Fields>
+                        <Validation>
+                            <Field ColumnSize="ColumnSize.Is4">
+                                <FieldLabel>Price</FieldLabel>
+                                <FieldBody>
+                                    <NumericEdit Placeholder="Enter Unit Price" @bind-Value="model.UnitPrice" TValue="uint">
+                                        <Feedback><ValidationError /></Feedback>
+                                    </NumericEdit>
+                                </FieldBody>
+                            </Field>
+                        </Validation>
+                        <Validation>
+                            <Field ColumnSize="ColumnSize.Is4">
+                                <FieldLabel>Discount</FieldLabel>
+                                <FieldBody ColumnSize="ColumnSize.Is10">
+                                    <NumericEdit Placeholder="Enter Discount" @bind-Value="model.Discount" Min="0" Max="100">
+                                        <Feedback><ValidationError /></Feedback>
+                                    </NumericEdit>
+                                </FieldBody>
+                            </Field>
+                        </Validation>
+                        <Validation>
+                            <Field ColumnSize="ColumnSize.Is4">
+                                <FieldLabel>Units In Stock</FieldLabel>
+                                <FieldBody>
+                                    <NumericEdit Placeholder="Enter Units In Stock" @bind-Value="model.UnitsInStock">
+                                        <Feedback><ValidationError /></Feedback>
+                                    </NumericEdit>
+                                </FieldBody>
+                            </Field>
+                        </Validation>
+                    </Fields>
+                    <Fields>
+                        <Validation>
+                            <Field ColumnSize="ColumnSize.Is4">
+                                <FieldLabel>Category</FieldLabel>
+                                <FieldBody>
+
+                                    <Select TValue="string" Multiple="false" @bind-SelectedValue="model.CategoryId">
+                                        <ChildContent>
+                                            @if (categories != null)
+                                            {
+                                                <SelectItem Value="@(String.Empty)" Disabled="true">Please Select</SelectItem>
+                                                @foreach (var item in categories)
+                                                {
+                                                    <SelectItem Value="@item.Id">@item.Name</SelectItem>
+                                                }
+                                            }
+                                        </ChildContent>
+                                        <Feedback><ValidationError /></Feedback>
+                                    </Select>
+
+                                </FieldBody>
+                            </Field>
+                        </Validation>
+                        <Validation>
+                            <Field ColumnSize="ColumnSize.Is4">
+                                <FieldLabel>Supplier</FieldLabel>
+                                <FieldBody>
+                                    <Select TValue="string" Multiple="false" @bind-SelectedValue="model.SupplierId">
+                                        <ChildContent>
+                                            @if (suppliers != null)
+                                            {
+                                                <SelectItem Value="@(String.Empty)" Disabled="true">Please Select</SelectItem>
+                                                @foreach (var item in suppliers)
+                                                {
+                                                    <SelectItem Value="@item.Id">@item.CompanyName</SelectItem>
+                                                }
+                                            }
+                                        </ChildContent>
+                                        <Feedback><ValidationError /></Feedback>
+                                    </Select>
+                                </FieldBody>
+                            </Field>
+                        </Validation>
+                    </Fields>
+                    <Field>
+                        <FieldLabel>Images</FieldLabel>
+                        <FieldBody>
+                            <div>
+                                <div class="dropArea @dropClass">
+                                    Drag and drop your files here or click to open file loading dialogue...
+                                    <InputFile id="inputDrop"
+                                               OnChange="OnInputFileChange"
+                                               @ondragenter="HandleDragEnter"
+                                               @ondragleave="HandleDragLeave"
+                                               multiple />
+                                </div>
+
+                                <ol class="mt-1">
+                                    @if (images != null && images.Any())
+                                    {
+                                        @foreach (var image in images)
+                                        {
+
+                                            <li class="mt-1">
+                                                <a href="@image.Key" target="_blank"> @image.Value</a>
+                                            </li>
+                                        }
+                                    }
+
+                                </ol>
+
+                            </div>
+                        </FieldBody>
+                    </Field>
+                </Validations>
+            </ModalBody>
+            <ModalFooter>
+                <Button Color="Color.Secondary" Clicked="@HideModal">Close</Button>
+                <Button Color="Color.Primary" Clicked="@(async () => await SaveChangeAsync())">
+                    Save Changes
+                </Button>
+            </ModalFooter>
+        </form>
+        <Snackbar @ref="snackbar" Color="SnackbarColor.Danger" Location="SnackbarLocation.Right">
+            <SnackbarBody>
+                The input data is invalid.
+            </SnackbarBody>
+        </Snackbar>
+
+
+    </ModalContent>
+</Modal>
+
+@code {
+    [Parameter]
+    public EventCallback OnSaveChange { get; set; }
+
+    // reference to the modal component
+    public Modal modalRef;
+    public string modalTitle = "";
+
+    ProductRequestModel model;
+
+    Validations validations;
+
+    public IEnumerable<CategoryModel> categories;
+    public IEnumerable<SupplierModel> suppliers;
+
+    //upload file
+    IReadOnlyList<IBrowserFile> files;
+
+    List<string> urls = new List<string>();
+
+    Dictionary<string, string> images = new Dictionary<string, string>();
+
+    Snackbar snackbar;
+
+    string dropClass = string.Empty;
+    const int maxFileSize = 10485760;
+
+    List<KeyValuePair<Gender, string>> GenderList;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        model = new ProductRequestModel();
+        await GetAllAsync();
+        GetAllGender();
+    }
+
+    public void GetAllGender()
+    {
+        GenderList = EnumHelper.GetEnumAndDescriptions<Gender>();
+    }
+
+    private async Task SaveChangeAsync()
+    {
+        if (validations.ValidateAll())
+        {
+            if (images.Values.Any())
+            {
+                model.Images.Clear();
+
+                foreach (var image in images)
+                {
+
+                    model.Images.Add(new ResourceModel
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        PathName = image.Key,
+                        IsDeleted = false,
+                        ProductId = model.Id
+                    });
+                }
+            }
+
+            if (String.IsNullOrWhiteSpace(model.Id))
+            {
+                await productService.AddAsync(model);
+                await OnSaveChange.InvokeAsync();
+            }
+            else
+            {
+
+                var a = await productService.UpdateAsync(model.Id, model);
+
+                if (a)
+                {
+                    await OnSaveChange.InvokeAsync();
+                }
+            }
+            HideModal();
+        }
+        else
+        {
+            snackbar.Show();
+        }
+    }
+
+    public void AddModal()
+    {
+        model = new ProductRequestModel();
+        modalTitle = "Add product";
+        images.Clear();
+        modalRef.Show();
+    }
+
+    public ProductRequestModel GetById(string id)
+    {
+        var responseModel = productService.GetById(id);
+        return _mapper.Map<ProductRequestModel>(responseModel);
+    }
+
+    public void EditModal(string productId)
+    {
+        images.Clear();
+        modalTitle = "Edit product";
+
+        model = GetById(productId);
+
+        this.model.Images.ForEach(item =>
+        {
+            images.Add(item.PathName, item.PathName.Split("_").Last());
+        });
+
+
+        modalRef.Show();
+    }
+
+    public void HideModal()
+    {
+        //images.Clear();
+        //files = null;
+        modalRef.Hide();
+    }
+
+
+    public async Task GetAllAsync()
+    {
+        categories = await categoryService.GetAllAsync();
+        suppliers = await supplierService.GetAllAsync();
+    }
+
+    private void HandleDragEnter()
+    {
+        dropClass = "dropAreaDrug";
+    }
+    private void HandleDragLeave()
+    {
+        dropClass = string.Empty;
+    }
+    async Task OnInputFileChange(InputFileChangeEventArgs e)
+    {
+        dropClass = string.Empty;
+        try
+        {
+            if (e.FileCount > 0)
+            {
+                images.Clear();
+                //urls.Clear();
+                files = null;
+                files = e.GetMultipleFiles();
+                await SaveFiles(files);
+                //urls.AddRange(images);
+            }
+
+        }
+
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.Message);
+            throw;
+        }
+    }
+
+    private async Task SaveFiles(IReadOnlyList<IBrowserFile> files)
+    {
+
+        foreach (var file in files)
+        {
+            var url = await SaveFile(file);
+            images.Add(url, file.Name);
+        }
+    }
+
+    private async Task<string> SaveFile(IBrowserFile file)
+    {
+        var relativePath = Path.Combine("images/products");
+        var dirToSave = Path.Combine(_env.WebRootPath, relativePath);
+        var di = new DirectoryInfo(dirToSave);
+
+
+        if (!di.Exists)
+        {
+            di.Create();
+        }
+
+        var createFileName = $"{DateTime.UtcNow.ToString("ddMMyyyyss")}_{file.Name}";
+
+        var filePath = Path.Combine(dirToSave, createFileName);
+        using (var stream = file.OpenReadStream(maxFileSize))
+        {
+            using (var mstream = new MemoryStream())
+            {
+                await stream.CopyToAsync(mstream);
+                await File.WriteAllBytesAsync(filePath, mstream.ToArray());
+            }
+        }
+        var url = Path.Combine(relativePath, createFileName).Replace("\\", "/");
+        return url;
+    }
+
+}

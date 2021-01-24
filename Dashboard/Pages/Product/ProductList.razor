@@ -203,7 +203,7 @@
 
         await productService.DeleteAsync(model.Id);
         await productService.SaveChangesAsync();
-        products = await productService.GetAllAsync();
+        await GetAllAsync();
     }
 
     public async Task GetAllAsync()

@@ -1,4 +1,4 @@
-﻿using Infrastructure.Entities;
+﻿using System;
 
 namespace Infrastructure.Models
 {
