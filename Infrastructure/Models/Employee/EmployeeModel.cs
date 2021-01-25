@@ -6,9 +6,9 @@ namespace Infrastructure.Models
     {
         public EmployeeModel()
         {
-            User = new ApplicationUserModel();
+            ApplicationUser = new ApplicationUserModel();
         }
         public string Id { get; set; }
-        public virtual ApplicationUserModel User { get; set; }
+        public virtual ApplicationUserModel ApplicationUser { get; set; }
     }
 }

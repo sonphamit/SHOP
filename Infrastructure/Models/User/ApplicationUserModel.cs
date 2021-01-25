@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace Infrastructure.Models
 {
     public class ApplicationUserModel
-    {
+    { 
         public string Id { get; set; }
         [Required(ErrorMessage = "FirstName is required")]
         public string FirstName { get; set; }
@@ -16,6 +16,7 @@ namespace Infrastructure.Models
         public string PhoneNumber { get; set; }
         public string PasswordHash { get; set; }
         [Required(ErrorMessage = "Email is required")]
+        [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
         [Required(ErrorMessage = "UserName is required")]
         public string UserName { get; set; }

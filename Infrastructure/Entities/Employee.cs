@@ -1,5 +1,4 @@
-﻿using Infrastructure.Enums;
-using SharedCore.Entities;
+﻿using SharedCore.Helpers;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,6 +8,10 @@ namespace Infrastructure.Entities
 {
     public class Employee
     {
+        public Employee()
+        {
+            Id = CommonHelper.NewGuid();
+        }
         [Key]
         [ForeignKey("ApplicationUser")]
         public string Id { get; set; }

@@ -7,6 +7,7 @@ namespace Infrastructure.Services
 {
     public interface IEmployeeService
     {
+        Task<bool> IsExsistAsync(string userName);
         Task AddAsync(EmployeeRequestModel model);
         Task UpdateAsync(string id, EmployeeRequestModel model);
         Task<IEnumerable<EmployeeResponseModel>> GetAllAsync();
@@ -16,7 +17,6 @@ namespace Infrastructure.Services
             string keyword,
             string orderCol,
             string orderType,
-            int? userType = null,
             int? page = null,
             int? size = null
             );

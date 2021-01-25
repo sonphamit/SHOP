@@ -7,9 +7,13 @@
 
   <ItemGroup>
     <Compile Remove="Pages\Permission\**" />
+    <Compile Remove="Pages\User\**" />
     <Content Remove="Pages\Permission\**" />
+    <Content Remove="Pages\User\**" />
     <EmbeddedResource Remove="Pages\Permission\**" />
+    <EmbeddedResource Remove="Pages\User\**" />
     <None Remove="Pages\Permission\**" />
+    <None Remove="Pages\User\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -40,7 +44,6 @@
 
   <ItemGroup>
     <Folder Include="Pages\Customer\" />
-    <Folder Include="Pages\User\" />
   </ItemGroup>
 
   <ItemGroup>

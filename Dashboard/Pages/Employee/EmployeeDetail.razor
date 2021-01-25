@@ -11,95 +11,96 @@
             </ModalHeader>
             <ModalBody>
 
-                    <Validations @ref="validations" Model="model" Mode="ValidationMode.Auto" ValidateOnLoad="false">
-                        <Validation>
-                            <Field Horizontal="true">
-                                <FieldLabel ColumnSize="ColumnSize.Is2">UserName</FieldLabel>
-                                <FieldBody ColumnSize="ColumnSize.Is10">
-                                    <TextEdit Placeholder="Enter UserName" @bind-Text="model.User.UserName" 
-                                              MaskType="MaskType.RegEx" EditMask="^[a-zA-Z][a-zA-Z0-9]*$" MaxLength="20">
-                                        <Feedback><ValidationError /></Feedback>
-                                    </TextEdit>
-                                </FieldBody>
-                            </Field>
-                        </Validation>
+                <Validations @ref="validations" Model="model" Mode="ValidationMode.Auto" ValidateOnLoad="false">
+                    <Validation>
+                        <Field Horizontal="true">
+                            <FieldLabel ColumnSize="ColumnSize.Is3">UserName</FieldLabel>
+                            <FieldBody ColumnSize="ColumnSize.Is9">
+                                <TextEdit Placeholder="Enter UserName" @bind-Text="model.ApplicationUser.UserName"
+                                          MaskType="MaskType.RegEx" EditMask="^[a-zA-Z][a-zA-Z0-9]*$" MaxLength="20">
+                                    <Feedback><ValidationError /></Feedback>
+                                </TextEdit>
+                            </FieldBody>
+                        </Field>
+                    </Validation>
 
-                        <Validation>
-                            <Field Horizontal="true">
-                                <FieldLabel ColumnSize="ColumnSize.Is2">Password</FieldLabel>
-                                <FieldBody ColumnSize="ColumnSize.Is10">
-                                    <TextEdit Placeholder="Enter Password" @bind-Text="model.Password" Role="TextRole.Password">
-                                        <Feedback><ValidationError /></Feedback>
-                                    </TextEdit>
-                                </FieldBody>
-                            </Field>
-                        </Validation>
+                    <Validation>
+                        <Field Horizontal="true">
+                            <FieldLabel ColumnSize="ColumnSize.Is3">Password</FieldLabel>
+                            <FieldBody ColumnSize="ColumnSize.Is9">
+                                <TextEdit Placeholder="Enter Password" @bind-Text="model.Password" Role="TextRole.Password">
+                                    <Feedback><ValidationError /></Feedback>
+                                </TextEdit>
+                            </FieldBody>
+                        </Field>
+                    </Validation>
 
-                        <Validation>
-                            <Field Horizontal="true">
-                                <FieldLabel ColumnSize="ColumnSize.Is2">Confirm</FieldLabel>
-                                <FieldBody ColumnSize="ColumnSize.Is10">
-                                    <TextEdit Placeholder="Enter Confirm Password" @bind-Text="model.ConfirmPassword" Role="TextRole.Password">
-                                        <Feedback><ValidationError /></Feedback>
-                                    </TextEdit>
-                                </FieldBody>
-                            </Field>
-                        </Validation>
+                    <Validation>
+                        <Field Horizontal="true">
+                            <FieldLabel ColumnSize="ColumnSize.Is3">Confirm</FieldLabel>
+                            <FieldBody ColumnSize="ColumnSize.Is9">
+                                <TextEdit Placeholder="Enter Confirm Password" @bind-Text="model.ConfirmPassword" Role="TextRole.Password">
+                                    <Feedback><ValidationError /></Feedback>
+                                </TextEdit>
+                            </FieldBody>
+                        </Field>
+                    </Validation>
 
-                        <Fields>
-                            <Validation Validator="@ValidationRule.IsNotEmpty">
-                                <Field ColumnSize="ColumnSize.Is4">
-                                    <FieldLabel>FirstName</FieldLabel>
-                                    <FieldBody>
-                                        <TextEdit Placeholder="Enter FirstName" @bind-Value="model.User.FirstName">
-                                            <Feedback><ValidationError /></Feedback>
-                                        </TextEdit>
-                                    </FieldBody>
-                                </Field>
-                            </Validation>
-                            <Validation>
-                                <Field ColumnSize="ColumnSize.Is4">
-                                    <FieldLabel>MiddleName</FieldLabel>
-                                    <FieldBody ColumnSize="ColumnSize.Is10">
-                                        <TextEdit Placeholder="Enter MiddleName" @bind-Value="model.User.MiddleName" Min="0" Max="100">
-                                            <Feedback><ValidationError /></Feedback>
-                                        </TextEdit>
-                                    </FieldBody>
-                                </Field>
-                            </Validation>
-                            <Validation Validator="@ValidationRule.IsNotEmpty">
-                                <Field ColumnSize="ColumnSize.Is4">
-                                    <FieldLabel>LastName</FieldLabel>
-                                    <FieldBody>
-                                        <TextEdit Placeholder="Enter LastName" @bind-Value="model.User.LastName" >
-                                            <Feedback><ValidationError /></Feedback>
-                                        </TextEdit>
-                                    </FieldBody>
-                                </Field>
-                            </Validation>
-                        </Fields>
-                        <Validation>
-                            <Field Horizontal="true">
-                                <FieldLabel ColumnSize="ColumnSize.Is2">Email</FieldLabel>
-                                <FieldBody ColumnSize="ColumnSize.Is10">
-                                    <TextEdit Placeholder="Enter Email" @bind-Text="model.User.Email" Role="TextRole.Email">
-                                        <Feedback><ValidationError /></Feedback>
-                                    </TextEdit>
-                                </FieldBody>
-                            </Field>
-                        </Validation>
-                        <Validation>
-                            <Field Horizontal="true">
-                                <FieldLabel ColumnSize="ColumnSize.Is2">Phone</FieldLabel>
-                                <FieldBody ColumnSize="ColumnSize.Is10">
-                                    <TextEdit Placeholder="Enter Phone Number" @bind-Text="model.User.PhoneNumber" 
-                                              MaxLength="13" MaskType="MaskType.RegEx" EditMask="^[+84]?[0-9]*$">
-                                        <Feedback><ValidationError /></Feedback>
-                                    </TextEdit>
-                                </FieldBody>
-                            </Field>
-                        </Validation>
-                    </Validations>
+                    <Validation>
+                        <Field Horizontal="true">
+                            <FieldLabel ColumnSize="ColumnSize.Is3">FirstName</FieldLabel>
+                            <FieldBody ColumnSize="ColumnSize.Is9">
+                                <TextEdit Placeholder="Enter FirstName" @bind-Text="model.ApplicationUser.FirstName">
+                                    <Feedback><ValidationError /></Feedback>
+                                </TextEdit>
+                            </FieldBody>
+                        </Field>
+                    </Validation>
+
+                    <Validation>
+                        <Field Horizontal="true">
+                            <FieldLabel ColumnSize="ColumnSize.Is3">MiddleName</FieldLabel>
+                            <FieldBody ColumnSize="ColumnSize.Is9">
+                                <TextEdit Placeholder="Enter MiddleName" @bind-Text="model.ApplicationUser.MiddleName">
+                                    <Feedback><ValidationError /></Feedback>
+                                </TextEdit>
+                            </FieldBody>
+                        </Field>
+                    </Validation>
+
+                    <Validation>
+                        <Field Horizontal="true">
+                            <FieldLabel ColumnSize="ColumnSize.Is3">Last Name</FieldLabel>
+                            <FieldBody ColumnSize="ColumnSize.Is9">
+                                <TextEdit Placeholder="Enter Last Name" @bind-Text="model.ApplicationUser.LastName">
+                                    <Feedback><ValidationError /></Feedback>
+                                </TextEdit>
+                            </FieldBody>
+                        </Field>
+                    </Validation>
+
+                    <Validation>
+                        <Field Horizontal="true">
+                            <FieldLabel ColumnSize="ColumnSize.Is3">Email</FieldLabel>
+                            <FieldBody ColumnSize="ColumnSize.Is9">
+                                <TextEdit Placeholder="Enter Email" @bind-Text="model.ApplicationUser.Email" Role="TextRole.Email">
+                                    <Feedback><ValidationError /></Feedback>
+                                </TextEdit>
+                            </FieldBody>
+                        </Field>
+                    </Validation>
+                    <Validation>
+                        <Field Horizontal="true">
+                            <FieldLabel ColumnSize="ColumnSize.Is3">Phone</FieldLabel>
+                            <FieldBody ColumnSize="ColumnSize.Is9">
+                                <TextEdit Placeholder="Enter Phone Number" @bind-Text="model.ApplicationUser.PhoneNumber"
+                                          MaxLength="13" MaskType="MaskType.RegEx" EditMask="^[+84]?[0-9]*$">
+                                    <Feedback><ValidationError /></Feedback>
+                                </TextEdit>
+                            </FieldBody>
+                        </Field>
+                    </Validation>
+                </Validations>
                 
             </ModalBody>
             <ModalFooter>
@@ -111,7 +112,7 @@
         </form>
         <Snackbar @ref="snackbar" Color="SnackbarColor.Danger" Location="SnackbarLocation.Right">
             <SnackbarBody>
-                The input data is invalid.
+                @SnackbarText
             </SnackbarBody>
         </Snackbar>
 
@@ -127,6 +128,8 @@
     public Modal modalRef;
     public string modalTitle = "";
 
+    public string SnackbarText = "The input data is invalid.";
+
     EmployeeRequestModel model;
 
     Validations validations;
@@ -141,6 +144,14 @@
 
     private async Task SaveChangeAsync()
     {
+        bool isExsist = await service.IsExsistAsync(model.ApplicationUser.UserName);
+        if (isExsist)
+        {
+            SnackbarText = $"UserName {model.ApplicationUser.UserName} is Exsisting, please pick another one.";
+            snackbar.Show();
+            return;
+        }
+
         if (validations.ValidateAll())
         {
 
@@ -159,6 +170,7 @@
         }
         else
         {
+            SnackbarText = "The input data is invalid.";
             snackbar.Show();
         }
     }
