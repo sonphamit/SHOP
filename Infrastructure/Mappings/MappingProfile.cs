@@ -25,8 +25,9 @@ namespace Infrastructure.Mappings
 
             CreateMap<Customer, CustomerModel>();
             CreateMap<CustomerModel, Customer>();
-            CreateMap<CustomerRequestModel, Customer>().ForMember(x => x.ApplicationUser, opt => opt.MapFrom(u => u.User));
+            CreateMap<CustomerRequestModel, Customer>();
             CreateMap<Customer, CustomerResponseModel>();
+            CreateMap<CustomerResponseModel, CustomerRequestModel>();
 
             CreateMap<Employee, EmployeeModel>();
             CreateMap<EmployeeModel, Employee>();

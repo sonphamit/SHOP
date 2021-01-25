@@ -55,6 +55,8 @@ namespace Infrastructure.Services
 
             await _unitOfWork.EmployeeRepository.AddAsync(entity);
             SaveChanges();
+            _unitOfWork.EmployeeRepository.Detach(entity);
+            _unitOfWork.ApplicationUserRepository.Detach(entity.ApplicationUser);
         }
 
         public async Task<bool> IsExsistAsync(string userName)

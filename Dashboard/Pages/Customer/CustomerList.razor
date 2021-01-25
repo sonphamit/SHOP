@@ -1,0 +1,190 @@
+﻿@page "/customers"
+@inject ICustomerService service
+@inject IJSRuntime JsRuntime
+
+<div class="row">
+    <div class="col-8">
+        <h3 class="mr-5">Customer</h3>
+        <CustomerDetail @ref="child" OnSaveChange="@(async () => await Search())" />
+        <Button Color="Color.Primary" Size="Size.Medium" Clicked="@AddModal">
+            <Icon Name="IconName.Add" />
+            Add
+        </Button>
+    </div>
+</div>
+
+<div class="row mb-4">
+
+    <div class="col-4 offset-8">
+        <Addons>
+            <Addon AddonType="AddonType.Start">
+                <AddonLabel><Icon Name="IconName.Search" /></AddonLabel>
+            </Addon>
+            <Addon AddonType="AddonType.Body">
+                <TextEdit Placeholder="Search" TextChanged="keywordOnChange"></TextEdit>
+            </Addon>
+        </Addons>
+    </div>
+</div>
+
+<table class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>No.</th>
+            <th>UserName</th>
+            <th>FullName</th>
+            <th>PhoneNumber</th>
+            <th>Address</th>
+            <th>Email</th>
+            <th>CreatedAt</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Customers != null)
+        {
+            @foreach (var item in Customers.Select((value, index) => new { value, index }))
+            {
+                <tr>
+                    <td>@(item.index + 1 + pageSize*(pageNumber-1))</td>
+                    <td>@item.value.ApplicationUser.UserName</td>
+                    <td>@($"{item.value.ApplicationUser.FirstName} {item.value.ApplicationUser.MiddleName} {item.value.ApplicationUser.LastName}")</td>
+                    <td>@item.value.ApplicationUser.PhoneNumber</td>
+                    <td>@item.value.Address</td>
+                    <td>@item.value.ApplicationUser.Email</td>
+                    <td>@item.value.CreatedAt</td>
+
+                    <td>
+                        <Button Color="Color.Primary" Size="Size.Small" Clicked="@( () => EditModal(item.value.Id))">
+                            <Icon Name="IconName.Edit" />
+                            Edit
+                        </Button>
+                        <Button Color="Color.Danger" Size="Size.Small" Clicked="@(async () => await Delete(item.value))">
+                            <Icon Name="IconName.Delete" />
+                            Delete
+                        </Button>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+@if (lastPage > 0)
+{
+    <Pagination>
+        <PaginationItem Disabled="@(pageNumber == 1)">
+            <PaginationLink Clicked="preOnClick">
+                <span aria-hidden="true">«</span>
+            </PaginationLink>
+        </PaginationItem>
+
+        @if (lastPage >= 1)
+        {
+            @foreach (var pg in Enumerable.Range(1, lastPage).ToArray())
+            {
+                <PaginationItem Active="@(pageNumber == pg)">
+                    <PaginationLink Clicked="@(async () => await pageOnClick(pg))">
+                        @pg
+                    </PaginationLink>
+                </PaginationItem>
+            }
+        }
+        <PaginationItem Disabled="@(pageNumber == lastPage)">
+            <PaginationLink Clicked="nextOnClick" Page="Page.">
+                <span aria-hidden="true">»</span>
+            </PaginationLink>
+        </PaginationItem>
+    </Pagination>
+}
+
+@code {
+
+
+    CustomerDetail child;
+
+    void AddModal()
+    {
+        child.AddModal();
+    }
+
+    void EditModal(string id)
+    {
+        child.EditModal(id);
+    }
+
+    public IEnumerable<CustomerResponseModel> Customers;
+    int total = 0;
+    protected override async Task OnInitializedAsync()
+    {
+        await Search();
+    }
+
+    async Task Delete(CustomerResponseModel model)
+    {
+        if (!await JsRuntime.InvokeAsync<bool>("confirm", $"Are you sure you want to delete '{model.ApplicationUser.UserName}'?"))
+        {
+            return;
+        }
+
+        await service.DeleteAsync(model.Id);
+        await Search();
+    }
+
+    #region PAGINATION
+
+    string searchKeyword = String.Empty;
+    int? pageNumber = 1;
+
+    int pageSize = 10;
+    string orderCol = nameof(Infrastructure.Entities.Customer.CreatedAt);
+    string orderType = "asc"; //or desc
+
+    int lastPage = 0;
+    public async Task Search()
+    {
+        var result = await service.Search(
+            searchKeyword,
+            orderCol,
+            orderType,
+            pageNumber,
+            pageSize
+            );
+        Customers = result.Items;
+        total = result.Count;
+        lastPage = (int)Math.Ceiling((decimal)total / pageSize);
+    }
+
+    async Task keywordOnChange(string value)
+    {
+        searchKeyword = value;
+        await Search();
+    }
+
+    async Task preOnClick()
+    {
+        if (pageNumber > 1)
+        {
+            pageNumber = pageNumber - 1;
+        }
+
+        await Search();
+    }
+
+    async Task nextOnClick()
+    {
+        if (pageNumber < lastPage)
+        {
+            pageNumber = pageNumber + 1;
+        }
+
+        await Search();
+    }
+
+    async Task pageOnClick(int value)
+    {
+        pageNumber = value;
+        await Search();
+    }
+
+    #endregion
+}
