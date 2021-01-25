@@ -6,7 +6,61 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     var productInCategory = await productService.GetProductsCategoryAsync(Model.CategoryId, Model.Id);
 }
+
+
+
 <div class="container mt-lg-5">
+    <script>
+        $(document).ready(function () {
+            $("#add-to-cart").click(function () {
+                var quantity = $("#quantity").val();
+                var productId = $("#productId").val();
+               
+                $.ajax({
+                    url: "/Product/AddToCart",
+                    type: "GET",
+                    dataType: "text",
+                    data: {
+                        "quantity": quantity,
+                        "productId": productId
+                    },
+                    contentType: 'application/json; charset=utf-8',
+
+                    success: function (result) {
+                        var count = $("#total-count").text();
+                        $("#total-count").html(parseInt(count) + 1);
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        //alert("Thêm vào giỏ hàng thành công!");
+                    }
+                });
+            });
+
+            $(".addproduct").each(function () {
+                $(this).unbind().click(function () {
+                    var productId = $(this)[0].getAttribute("proId");
+                    $.ajax({
+                        url: "/Product/AddToCart",
+                        type: "GET",
+                        dataType: "text",
+                        data: {
+                            "quantity": 1,
+                            "productId": productId
+                        },
+                        contentType: 'application/json; charset=utf-8',
+
+                        success: function (result) {
+                            var count = $("#total-count").text();
+                            $("#total-count").html(parseInt(count) + 1);
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                        }
+                    });
+                });
+            });
+
+        });
+    </script>
     <div class="card">
         <div class="container-fliud">
             <div class="wrapper row">
@@ -50,7 +104,8 @@
                             <span>@(String.Format("{0:0.0 VND}", Model.UnitPrice))</span>
                         </h3>
                     }
-
+                    @*@using (Html.BeginForm("AddToCart", "Product", FormMethod.Post, new { productId = Model.Id }))
+        {*@
                     <div class="form-row mt-3">
                         <div class="col-md-3 mb-2">
                             <h6 class="mt-2">Giới tính:</h6>
@@ -83,7 +138,7 @@
                     <div class="form-row mt-3">
                         <h6 class="col-md-3 mt-2">Số lượng:</h6>
                         <span class="quantity">
-                            <input class="input-quantity" type="number" value="1" />
+                            <input id="quantity" class="input-quantity" type="number" name="quantity" asp- value="1" />
                         </span>
                         <span class="pl-2 mt-2 text-muted">@Model.UnitsInStock sản phẩm có sẵn</span>
                     </div>
@@ -114,9 +169,10 @@
                             <br />
                         </span>
                     </div>
-
+                    @*@Html.HiddenFor(m => m.Id)*@
+                    <input type="hidden" id="productId" name="productId" value=@Model.Id>
                     <div class="action mt-3">
-                        <button class="add-to-cart btn btn-default" type="button">Thêm vào giỏ hàng</button>
+                        <button id="add-to-cart" class="add-to-cart btn btn-default" type="submit">Thêm vào giỏ hàng</button>
                         <button class="like btn btn-default" type="button">Mua ngay</button>
                     </div>
                 </div>
@@ -140,21 +196,14 @@
                                     <div class="product-img">
                                         @if (product.Images.Count > 0)
                                         {
-                                            <a href="product-details.html">
+                                            <a href=@Url.Action("Details", "Product", new {id=product.Id })>
                                                 <img class="default-img" src="@(TextConstant.DashboardDomain + "/" + product.Images?.First().PathName)" alt="#">
                                             </a>
                                         }
 
                                         <div class="button-head">
-                                            <div class="product-action">
-                                                <a data-toggle="modal" data-target="#exampleModal" title="Quick View" href="#">
-                                                    <i class=" ti-eye"></i><span>Quick Shop</span>
-                                                </a>
-                                                <a title="Wishlist" href="#"><i class=" ti-heart "></i><span>Add to Wishlist</span></a>
-                                                <a title="Compare" href="#"><i class="ti-bar-chart-alt"></i><span>Add to Compare</span></a>
-                                            </div>
                                             <div class="product-action-2">
-                                                <a title="Add to cart" href="#">Add to cart</a>
+                                                <a title="Add to cart" class="addproduct @product.Id" proId="@product.Id">Thêm vào giỏ hàng</a>
                                             </div>
                                         </div>
                                     </div>
@@ -165,7 +214,8 @@
                                             {
                                                 <span class="text-decoration">@product.UnitPriceString</span>
                                                 <span class="sale">@product.DiscountPriceString</span>
-                                            } else
+                                            }
+                                            else
                                             {
                                                 <span>@product.UnitPriceString</span>
                                             }
