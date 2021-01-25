@@ -77,9 +77,9 @@
         child.EditModal(model);
     }
 
-    void ConfigPermission(string id)
+    async Task ConfigPermission(string id)
     {
-        childConf.ConfigPermission(id);
+        await childConf.ConfigPermission(id);
     }
 
     public IEnumerable<RoleModel> roles;

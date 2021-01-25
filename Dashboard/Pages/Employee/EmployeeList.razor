@@ -105,9 +105,9 @@
         child.AddModal();
     }
 
-    void EditModal(string id)
+    async Task EditModal(string id)
     {
-        child.EditModal(id);
+        await child.EditModal(id);
     }
 
     public IEnumerable<EmployeeResponseModel> employees;
