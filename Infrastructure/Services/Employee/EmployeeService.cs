@@ -68,7 +68,16 @@ namespace Infrastructure.Services
         public async Task DeleteAsync(string id)
         {
             var entity = await _unitOfWork.EmployeeRepository.FindByCondition(e => e.Id.Equals(id)).FirstOrDefaultAsync();
-            _unitOfWork.EmployeeRepository.Delete(entity);
+            if (entity is not null)
+            {
+                var user = await _userManager.FindByIdAsync(entity.Id);
+                if (user is not null)
+                {
+                    await _userManager.DeleteAsync(user);
+                }
+                _unitOfWork.EmployeeRepository.Delete(entity);
+            }
+            //await SaveChangesAsync();
         }
 
         public async Task<IEnumerable<EmployeeResponseModel>> GetAllAsync()

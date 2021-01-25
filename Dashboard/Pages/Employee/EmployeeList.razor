@@ -125,7 +125,6 @@
         }
 
         await service.DeleteAsync(model.Id);
-        await service.SaveChangesAsync();
         await Search();
     }
 
