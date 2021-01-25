@@ -144,19 +144,20 @@
 
     private async Task SaveChangeAsync()
     {
-        bool isExsist = await service.IsExsistAsync(model.ApplicationUser.UserName);
-        if (isExsist)
-        {
-            SnackbarText = $"UserName {model.ApplicationUser.UserName} is Exsisting, please pick another one.";
-            snackbar.Show();
-            return;
-        }
+
 
         if (validations.ValidateAll())
         {
 
             if (String.IsNullOrWhiteSpace(model.Id))
             {
+                bool isExsist = await service.IsExsistAsync(model.ApplicationUser.UserName);
+                if (isExsist)
+                {
+                    SnackbarText = $"UserName {model.ApplicationUser.UserName} is Exsisting, please pick another one.";
+                    snackbar.Show();
+                    return;
+                }
                 await service.AddAsync(model);
                 await OnSaveChange.InvokeAsync();
             }
@@ -189,11 +190,11 @@
         return _mapper.Map<EmployeeRequestModel>(responseModel);
     }
 
-    public void EditModal(string employeeId)
+    public async Task EditModal(string employeeId)
     {
         modalTitle = "Edit employee";
 
-        //model = await GetById(employeeId);
+        model = await GetById(employeeId);
 
         modalRef.Show();
     }

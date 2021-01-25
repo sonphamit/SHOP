@@ -8,6 +8,7 @@ namespace Infrastructure.Database
         public IRepository<Customer> CustomerRepository { get; }
         public IRepository<Category> CategoryRepository { get; }
         public IRepository<Employee> EmployeeRepository { get; }
+        public IRepository<ApplicationUser> ApplicationUserRepository { get; }
         public IRepository<Order> OrderRepository { get; }
         public IRepository<OrderDetail> OrderDetailRepository { get; }
         public IRepository<Product> ProductRepository { get; }

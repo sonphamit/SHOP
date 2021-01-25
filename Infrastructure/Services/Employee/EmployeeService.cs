@@ -43,8 +43,12 @@ namespace Infrastructure.Services
             entity.ApplicationUser.EmailConfirmed = true;
             entity.ApplicationUser.PhoneNumberConfirmed = true;
 
-            var passwordHash = new PasswordHasher<ApplicationUser>();
-            entity.ApplicationUser.PasswordHash = passwordHash.HashPassword(entity.ApplicationUser, model.Password);
+            if (!string.IsNullOrWhiteSpace(model.Password))
+            {
+                var passwordHash = new PasswordHasher<ApplicationUser>();
+                entity.ApplicationUser.PasswordHash = passwordHash.HashPassword(entity.ApplicationUser, model.Password);
+            }
+
 
             entity.ApplicationUser.NormalizedEmail = entity.ApplicationUser.Email.ToUpperInvariant().Normalize();
             entity.ApplicationUser.NormalizedUserName = entity.ApplicationUser.UserName.ToUpperInvariant().Normalize();
@@ -88,7 +92,8 @@ namespace Infrastructure.Services
 
         public async Task<EmployeeResponseModel> GetByIdAsync(string id)
         {
-            var entity = await _unitOfWork.EmployeeRepository.FindByCondition(e => e.Id.Equals(id)).FirstOrDefaultAsync();
+            var entity = await _unitOfWork.EmployeeRepository.FindByCondition(e => e.Id.Equals(id))
+                .Include(x => x.ApplicationUser).FirstOrDefaultAsync();
             return _mapper.Map<EmployeeResponseModel>(entity);
         }
 
@@ -150,12 +155,31 @@ namespace Infrastructure.Services
         {
             if (!string.IsNullOrWhiteSpace(id))
             {
-                var originEntity = await _unitOfWork.EmployeeRepository.FindByCondition(e => e.Id.Equals(model.Id)).FirstOrDefaultAsync();
+                var originEntity = await _unitOfWork.EmployeeRepository.FindByCondition(e => e.Id.Equals(model.Id))
+                    .Include(x => x.ApplicationUser).FirstOrDefaultAsync();
                 var entityUpdate = _mapper.Map(model, originEntity);
-                entityUpdate.Id = model.Id;
+                //entityUpdate.Id = model.Id;
+
+                if (!string.IsNullOrWhiteSpace(model.Password))
+                {
+                    var passwordHash = new PasswordHasher<ApplicationUser>();
+                    entityUpdate.ApplicationUser.PasswordHash = passwordHash.HashPassword(entityUpdate.ApplicationUser, model.Password);
+                }
+
+                entityUpdate.ApplicationUser.NormalizedEmail = entityUpdate.ApplicationUser.Email.ToUpperInvariant().Normalize();
+                entityUpdate.ApplicationUser.NormalizedUserName = entityUpdate.ApplicationUser.UserName.ToUpperInvariant().Normalize();
+
+                entityUpdate.UpdatedAt = DateTime.Now;
+
                 _unitOfWork.EmployeeRepository.Update(entityUpdate);
+                _unitOfWork.ApplicationUserRepository.Update(entityUpdate.ApplicationUser);
+                //await _userManager.UpdateAsync(entityUpdate.ApplicationUser);
                 SaveChanges();
                 _unitOfWork.EmployeeRepository.Detach(entityUpdate);
+                _unitOfWork.ApplicationUserRepository.Detach(entityUpdate.ApplicationUser);
+                //_unitOfWork.Detach(entityUpdate.ApplicationUser);
+                
+                
             }
         }
 

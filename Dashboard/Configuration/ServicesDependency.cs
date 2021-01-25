@@ -20,6 +20,7 @@ namespace Dashboard.Configuration
             services.AddTransient<IRepository<Category>, Repository<Category>>();
             services.AddTransient<IRepository<Customer>, Repository<Customer>>();
             services.AddTransient<IRepository<Employee>, Repository<Employee>>();
+            services.AddTransient<IRepository<ApplicationUser>, Repository<ApplicationUser>>();
             services.AddTransient<IRepository<Shipper>, Repository<Shipper>>();
             services.AddTransient<IRepository<Supplier>, Repository<Supplier>>();
             services.AddTransient<IRepository<Product>, Repository<Product>>();
