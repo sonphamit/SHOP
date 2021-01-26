@@ -33,10 +33,8 @@ namespace Dashboard
             services.AddBlazorise(options =>
             {
                 options.ChangeTextOnKeyPress = true; // optional
-            })
-            .AddBootstrapProviders()
-            .AddFontAwesomeIcons();
-            //services.AddScoped<ICategoryService, CategoryService>();
+            }).AddBootstrapProviders().AddFontAwesomeIcons();
+
             services.AddServicesDependency();
             services.Configure<AppSettings>(Configuration);
 
@@ -48,10 +46,7 @@ namespace Dashboard
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true).AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            //services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
-
-            //services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
-
+            services.AddAuthentication("Identity.Application").AddCookie();
             services.AddRazorPages();
             services.AddServerSideBlazor();
             
