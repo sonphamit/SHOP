@@ -61,6 +61,12 @@ namespace Dashboard
             {
                 e.MaximumReceiveMessageSize = 1000;
             });
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Identity/Account/Login";
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
