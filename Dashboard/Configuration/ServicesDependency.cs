@@ -9,17 +9,13 @@ namespace Dashboard.Configuration
     {
         public static void AddServicesDependency(this IServiceCollection services)
         {
-            //services.Scan(scan => scan
-            //    .FromCallingAssembly()
-            //    .AddClasses(classes => classes.AssignableTo(typeof(IService)))
-            //    .AsSelf()
-            //    .WithTransientLifetime()
-            //);
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
+
             services.AddTransient<IRepository<Category>, Repository<Category>>();
             services.AddTransient<IRepository<Customer>, Repository<Customer>>();
             services.AddTransient<IRepository<Employee>, Repository<Employee>>();
+            services.AddTransient<IRepository<ApplicationUser>, Repository<ApplicationUser>>();
             services.AddTransient<IRepository<Shipper>, Repository<Shipper>>();
             services.AddTransient<IRepository<Supplier>, Repository<Supplier>>();
             services.AddTransient<IRepository<Product>, Repository<Product>>();

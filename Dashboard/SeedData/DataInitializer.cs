@@ -44,11 +44,6 @@ namespace Dashboard.SeedData
                 _ = roleManager.CreateAsync(role).Result;
             }
 
-            
-
-            
-
-
         }
 
         private static void SeedUsers(UserManager<ApplicationUser> userManager)

@@ -14,6 +14,7 @@ using Infrastructure.Database;
 using Dashboard.Configuration;
 using Infrastructure.Entities;
 using Dashboard.SeedData;
+using System;
 
 namespace Dashboard
 {
@@ -33,10 +34,8 @@ namespace Dashboard
             services.AddBlazorise(options =>
             {
                 options.ChangeTextOnKeyPress = true; // optional
-            })
-            .AddBootstrapProviders()
-            .AddFontAwesomeIcons();
-            //services.AddScoped<ICategoryService, CategoryService>();
+            }).AddBootstrapProviders().AddFontAwesomeIcons();
+
             services.AddServicesDependency();
             services.Configure<AppSettings>(Configuration);
 
@@ -45,23 +44,39 @@ namespace Dashboard
             string connectionString = Configuration.GetConnectionString("DbConnection");
             services.AddAppDatabase(connectionString);
 
-            services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true).AddRoles<IdentityRole>()
+            services.AddDefaultIdentity<ApplicationUser>().AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            //services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
-
-            //services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
-
+            services.AddAuthentication("Identity.Application").AddCookie();
             services.AddRazorPages();
-            services.AddServerSideBlazor();
-            
+            services.AddServerSideBlazor().AddHubOptions(hub => hub.MaximumReceiveMessageSize = 100 * 1024 * 1024);
+            services.AddServerSideBlazor().AddCircuitOptions(o =>
+            {
+                o.DetailedErrors = true;
+            });
+
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<ApplicationUser>>();
             services.AddDatabaseDeveloperPageExceptionFilter();
+
+            services.AddSignalR(e =>
+            {
+                e.MaximumReceiveMessageSize = 1000;
+            });
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(5000);
+                options.LoginPath = "/Identity/Account/Login";
+                options.LoginPath = "/Identity/Account/Login";
+                options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+                options.SlidingExpiration = true;
+            });
 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, 
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
             UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             if (env.IsDevelopment())

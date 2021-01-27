@@ -27,12 +27,13 @@ namespace Infrastructure.Mappings
             CreateMap<CustomerModel, Customer>();
             CreateMap<CustomerRequestModel, Customer>();
             CreateMap<Customer, CustomerResponseModel>();
+            CreateMap<CustomerResponseModel, CustomerRequestModel>();
 
             CreateMap<Employee, EmployeeModel>();
             CreateMap<EmployeeModel, Employee>();
             CreateMap<EmployeeRequestModel, Employee>();
             CreateMap<Employee, EmployeeResponseModel>();
-
+            CreateMap<EmployeeResponseModel, EmployeeRequestModel>();
 
             CreateMap<Product, ProductModel>();
             CreateMap<ProductModel, Product>().ForMember(x => x.Id, opt => opt.Ignore())

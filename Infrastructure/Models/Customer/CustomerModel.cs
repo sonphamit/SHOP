@@ -1,10 +1,13 @@
-﻿using Infrastructure.Entities;
-
-namespace Infrastructure.Models
+﻿namespace Infrastructure.Models
 {
     public class CustomerModel
     {
+        public CustomerModel()
+        {
+            ApplicationUser = new ApplicationUserModel();
+        }
         public string Id { get; set; }
-        public virtual ApplicationUserModel User { get; set; }
+        public string Address { get; set; }
+        public virtual ApplicationUserModel ApplicationUser { get; set; }
     }
 }

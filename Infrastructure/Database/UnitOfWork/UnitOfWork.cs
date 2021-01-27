@@ -9,10 +9,11 @@ namespace Infrastructure.Database
 
         public readonly ApplicationDbContext dbContext;
 
-        
+
         public IRepository<Customer> CustomerRepository { get; }
         public IRepository<Category> CategoryRepository { get; }
         public IRepository<Employee> EmployeeRepository { get; }
+        public IRepository<ApplicationUser> ApplicationUserRepository { get; }
         public IRepository<Order> OrderRepository { get; }
         public IRepository<OrderDetail> OrderDetailRepository { get; }
         public IRepository<Product> ProductRepository { get; }
@@ -20,7 +21,7 @@ namespace Infrastructure.Database
         public IRepository<Supplier> SupplierRepository { get; }
         public IRepository<Resource> ResourceRepository { get; }
 
-        
+
 
         public int SaveChanges()
         {
@@ -39,6 +40,7 @@ namespace Infrastructure.Database
             IRepository<Customer> customerRepository,
             IRepository<Category> categoryRepository,
             IRepository<Employee> employeeRepository,
+            IRepository<ApplicationUser> applicationUserRepository,
             IRepository<Order> orderRepository,
             IRepository<OrderDetail> orderDetailRepository,
             IRepository<Product> productRepository,
@@ -56,6 +58,9 @@ namespace Infrastructure.Database
 
             EmployeeRepository = employeeRepository;
             EmployeeRepository.DbContext = dbContext;
+
+            ApplicationUserRepository = applicationUserRepository;
+            ApplicationUserRepository.DbContext = dbContext;
 
             OrderRepository = orderRepository;
             OrderRepository.DbContext = dbContext;
@@ -98,6 +103,6 @@ namespace Infrastructure.Database
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }
-        
+
     }
 }

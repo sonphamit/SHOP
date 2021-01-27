@@ -9,7 +9,6 @@ using Store.Configuration;
 using Infrastructure.Database;
 using System;
 using Infrastructure.Entities;
-using Microsoft.AspNetCore.Components.Authorization;
 using Store.Middlewares;
 
 namespace Store
@@ -32,17 +31,18 @@ namespace Store
             services.AddDatabaseDeveloperPageExceptionFilter();
 
 
-            services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true).AddRoles<IdentityRole>()
+            services.AddDefaultIdentity<ApplicationUser>().AddRoles<IdentityRole>()
                             .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddMapperConfiguration();
             services.AddServicesDependency();
-            services.AddIdentityOptions();
+            //services.AddIdentityOptions();
 
+            services.AddAuthentication("Identity.Application").AddCookie();
             services.ConfigureApplicationCookie(options =>
             {
                 // Cookie settings
                 options.Cookie.HttpOnly = true;
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(5000);
 
                 options.LoginPath = "/Identity/Account/Login";
                 options.AccessDeniedPath = "/Identity/Account/AccessDenied";
