@@ -44,6 +44,7 @@
 
     <link rel="stylesheet" href="~/css/responsive.css">
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/nicesellect.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 </head>
@@ -150,16 +151,7 @@
                                 <a href="#" class="single-icon"><i class="fa fa-user-circle-o" aria-hidden="true"></i></a>
                             </div>
                             <div class="sinlge-bar shopping">
-                                <a href="#" class="single-icon"><i class="ti-bag"></i> <span id="total-count" class="total-count">0</span></a>
-                                <!-- Shopping Item -->
-                                <div class="shopping-item">
-                                    <div class="dropdown-cart-header">
-                                        <span>2 Items</span>
-                                        @*<a href=@Url.Action("New", "Home")>New</a>*@
-                                        <a href="#">View Cart</a>
-                                    </div>
-                                </div>
-                                <!--/ End Shopping Item -->
+                                <a href=@Url.Action("Index", "Order") class="single-icon"><i class="ti-bag"></i> <span id="total-count" class="total-count">0</span></a>
                             </div>
                         </div>
                     </div>

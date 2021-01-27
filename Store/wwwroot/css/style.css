@@ -5211,28 +5211,6 @@ h6 {
 	font-size: 17px;
 }
 
-
-.minus {
-	width: 24px !important;
-	height: 24px !important;
-	background: #f2f2f2 !important;
-	border-radius: 4px !important;
-	padding: 8px 10px 7px 10px !important;
-	border: 1px solid #ddd !important;
-	vertical-align: middle !important;
-	text-align: center !important;
-}
-
-.plus {
-	width: 24px !important;
-	height: 24px !important;
-	background: #f2f2f2 !important;
-	border-radius: 4px !important;
-	padding: 8px 10px 7px 10px !important;
-	border: 1px solid #ddd !important;
-	vertical-align: middle !important;
-	text-align: center !important;
-}
 input .add-quantity {
 	height: 24px !important;
 	width: 24px !important;

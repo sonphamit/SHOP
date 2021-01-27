@@ -208,7 +208,7 @@
                                         </div>
                                     </div>
                                     <div class="product-content">
-                                        <h3><a href="product-details.html">@product.Name</a></h3>
+                                        <h3><a href=@Url.Action("Details", "Product", new {id=product.Id })>@product.Name</a></h3>
                                         <div class="product-price">
                                             @if (Model.Discount > 0)
                                             {
