@@ -49,7 +49,7 @@ namespace Dashboard
 
             services.AddAuthentication("Identity.Application").AddCookie();
             services.AddRazorPages();
-            services.AddServerSideBlazor().AddHubOptions(hub => hub.MaximumReceiveMessageSize = 100 * 1024 * 1024);
+
             services.AddServerSideBlazor().AddCircuitOptions(o =>
             {
                 o.DetailedErrors = true;
@@ -57,11 +57,6 @@ namespace Dashboard
 
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<ApplicationUser>>();
             services.AddDatabaseDeveloperPageExceptionFilter();
-
-            services.AddSignalR(e =>
-            {
-                e.MaximumReceiveMessageSize = 1000;
-            });
 
             services.ConfigureApplicationCookie(options =>
             {
