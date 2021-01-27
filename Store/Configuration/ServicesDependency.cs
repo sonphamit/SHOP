@@ -9,35 +9,31 @@ namespace Store.Configuration
     {
         public static void AddServicesDependency(this IServiceCollection services)
         {
-            //services.Scan(scan => scan
-            //    .FromCallingAssembly()
-            //    .AddClasses(classes => classes.AssignableTo(typeof(IService)))
-            //    .AsSelf()
-            //    .WithTransientLifetime()
-            //);
 
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<IRepository<Category>, Repository<Category>>();
-            services.AddScoped<IRepository<Customer>, Repository<Customer>>();
-            services.AddScoped<IRepository<Employee>, Repository<Employee>>();
-            services.AddScoped<IRepository<Shipper>, Repository<Shipper>>();
-            services.AddScoped<IRepository<Supplier>, Repository<Supplier>>();
-            services.AddScoped<IRepository<Product>, Repository<Product>>();
-            services.AddScoped<IRepository<Order>, Repository<Order>>();
-            services.AddScoped<IRepository<OrderDetail>, Repository<OrderDetail>>();
-            services.AddScoped<IRepository<Resource>, Repository<Resource>>();
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
 
-            services.AddScoped<ICategoryService, CategoryService>();
-            services.AddScoped<ICustomerService, CustomerService>();
-            services.AddScoped<IEmployeeService, EmployeeService>();
-            services.AddScoped<IIdentityService, IdentityService>();
-            services.AddScoped<IShipperService, ShipperService>();
-            services.AddScoped<ISupplierService, SupplierService>();
-            services.AddScoped<IProductService, ProductService>();
+            services.AddTransient<IRepository<Category>, Repository<Category>>();
+            services.AddTransient<IRepository<Customer>, Repository<Customer>>();
+            services.AddTransient<IRepository<Employee>, Repository<Employee>>();
+            services.AddTransient<IRepository<ApplicationUser>, Repository<ApplicationUser>>();
+            services.AddTransient<IRepository<Shipper>, Repository<Shipper>>();
+            services.AddTransient<IRepository<Supplier>, Repository<Supplier>>();
+            services.AddTransient<IRepository<Product>, Repository<Product>>();
+            services.AddTransient<IRepository<Order>, Repository<Order>>();
+            services.AddTransient<IRepository<OrderDetail>, Repository<OrderDetail>>();
+            services.AddTransient<IRepository<Resource>, Repository<Resource>>();
 
-            services.AddScoped<IOrderService, OrderService>();
+            services.AddTransient<ICategoryService, CategoryService>();
+            services.AddTransient<ICustomerService, CustomerService>();
+            services.AddTransient<IEmployeeService, EmployeeService>();
+            services.AddTransient<IIdentityService, IdentityService>();
+            services.AddTransient<IShipperService, ShipperService>();
+            services.AddTransient<ISupplierService, SupplierService>();
+            services.AddTransient<IProductService, ProductService>();
 
-            services.AddScoped<IRoleService, RoleService>();
+            services.AddTransient<IOrderService, OrderService>();
+
+            services.AddTransient<IRoleService, RoleService>();
         }
     }
 }

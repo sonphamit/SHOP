@@ -14,6 +14,7 @@ using Infrastructure.Database;
 using Dashboard.Configuration;
 using Infrastructure.Entities;
 using Dashboard.SeedData;
+using System;
 
 namespace Dashboard
 {
@@ -43,7 +44,7 @@ namespace Dashboard
             string connectionString = Configuration.GetConnectionString("DbConnection");
             services.AddAppDatabase(connectionString);
 
-            services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true).AddRoles<IdentityRole>()
+            services.AddDefaultIdentity<ApplicationUser>().AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddAuthentication("Identity.Application").AddCookie();
@@ -64,7 +65,12 @@ namespace Dashboard
 
             services.ConfigureApplicationCookie(options =>
             {
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(5000);
                 options.LoginPath = "/Identity/Account/Login";
+                options.LoginPath = "/Identity/Account/Login";
+                options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+                options.SlidingExpiration = true;
             });
 
         }
