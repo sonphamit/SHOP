@@ -1,12 +1,25 @@
-﻿<CascadingAuthenticationState>
+﻿@inject NavigationManager navMan
+
+<CascadingAuthenticationState>
     <Router AppAssembly="@typeof(Program).Assembly" PreferExactMatches="@true">
         <Found Context="routeData">
-            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+            <AuthorizeView>
+                <Authorized>
+                    <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+                </Authorized>
+                <NotAuthorized>
+                    <ReditectToLogin />
+                </NotAuthorized>
+            </AuthorizeView>
+
         </Found>
         <NotFound>
             <LayoutView Layout="@typeof(MainLayout)">
                 <p>Sorry, there's nothing at this address.</p>
             </LayoutView>
         </NotFound>
+
     </Router>
+
 </CascadingAuthenticationState>
+
