@@ -21,6 +21,7 @@ namespace Dashboard
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.UseSetting(WebHostDefaults.DetailedErrorsKey, "true");
                 });
     }
 }

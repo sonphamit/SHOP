@@ -48,15 +48,23 @@ namespace Dashboard
 
             services.AddAuthentication("Identity.Application").AddCookie();
             services.AddRazorPages();
-            services.AddServerSideBlazor();
-            
+            services.AddServerSideBlazor().AddHubOptions(hub => hub.MaximumReceiveMessageSize = 100 * 1024 * 1024);
+            services.AddServerSideBlazor().AddCircuitOptions(o =>
+            {
+                o.DetailedErrors = true;
+            });
+
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<ApplicationUser>>();
             services.AddDatabaseDeveloperPageExceptionFilter();
 
+            services.AddSignalR(e =>
+            {
+                e.MaximumReceiveMessageSize = 1000;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, 
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
             UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             if (env.IsDevelopment())
