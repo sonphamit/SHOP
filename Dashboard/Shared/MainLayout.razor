@@ -11,7 +11,7 @@
                     <BarItem>
                         <BarLink To="">
                             <BarIcon IconName="customIcon" />
-                            
+
                         </BarLink>
                     </BarItem>
                 </BarBrand>
@@ -34,11 +34,11 @@
                 <BarToggler />
                 <BarMenu>
                     <BarStart>
-                        
+
                     </BarStart>
                     <BarEnd>
                         <BarItem>
-                                <LoginDisplay />
+                            <LoginDisplay />
                         </BarItem>
                     </BarEnd>
                 </BarMenu>
@@ -52,73 +52,74 @@
     </Layout>
 </Layout>
 
-@code{void OnThemeEnabledChanged(bool value)
-            {
-                if (Theme == null)
-                    return;
+@code{
+    void OnThemeEnabledChanged(bool value)
+    {
+        if (Theme == null)
+            return;
 
-                Theme.Enabled = value;
+        Theme.Enabled = value;
 
-                Theme.ThemeHasChanged();
-            }
+        Theme.ThemeHasChanged();
+    }
 
-            void OnGradientChanged(bool value)
-            {
-                if (Theme == null)
-                    return;
+    void OnGradientChanged(bool value)
+    {
+        if (Theme == null)
+            return;
 
-                Theme.IsGradient = value;
+        Theme.IsGradient = value;
 
-                //if ( Theme.GradientOptions == null )
-                //    Theme.GradientOptions = new GradientOptions();
+        //if ( Theme.GradientOptions == null )
+        //    Theme.GradientOptions = new GradientOptions();
 
-                //Theme.GradientOptions.BlendPercentage = 80;
+        //Theme.GradientOptions.BlendPercentage = 80;
 
-                Theme.ThemeHasChanged();
-            }
+        Theme.ThemeHasChanged();
+    }
 
-            void OnRoundedChanged(bool value)
-            {
-                if (Theme == null)
-                    return;
+    void OnRoundedChanged(bool value)
+    {
+        if (Theme == null)
+            return;
 
-                Theme.IsRounded = value;
+        Theme.IsRounded = value;
 
-                Theme.ThemeHasChanged();
-            }
+        Theme.ThemeHasChanged();
+    }
 
-            void OnThemeColorChanged(string value)
-            {
-                if (Theme == null)
-                    return;
+    void OnThemeColorChanged(string value)
+    {
+        if (Theme == null)
+            return;
 
-                if (Theme.ColorOptions == null)
-                    Theme.ColorOptions = new ThemeColorOptions();
+        if (Theme.ColorOptions == null)
+            Theme.ColorOptions = new ThemeColorOptions();
 
-                if (Theme.BackgroundOptions == null)
-                    Theme.BackgroundOptions = new ThemeBackgroundOptions();
+        if (Theme.BackgroundOptions == null)
+            Theme.BackgroundOptions = new ThemeBackgroundOptions();
 
-                if (Theme.TextColorOptions == null)
-                    Theme.TextColorOptions = new ThemeTextColorOptions();
+        if (Theme.TextColorOptions == null)
+            Theme.TextColorOptions = new ThemeTextColorOptions();
 
-                Theme.ColorOptions.Primary = value;
-                Theme.BackgroundOptions.Primary = value;
-                Theme.TextColorOptions.Primary = value;
+        Theme.ColorOptions.Primary = value;
+        Theme.BackgroundOptions.Primary = value;
+        Theme.TextColorOptions.Primary = value;
 
-                if (Theme.InputOptions == null)
-                    Theme.InputOptions = new ThemeInputOptions();
+        if (Theme.InputOptions == null)
+            Theme.InputOptions = new ThemeInputOptions();
 
-                //Theme.InputOptions.Color = value;
-                Theme.InputOptions.CheckColor = value;
-                Theme.InputOptions.SliderColor = value;
+        //Theme.InputOptions.Color = value;
+        Theme.InputOptions.CheckColor = value;
+        Theme.InputOptions.SliderColor = value;
 
-                Theme.ThemeHasChanged();
-            }
+        Theme.ThemeHasChanged();
+    }
 
-            private bool topbarVisible = false;
-            //private bool uiElementsVisible = true;
+    private bool topbarVisible = false;
+    //private bool uiElementsVisible = true;
 
-            [CascadingParameter] protected Theme Theme { get; set; }
+    [CascadingParameter] protected Theme Theme { get; set; }
 
-            RenderFragment customIcon =@<img src="/brand-logo.png" style="width:32px; height: 32px" />;
+    RenderFragment customIcon =@<img src="/brand-logo.png" style="width:32px; height: 32px" />;
 }

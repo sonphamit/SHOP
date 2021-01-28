@@ -1,16 +1,16 @@
 <AuthorizeView>
     <Authorized>
-        <form method="post" action="Identity/Account/LogOut">
+        <form method="get" action="Identity/Account/LogOut">
             <div class="row">
                 <a href="Identity/Account/Manage">Hello, @context.User.Identity.Name!</a>
-                <button type="submit" class="nav-link btn btn-link p-0 px-3" title="Logout">
-                <i class="fas fa-sign-out-alt" style="color:white"></i></button>
+                
+                <a type="submit" class="nav-link btn btn-link p-0 px-3" title="Logout" href="Identity/Account/LogOut">
+                    <i class="fas fa-sign-out-alt" style="color:white"></i>
+                </a>
             </div>
-
         </form>
     </Authorized>
     <NotAuthorized>
-
         <NavLink class="nav-link" href="Identity/Account/Login" title="Login" style="color:white">
             <i class="fas fa-sign-in-alt" style="color:white"></i> Login
         </NavLink>

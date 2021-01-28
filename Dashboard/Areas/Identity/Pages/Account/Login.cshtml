@@ -5,7 +5,10 @@
     ViewData["Title"] = "Log in";
 }
 
-
+@if (User.Identity.IsAuthenticated)
+{
+    Response.Redirect("/");
+}
 <div class="row">
     <div class="col-md-6 offset-3">
         <h1>@ViewData["Title"]</h1>
@@ -38,7 +41,7 @@
             </form>
         </section>
     </div>
-    
+
 </div>
 
 @section Scripts {
