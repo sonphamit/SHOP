@@ -1,4 +1,5 @@
-﻿using Infrastructure.Services;
+﻿using Infrastructure.Models;
+using Infrastructure.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -10,17 +11,15 @@ namespace Store.Controllers
     public class OrderController : Controller
     {
         protected readonly IOrderService _orderService;
-        public IActionResult Index()
-        {
-            return View();
-        }
+        protected readonly IRoleService _roleService;
 
-        [HttpPost]
-        public async Task OrderByUser([FromQuery] string userId)
+        [HttpGet]
+        public async Task<IActionResult> Index([FromQuery] string userName)
         {
+            var user = await _roleService.FindByNameAsync(userName);
             //GetHashCode by Id user
-           var order = _orderService.GetById("");
-
+            var order = _orderService.GetById(user.Id);
+            return View(order);
         }
     }
 }

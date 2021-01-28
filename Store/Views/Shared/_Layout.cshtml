@@ -1,6 +1,9 @@
 ﻿@using Infrastructure.Enums
+@using Microsoft.AspNetCore.Identity
+@using Infrastructure.Entities
 @inject ICategoryService categoryService
-@*@inject IOrderService orderService*@
+@inject UserManager<ApplicationUser> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
 @{
     var categories = await categoryService.GetAllAsync();
     //var orders = await orderService.GetAllAsync();
@@ -50,31 +53,31 @@
 </head>
 <body>
     <script>
-        //$(document).ready(function () {
-        //    $("#add-to-cart").click(function () {
-        //        var quantity = $("#quantity").val();
-        //        var productId = $("#productId").val();
+                    //$(document).ready(function () {
+                    //    $("#add-to-cart").click(function () {
+                    //        var quantity = $("#quantity").val();
+                    //        var productId = $("#productId").val();
 
-        //        $.ajax({
-        //            url: "/Product/AddToCart",
-        //            type: "POST",
-        //            dataType: "text",
-        //            data: {
-        //                quantity, productId
-        //            },
-        //            contentType: 'application/json; charset=utf-8',
+                    //        $.ajax({
+                    //            url: "/Product/AddToCart",
+                    //            type: "POST",
+                    //            dataType: "text",
+                    //            data: {
+                    //                quantity, productId
+                    //            },
+                    //            contentType: 'application/json; charset=utf-8',
 
-        //            success: function (result) {
-        //                //alert("Thêm sdfsdvào giỏ hàng thành công!");
-        //                $("#total-count").text('1');
-        //            },
-        //            error: function (xhr, ajaxOptions, thrownError) {
-        //                //alert("Thêm vào giỏ hàng thành công!");
-        //            }
-        //        });
-        //    });
+                    //            success: function (result) {
+                    //                //alert("Thêm sdfsdvào giỏ hàng thành công!");
+                    //                $("#total-count").text('1');
+                    //            },
+                    //            error: function (xhr, ajaxOptions, thrownError) {
+                    //                //alert("Thêm vào giỏ hàng thành công!");
+                    //            }
+                    //        });
+                    //    });
 
-        //});
+                    //});
     </script>
     <!-- Header -->
     <header class="header shop">
@@ -95,11 +98,9 @@
                     <div class="col-lg-8 col-md-12 col-12">
                         <!-- Top Right -->
                         <div class="right-content">
-                            <ul class="list-main">
-                                <li><i class="ti-location-pin"></i> Store location</li>
-                                <li><i class="ti-user"></i> <a href="#">My account</a></li>
-                                <li><i class="ti-power-off"></i><a href="login.html#">Login</a></li>
-                            </ul>
+
+                            @Html.Partial("_LoginPartial")
+
                         </div>
                         <!-- End Top Right -->
                     </div>
@@ -143,15 +144,16 @@
                     </div>
                     <div class="col-lg-2 col-md-3 col-12">
                         <div class="right-bar">
-                            <!-- Search Form -->
-                            <div class="sinlge-bar">
-                                <a href="#" class="single-icon"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
-                            </div>
-                            <div class="sinlge-bar">
-                                <a href="#" class="single-icon"><i class="fa fa-user-circle-o" aria-hidden="true"></i></a>
-                            </div>
                             <div class="sinlge-bar shopping">
-                                <a href=@Url.Action("Index", "Order") class="single-icon"><i class="ti-bag"></i> <span id="total-count" class="total-count">0</span></a>
+                                @if (SignInManager.IsSignedIn(User))
+                                {
+
+                                    <a href=@Url.Action("Index", "Order", new {userName=User.Identity.Name}) class="single-icon"><i class="ti-bag"></i> <span id="total-count" class="total-count">0</span></a>
+                                }
+                                else
+                                {
+                                    <a href=@Url.Action("Index", "Order") class="single-icon"><i class="ti-bag"></i> <span id="total-count" class="total-count">0</span></a>
+                                }
                             </div>
                         </div>
                     </div>
