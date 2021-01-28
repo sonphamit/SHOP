@@ -12,7 +12,7 @@
             <a class="single-icon" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><i class="fa fa-user-circle-o" aria-hidden="true"></i>@User.Identity.Name</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-dark" href="@Url.Action("Index", "Home", new { area = "" })"><i class="fa fa-sign-out"></i>Logout</a>
+            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Logout"><i class="fa fa-sign-out"></i>Logout</a>
         </li>
         }
         else
