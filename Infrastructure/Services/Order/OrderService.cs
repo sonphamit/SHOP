@@ -74,6 +74,22 @@ namespace Infrastructure.Services
             return model;
         }
 
+        public async Task<OrderResponseModel> GetByCustomerIdOrderingAsync(string id)
+        {
+            var entity = await _unitOfWork.OrderRepository.FindByCondition(e => e.CustomerId == id && e.Status==OrderStatus.ORDERING)
+                .Include(x => x.OrderDetails).ThenInclude(x => x.Product).ThenInclude(x => x.Images).FirstOrDefaultAsync();
+            var model = _mapper.Map<OrderResponseModel>(entity);
+            return model;
+        }
+
+        public async Task<OrderResponseModel> GetByIdOrderingAsync(string id)
+        {
+            var entity = await _unitOfWork.OrderRepository.FindByCondition(e => e.Id == id && e.Status == OrderStatus.ORDERING)
+                .Include(x => x.OrderDetails).ThenInclude(x => x.Product).ThenInclude(x => x.Images).FirstOrDefaultAsync();
+            var model = _mapper.Map<OrderResponseModel>(entity);
+            return model;
+        }
+
         public int SaveChanges()
         {
             return _unitOfWork.SaveChanges();
@@ -117,13 +133,14 @@ namespace Infrastructure.Services
             return false;
         }
 
-        public async Task<OrderResponseModel> UpdateExistingOrder(string productId, int quantity, string? orderId = null)
+        public async Task<OrderResponseModel> UpdateExistingOrder(string productId, int quantity, string? orderId = null, string? id = null)
         {
             var order = await GetByIdAsync(orderId);
 
             if (order != null)
             {
                 var cartItem = order.OrderDetails.Where(p => p.ProductId == productId).FirstOrDefault();
+                order.CustomerId = id;
                 if (cartItem != null)
                 {
                     cartItem.Quantity = quantity;
@@ -142,7 +159,7 @@ namespace Infrastructure.Services
             return order;
         }
 
-        public async Task<OrderResponseModel> AddNewOrder(string productId, int quantity)
+        public async Task<OrderResponseModel> AddNewOrder(string productId, int quantity, string? id = null)
         {
             var product = await _productService.GetByIdAsync(productId);
             string orderId = "";
@@ -153,6 +170,7 @@ namespace Infrastructure.Services
                 var order = new OrderRequestModel()
                 {
                     Status = OrderStatus.ORDERING,
+                    CustomerId = id,
                 };
 
                 var orderDetailItem = new OrderDetailModel() { Quantity = quantity, ProductId = productId, UnitPrice = product.UnitPrice };

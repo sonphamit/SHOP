@@ -1,6 +1,10 @@
 ﻿@model Infrastructure.Models.ProductResponseModel
 @inject IProductService productService
 @using Infrastructure.Constants
+@using Microsoft.AspNetCore.Identity
+@using Infrastructure.Entities
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
 @{
     ViewData["Title"] = "View";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -15,14 +19,17 @@
             $("#add-to-cart").click(function () {
                 var quantity = $("#quantity").val();
                 var productId = $("#productId").val();
-               
+                var userName = $("#userName").val();
+
                 $.ajax({
                     url: "/Product/AddToCart",
                     type: "GET",
                     dataType: "text",
                     data: {
                         "quantity": quantity,
-                        "productId": productId
+                        "productId": productId,
+                        "orderId": "",
+                        "userName": userName,
                     },
                     contentType: 'application/json; charset=utf-8',
 
@@ -39,13 +46,16 @@
             $(".addproduct").each(function () {
                 $(this).unbind().click(function () {
                     var productId = $(this)[0].getAttribute("proId");
+                    var userName = $("#userName").val();
                     $.ajax({
                         url: "/Product/AddToCart",
                         type: "GET",
                         dataType: "text",
                         data: {
                             "quantity": 1,
-                            "productId": productId
+                            "productId": productId,
+                            "orderId": "",
+                            "userName": userName,
                         },
                         contentType: 'application/json; charset=utf-8',
 
@@ -171,6 +181,11 @@
                     </div>
                     @*@Html.HiddenFor(m => m.Id)*@
                     <input type="hidden" id="productId" name="productId" value=@Model.Id>
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+
+                        <input type="hidden" id="userName" name="userName" value=@User.Identity.Name>
+                    }
                     <div class="action mt-3">
                         <button id="add-to-cart" class="add-to-cart btn btn-default" type="submit">Thêm vào giỏ hàng</button>
                         <button class="like btn btn-default" type="button">Mua ngay</button>
