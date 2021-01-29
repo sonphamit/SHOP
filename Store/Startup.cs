@@ -37,6 +37,12 @@ namespace Store
             services.AddServicesDependency();
             //services.AddIdentityOptions();
 
+            services.AddDistributedMemoryCache();           
+            services.AddSession(cfg => {                    
+                cfg.Cookie.Name = "mintshop";             
+                cfg.IdleTimeout = new TimeSpan(0, 30, 0);   
+            });
+
             services.AddAuthentication("Identity.Application").AddCookie();
             services.ConfigureApplicationCookie(options =>
             {
@@ -68,6 +74,7 @@ namespace Store
             app.UseMiddleware(typeof(ExceptionHandlingMiddleware));
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseSession();
 
             app.UseRouting();
 
