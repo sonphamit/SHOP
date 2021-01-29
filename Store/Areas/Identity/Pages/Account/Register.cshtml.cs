@@ -112,6 +112,7 @@ namespace Store.Areas.Identity.Pages.Account
                             UpdatedBy = addedUser.Id
                         };
                         await _unitOfWork.CustomerRepository.AddAsync(customer);
+                        _unitOfWork.SaveChanges();
                     }
                     _logger.LogInformation("User created a new account with password.");
 
