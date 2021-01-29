@@ -5,7 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Infrastructure.Database;
 using Infrastructure.Entities;
+using Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -24,17 +26,21 @@ namespace Store.Areas.Identity.Pages.Account
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IUnitOfWork _unitOfWork;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IUnitOfWork unitOfWork
+            )
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _unitOfWork = unitOfWork;
         }
 
         [BindProperty]
@@ -84,11 +90,29 @@ namespace Store.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email,
-                    Address = Input.Address, PhoneNumber = Input.PhoneNumber };
+                var user = new ApplicationUser {
+                    UserName = Input.UserName,
+                    Email = Input.Email,
+                    Address = Input.Address,
+                    PhoneNumber = Input.PhoneNumber
+                };
+
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
+                    var addedUser = await _userManager.FindByNameAsync(Input.UserName);
+                    if (addedUser is not null)
+                    {
+                        var customer = new Customer
+                        {
+                            Id = addedUser.Id,
+                            CreatedAt = DateTime.Now,
+                            CreatedBy = addedUser.Id,
+                            UpdatedAt = DateTime.Now,
+                            UpdatedBy = addedUser.Id
+                        };
+                        await _unitOfWork.CustomerRepository.AddAsync(customer);
+                    }
                     _logger.LogInformation("User created a new account with password.");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

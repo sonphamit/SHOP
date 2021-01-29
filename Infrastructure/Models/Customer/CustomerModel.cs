@@ -7,7 +7,6 @@
             ApplicationUser = new ApplicationUserModel();
         }
         public string Id { get; set; }
-        public string Address { get; set; }
         public virtual ApplicationUserModel ApplicationUser { get; set; }
     }
 }
