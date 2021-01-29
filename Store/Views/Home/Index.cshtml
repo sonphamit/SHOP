@@ -28,11 +28,10 @@
                     $.ajax({
                         url: "/Product/AddToCart",
                         type: "GET",
-                        dataType: "text",
+                        dataType: "json",
                         data: {
                             "quantity": 1,
                             "productId": productId,
-                            "orderId": "",
                             "userName": userName,
 
                         },
@@ -40,7 +39,7 @@
 
                         success: function (result) {
                             var count = $("#total-count").text();
-                            $("#total-count").html(parseInt(count) + 1);
+                            $("#total-count").html(result.productQuantity);
                         },
                         error: function (xhr, ajaxOptions, thrownError) {
                         }

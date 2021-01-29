@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Http;
 
 namespace Store.Controllers
 {
+
+
     public class OrderController : Controller
     {
         protected readonly IOrderService _orderService;
@@ -25,7 +27,7 @@ namespace Store.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index([FromQuery] string? orderId , [FromQuery] string? userName)
+        public async Task<IActionResult> Index([FromQuery] string userName = null)
         {
             var orderCart = GetCartItems();
 
@@ -37,9 +39,9 @@ namespace Store.Controllers
 
             }
 
-            if (!string.IsNullOrWhiteSpace(orderId))
+            if (!string.IsNullOrWhiteSpace(orderCart))
             {
-                var order = await _orderService.GetByIdOrderingAsync(orderId);
+                var order = await _orderService.GetByIdOrderingAsync(orderCart);
                 return View(order);
 
             }
@@ -49,17 +51,17 @@ namespace Store.Controllers
         }
 
         // Lấy cart từ Session (danh sách CartItem)
-        OrderResponseModel GetCartItems()
+        public string GetCartItems()
         {
 
             var session = HttpContext.Session;
             string jsoncart = session.GetString(CARTKEY);
             if (jsoncart != null)
             {
-                return JsonConvert.DeserializeObject<OrderResponseModel>(jsoncart);
+                return JsonConvert.DeserializeObject<string>(jsoncart);
             }
-            var order = new OrderResponseModel();
-            return order;
+
+            return "";
         }
     }
 }

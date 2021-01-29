@@ -24,18 +24,18 @@
                 $.ajax({
                     url: "/Product/AddToCart",
                     type: "GET",
-                    dataType: "text",
+                    dataType: "json",
                     data: {
                         "quantity": quantity,
                         "productId": productId,
-                        "orderId": "",
                         "userName": userName,
                     },
                     contentType: 'application/json; charset=utf-8',
 
                     success: function (result) {
+                        console.log('result', result);
                         var count = $("#total-count").text();
-                        $("#total-count").html(parseInt(count) + 1);
+                        $("#total-count").html(result.productQuantity);
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
                         //alert("Thêm vào giỏ hàng thành công!");

@@ -69,14 +69,15 @@ namespace Infrastructure.Services
 
         public async Task<OrderResponseModel> GetByIdAsync(string id)
         {
-            var entity = await _unitOfWork.OrderRepository.FindByCondition(e => e.Id == id).FirstOrDefaultAsync();
+            var entity = await _unitOfWork.OrderRepository.FindByCondition(e => e.Id == id)
+                .Include(x => x.OrderDetails).ThenInclude(x => x.Product).ThenInclude(x => x.Images).FirstOrDefaultAsync();
             var model = _mapper.Map<OrderResponseModel>(entity);
             return model;
         }
 
         public async Task<OrderResponseModel> GetByCustomerIdOrderingAsync(string id)
         {
-            var entity = await _unitOfWork.OrderRepository.FindByCondition(e => e.CustomerId == id && e.Status==OrderStatus.ORDERING)
+            var entity = await _unitOfWork.OrderRepository.FindByCondition(e => e.CustomerId == id && e.Status == OrderStatus.ORDERING)
                 .Include(x => x.OrderDetails).ThenInclude(x => x.Product).ThenInclude(x => x.Images).FirstOrDefaultAsync();
             var model = _mapper.Map<OrderResponseModel>(entity);
             return model;
@@ -117,7 +118,7 @@ namespace Infrastructure.Services
         {
             if (!string.IsNullOrWhiteSpace(id))
             {
-         
+
                 var originEntity = _unitOfWork.OrderRepository.FindByCondition(cat => cat.Id.Equals(model.Id)).FirstOrDefault();
 
                 var entityUpdate = _mapper.Map(model, originEntity);
@@ -135,15 +136,15 @@ namespace Infrastructure.Services
 
         public async Task<OrderResponseModel> UpdateExistingOrder(string productId, int quantity, string? orderId = null, string? id = null)
         {
-            var order = await GetByIdAsync(orderId);
-
+            //var order = await GetByIdAsync(orderId);
+            var order = _unitOfWork.OrderRepository.FindByCondition(cat => cat.Id.Equals(orderId)).Include(x => x.OrderDetails).FirstOrDefault();
             if (order != null)
             {
                 var cartItem = order.OrderDetails.Where(p => p.ProductId == productId).FirstOrDefault();
                 order.CustomerId = id;
                 if (cartItem != null)
                 {
-                    cartItem.Quantity = quantity;
+                    order.OrderDetails.Where(p => p.ProductId == productId).FirstOrDefault().Quantity = quantity;
                 }
                 else
                 {
@@ -151,12 +152,23 @@ namespace Infrastructure.Services
                     var product = await _productService.GetByIdAsync(productId);
                     if (product != null)
                     {
-                        var orderDetail = new OrderDetailModel() { OrderId = orderId, Quantity = quantity, ProductId = productId, UnitPrice = product.UnitPrice };
-                        order.OrderDetails.Add(orderDetail);
+                        var orderDetail = new OrderDetail()
+                        {
+                            OrderId = orderId,
+                            Quantity = quantity,
+                            ProductId = productId,
+                            UnitPrice = product.UnitPrice
+                        };
+                        //order.OrderDetails.Add(orderDetail);
+                        await _unitOfWork.OrderDetailRepository.AddAsync(orderDetail);
                     }
                 }
+
+                await SaveChangesAsync();
             }
-            return order;
+
+            var newOrder = _unitOfWork.OrderRepository.FindByCondition(cat => cat.Id.Equals(orderId)).Include(x => x.OrderDetails).FirstOrDefault();
+            return _mapper.Map<OrderResponseModel>(newOrder);
         }
 
         public async Task<OrderResponseModel> AddNewOrder(string productId, int quantity, string? id = null)
@@ -165,8 +177,6 @@ namespace Infrastructure.Services
             string orderId = "";
             if (product != null)
             {
-                
-
                 var order = new OrderRequestModel()
                 {
                     Status = OrderStatus.ORDERING,

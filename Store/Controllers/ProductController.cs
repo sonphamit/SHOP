@@ -1,18 +1,20 @@
 ﻿using Infrastructure.Entities;
-using Infrastructure.Enums;
 using Infrastructure.Models;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Store.Controllers
 {
+    public class CartDisplayResponse
+    {
+        public string ProductQuantity { get; set; }
+    }
+
     public class ProductController : Controller
     {
 
@@ -45,15 +47,16 @@ namespace Store.Controllers
 
         //add to cart
         [HttpGet]
-        public async Task AddToCart([FromQuery] string productId, [FromQuery] int quantity, [FromQuery] string? orderId = null, [FromQuery] string? userName = null)
+        public async Task<CartDisplayResponse> AddToCart([FromQuery] string productId, [FromQuery] int quantity, [FromQuery] string userName = null)
         {
             var newOrder = new OrderResponseModel();
-            if (!string.IsNullOrWhiteSpace(orderId))
+            var orderCart = GetCartItems();
+            if (!string.IsNullOrWhiteSpace(orderCart))
             {
-                var order = await _orderService.GetByIdAsync(orderId);
+                var order = await _orderService.GetByIdAsync(orderCart);
                 if(order != null && string.IsNullOrWhiteSpace(userName))
                 {
-                  newOrder =   await _orderService.UpdateExistingOrder(productId, quantity, orderId);
+                  newOrder =   await _orderService.UpdateExistingOrder(productId, quantity, orderCart);
                 }
             }
             else
@@ -72,12 +75,28 @@ namespace Store.Controllers
             }
          
             // Lưu cart vào Session
-            SaveCartSession(newOrder);
+            SaveCartSession(newOrder.Id);
 
-            return;
+            var CartDisplayResponse = new CartDisplayResponse()
+            {
+                ProductQuantity = newOrder.OrderDetails.Count().ToString(),
+            };
+
+            return CartDisplayResponse;
         }
 
+        public string GetCartItems()
+        {
 
+            var session = HttpContext.Session;
+            string jsoncart = session.GetString(CARTKEY);
+            if (jsoncart != null)
+            {
+                return JsonConvert.DeserializeObject<string>(jsoncart);
+            }
+
+            return "";
+        }
 
         void ClearCart()
         {
@@ -86,10 +105,10 @@ namespace Store.Controllers
         }
 
         // Lưu Cart (Danh sách CartItem) vào session
-        void SaveCartSession(OrderResponseModel order)
+        void SaveCartSession(string orderId)
         {
             var session = HttpContext.Session;
-            string jsoncart = JsonConvert.SerializeObject(order);
+            string jsoncart = JsonConvert.SerializeObject(orderId);
             session.SetString(CARTKEY, jsoncart);
         }
 
