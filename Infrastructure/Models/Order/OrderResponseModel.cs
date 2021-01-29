@@ -12,5 +12,6 @@ namespace Infrastructure.Models
         {
             //Supplier = new SupplierModel();
         }
+
     }
 }

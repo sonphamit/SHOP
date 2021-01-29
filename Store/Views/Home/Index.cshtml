@@ -1,6 +1,11 @@
 ﻿@using Infrastructure.Extentions
 @using Infrastructure.Enums
 @using Infrastructure.Models
+@using Microsoft.AspNetCore.Identity
+@using Infrastructure.Entities
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
 @model Tuple<Pagination<ProductResponseModel>, int>
 @inject ICategoryService categoryService
 @using Infrastructure.Constants
@@ -8,7 +13,7 @@
     ViewData["Title"] = "Home Page";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var categories = await categoryService.GetAllAsync();
-    var pageCount = Model.Item1.Count/9;
+    var pageCount = Model.Item1.Count / 9;
 }
 <!-- Breadcrumbs -->
 <div class="breadcrumbs">
@@ -16,14 +21,20 @@
         $(document).ready(function () {
             $(".addproduct").each(function () {
                 $(this).unbind().click(function () {
+
+                    var userName = $("#userName").val();
                     var productId = $(this)[0].getAttribute("proId");
+
                     $.ajax({
                         url: "/Product/AddToCart",
                         type: "GET",
                         dataType: "text",
                         data: {
                             "quantity": 1,
-                            "productId": productId
+                            "productId": productId,
+                            "orderId": "",
+                            "userName": userName,
+
                         },
                         contentType: 'application/json; charset=utf-8',
 
@@ -61,8 +72,8 @@
                     <div class="single-widget category">
                         <h3 class="title">Giới tính</h3>
                         <ul class="categor-list">
-                            <li>@Html.ActionLink("Bé trai", "Products", "Home", new { catagoryId ="", gender = Gender.BOY })</li>
-                            <li>@Html.ActionLink("Bé gái", "Products", "Home", new { catagoryId = "",  gender = Gender.GIRL })</li>
+                            <li>@Html.ActionLink("Bé trai", "Products", "Home", new { catagoryId = "", gender = Gender.BOY })</li>
+                            <li>@Html.ActionLink("Bé gái", "Products", "Home", new { catagoryId = "", gender = Gender.GIRL })</li>
                             <li>@Html.ActionLink("Cả hai", "Products", "Home", new { catagoryId = "", gender = Gender.ALL })</li>
                         </ul>
                     </div>
@@ -103,10 +114,15 @@
                                 <div class="product-img">
                                     <a href=@Url.Action("Details", "Product", new {id=item.Id })>
                                         <img class="default-img" src="@(TextConstant.DashboardDomain + "/" + item.Images[0].PathName)" alt="#">
-                                        <img class="hover-img"  src="@(TextConstant.DashboardDomain + "/" + item.Images[0].PathName)" alt="#">
+                                        <img class="hover-img" src="@(TextConstant.DashboardDomain + "/" + item.Images[0].PathName)" alt="#">
                                     </a>
                                     <div class="button-head">
                                         <div class="product-action-2">
+                                            @if (SignInManager.IsSignedIn(User))
+                                            {
+
+                                                <input type="hidden" id="userName" name="userName" value=@User.Identity.Name>
+                                            }
                                             <a title="Add to cart" class="addproduct @item.Id" proId="@item.Id">Thêm vào giỏ hàng</a>
                                         </div>
                                     </div>

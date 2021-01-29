@@ -14,11 +14,13 @@ namespace Infrastructure.Services
         Task<IEnumerable<OrderResponseModel>> GetAllAsync();
         IEnumerable<OrderResponseModel> GetAll();
         OrderResponseModel GetById(string id);
+        Task<OrderResponseModel> GetByCustomerIdOrderingAsync(string id);
+        Task<OrderResponseModel> GetByIdOrderingAsync(string id);
         Task<OrderResponseModel> GetByIdAsync(string id);
 
-        Task<OrderResponseModel> UpdateExistingOrder(string productId, int quantity, string? orderId = null);
+        Task<OrderResponseModel> UpdateExistingOrder(string productId, int quantity, string? orderId = null, string? userName = null);
 
-        Task<OrderResponseModel> AddNewOrder(string productId, int quantity);
+        Task<OrderResponseModel> AddNewOrder(string productId, int quantity, string? id = null);
 
         Task DeleteAsync(string id);
         Task<int> SaveChangesAsync();
