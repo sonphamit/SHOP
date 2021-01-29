@@ -48,31 +48,9 @@
 
                     <Validation>
                         <Field Horizontal="true">
-                            <FieldLabel ColumnSize="ColumnSize.Is3">FirstName</FieldLabel>
+                            <FieldLabel ColumnSize="ColumnSize.Is3">FullName</FieldLabel>
                             <FieldBody ColumnSize="ColumnSize.Is9">
-                                <TextEdit Placeholder="Enter FirstName" @bind-Text="model.ApplicationUser.FirstName">
-                                    <Feedback><ValidationError /></Feedback>
-                                </TextEdit>
-                            </FieldBody>
-                        </Field>
-                    </Validation>
-
-                    <Validation>
-                        <Field Horizontal="true">
-                            <FieldLabel ColumnSize="ColumnSize.Is3">MiddleName</FieldLabel>
-                            <FieldBody ColumnSize="ColumnSize.Is9">
-                                <TextEdit Placeholder="Enter MiddleName" @bind-Text="model.ApplicationUser.MiddleName">
-                                    <Feedback><ValidationError /></Feedback>
-                                </TextEdit>
-                            </FieldBody>
-                        </Field>
-                    </Validation>
-
-                    <Validation>
-                        <Field Horizontal="true">
-                            <FieldLabel ColumnSize="ColumnSize.Is3">Last Name</FieldLabel>
-                            <FieldBody ColumnSize="ColumnSize.Is9">
-                                <TextEdit Placeholder="Enter Last Name" @bind-Text="model.ApplicationUser.LastName">
+                                <TextEdit Placeholder="Enter FullName" @bind-Text="model.ApplicationUser.FullName">
                                     <Feedback><ValidationError /></Feedback>
                                 </TextEdit>
                             </FieldBody>

@@ -56,7 +56,10 @@ namespace Store.Areas.Identity.Pages.Account
             [Display(Name = "UserName")]
             public string UserName { get; set; }
             [Required]
-            [Display(Name = "PhoneNumber")]
+            [Display(Name = "FullName")]
+            public string FullName { get; set; }
+            [Required]
+            [Display(Name = "Phone Number")]
             public string PhoneNumber { get; set; }
             [Required]
             [Display(Name = "Address")]
@@ -92,6 +95,7 @@ namespace Store.Areas.Identity.Pages.Account
             {
                 var user = new ApplicationUser {
                     UserName = Input.UserName,
+                    FullName = Input.FullName,
                     Email = Input.Email,
                     Address = Input.Address,
                     PhoneNumber = Input.PhoneNumber

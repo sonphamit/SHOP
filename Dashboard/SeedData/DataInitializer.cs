@@ -50,17 +50,13 @@ namespace Dashboard.SeedData
         {
             if (userManager.FindByNameAsync("admin").Result == null)
             {
-                //var passwordHash = new PasswordHasher<ApplicationUser>();
-                
                 ApplicationUser userAdmin = new ApplicationUser
                 {
                     UserName = "admin",
                     Email = "admin@shop.com",
-                    FirstName = "Admin",
-                    LastName = "Admin",
+                    FullName = "Just Admin",
                     EmailConfirmed = true,
                 };
-                //passwordHash.HashPassword(userAdmin, "1234");
 
                 IdentityResult result = userManager.CreateAsync(userAdmin, "123456@bC").Result;
 

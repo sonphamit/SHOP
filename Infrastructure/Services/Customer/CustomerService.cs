@@ -125,9 +125,7 @@ namespace Infrastructure.Services
                     {
                         var wordLower = word.ToLower();
                         listPredicates.Add(x => x.ApplicationUser.UserName.ToLower().Contains(wordLower)
-                            || x.ApplicationUser.FirstName.ToLower().Contains(wordLower)
-                            || x.ApplicationUser.MiddleName.ToLower().Contains(wordLower)
-                            || x.ApplicationUser.LastName.ToLower().Contains(wordLower)
+                            || x.ApplicationUser.FullName.ToLower().Contains(wordLower)
                             || x.ApplicationUser.Email.ToLower().Contains(wordLower)
                             || x.ApplicationUser.PhoneNumber.ToLower().Contains(wordLower)
                         );

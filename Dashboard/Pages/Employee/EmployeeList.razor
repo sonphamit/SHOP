@@ -47,7 +47,7 @@
                 <tr>
                     <td>@(item.index + 1 + pageSize*(pageNumber-1))</td>
                     <td>@item.value.ApplicationUser.UserName</td>
-                    <td>@($"{item.value.ApplicationUser.FirstName} {item.value.ApplicationUser.MiddleName} {item.value.ApplicationUser.LastName}")</td>
+                    <td>@item.value.ApplicationUser.FullName</td>
                     <td>@item.value.ApplicationUser.PhoneNumber</td>
                     <td>@item.value.ApplicationUser.Email</td>
                     <td>@item.value.CreatedAt</td>
