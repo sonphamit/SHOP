@@ -22,7 +22,6 @@
             $(".addproduct").each(function () {
                 $(this).unbind().click(function () {
 
-                    var userName = $("#userName").val();
                     var productId = $(this)[0].getAttribute("proId");
 
                     $.ajax({
@@ -30,9 +29,7 @@
                         type: "GET",
                         dataType: "json",
                         data: {
-                            "quantity": 1,
                             "productId": productId,
-                            "userName": userName,
 
                         },
                         contentType: 'application/json; charset=utf-8',
@@ -117,11 +114,6 @@
                                     </a>
                                     <div class="button-head">
                                         <div class="product-action-2">
-                                            @if (SignInManager.IsSignedIn(User))
-                                            {
-
-                                                <input type="hidden" id="userName" name="userName" value=@User.Identity.Name>
-                                            }
                                             <a title="Add to cart" class="addproduct @item.Id" proId="@item.Id">Thêm vào giỏ hàng</a>
                                         </div>
                                     </div>

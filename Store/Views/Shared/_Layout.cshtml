@@ -1,9 +1,6 @@
 ﻿@using Infrastructure.Enums
-@using Microsoft.AspNetCore.Identity
 @using Infrastructure.Entities
 @inject ICategoryService categoryService
-@inject UserManager<ApplicationUser> UserManager
-@inject SignInManager<ApplicationUser> SignInManager
 @{
     var categories = await categoryService.GetAllAsync();
     //var orders = await orderService.GetAllAsync();
@@ -53,31 +50,20 @@
 </head>
 <body>
     <script>
-                    //$(document).ready(function () {
-                    //    $("#add-to-cart").click(function () {
-                    //        var quantity = $("#quantity").val();
-                    //        var productId = $("#productId").val();
-
-                    //        $.ajax({
-                    //            url: "/Product/AddToCart",
-                    //            type: "POST",
-                    //            dataType: "text",
-                    //            data: {
-                    //                quantity, productId
-                    //            },
-                    //            contentType: 'application/json; charset=utf-8',
-
-                    //            success: function (result) {
-                    //                //alert("Thêm sdfsdvào giỏ hàng thành công!");
-                    //                $("#total-count").text('1');
-                    //            },
-                    //            error: function (xhr, ajaxOptions, thrownError) {
-                    //                //alert("Thêm vào giỏ hàng thành công!");
-                    //            }
-                    //        });
-                    //    });
-
-                    //});
+        $(document).ready(function () {
+            $.ajax({
+                url: "/Order/getCountOrderDtails",
+                type: "GET",
+                dataType: "json",
+                data: {},
+                contentType: 'application/json; charset=utf-8',
+                success: function (result) {
+                    $("#total-count").html(result);
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                }
+            });
+        });
     </script>
     <!-- Header -->
     <header class="header shop">
@@ -145,15 +131,7 @@
                     <div class="col-lg-2 col-md-3 col-12">
                         <div class="right-bar">
                             <div class="sinlge-bar shopping">
-                                @if (SignInManager.IsSignedIn(User))
-                                {
-
-                                    <a href=@Url.Action("Index", "Order", new {userName=User.Identity.Name}) class="single-icon"><i class="ti-bag"></i> <span id="total-count" class="total-count">0</span></a>
-                                }
-                                else
-                                {
-                                    <a href=@Url.Action("Index", "Order") class="single-icon"><i class="ti-bag"></i> <span id="total-count" class="total-count">0</span></a>
-                                }
+                                <a href=@Url.Action("Index", "Order") class="single-icon"><i class="ti-bag"></i> <span id="total-count" class="total-count">0</span></a>
                             </div>
                         </div>
                     </div>

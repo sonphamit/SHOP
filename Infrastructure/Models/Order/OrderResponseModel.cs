@@ -12,6 +12,6 @@ namespace Infrastructure.Models
         {
             //Supplier = new SupplierModel();
         }
-
+        public string SubTotal { get; set; }
     }
 }

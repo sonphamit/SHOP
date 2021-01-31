@@ -137,14 +137,24 @@ namespace Infrastructure.Services
         public async Task<OrderResponseModel> UpdateExistingOrder(string productId, int quantity, string? orderId = null, string? id = null)
         {
             //var order = await GetByIdAsync(orderId);
-            var order = _unitOfWork.OrderRepository.FindByCondition(cat => cat.Id.Equals(orderId)).Include(x => x.OrderDetails).FirstOrDefault();
+            var existOrderDetail = _unitOfWork.OrderDetailRepository.FindByCondition(item => item.OrderId.Equals(orderId) && item.ProductId.Equals(productId))
+                .FirstOrDefault();
+
+            var order = _unitOfWork.OrderRepository.FindByCondition(item => item.Id.Equals(orderId)).FirstOrDefault();
             if (order != null)
             {
-                var cartItem = order.OrderDetails.Where(p => p.ProductId == productId).FirstOrDefault();
                 order.CustomerId = id;
-                if (cartItem != null)
+                _unitOfWork.OrderRepository.Update(order);
+                if (existOrderDetail != null)
                 {
-                    order.OrderDetails.Where(p => p.ProductId == productId).FirstOrDefault().Quantity = quantity;
+                    var quantityOrderDetail = quantity;
+                    if (quantity == 0)
+                    {
+                        quantityOrderDetail = existOrderDetail.Quantity + 1;
+                    }
+
+                    existOrderDetail.Quantity = quantityOrderDetail;
+                    _unitOfWork.OrderDetailRepository.Update(existOrderDetail);
                 }
                 else
                 {
@@ -155,20 +165,21 @@ namespace Infrastructure.Services
                         var orderDetail = new OrderDetail()
                         {
                             OrderId = orderId,
-                            Quantity = quantity,
+                            Quantity = 1,
                             ProductId = productId,
                             UnitPrice = product.UnitPrice
                         };
-                        //order.OrderDetails.Add(orderDetail);
                         await _unitOfWork.OrderDetailRepository.AddAsync(orderDetail);
                     }
                 }
 
                 await SaveChangesAsync();
-            }
 
-            var newOrder = _unitOfWork.OrderRepository.FindByCondition(cat => cat.Id.Equals(orderId)).Include(x => x.OrderDetails).FirstOrDefault();
-            return _mapper.Map<OrderResponseModel>(newOrder);
+                var newOrder = _unitOfWork.OrderRepository.FindByCondition(cat => cat.Id.Equals(orderId)).Include(x => x.OrderDetails).FirstOrDefault();
+                return _mapper.Map<OrderResponseModel>(newOrder);
+            }
+            return null;
+           
         }
 
         public async Task<OrderResponseModel> AddNewOrder(string productId, int quantity, string? id = null)
@@ -183,7 +194,7 @@ namespace Infrastructure.Services
                     CustomerId = id,
                 };
 
-                var orderDetailItem = new OrderDetailModel() { Quantity = quantity, ProductId = productId, UnitPrice = product.UnitPrice };
+                var orderDetailItem = new OrderDetailModel() { Quantity = 1, ProductId = productId, UnitPrice = product.UnitPrice };
 
                 order.OrderDetails.Add(orderDetailItem);
 

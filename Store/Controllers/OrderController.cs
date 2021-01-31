@@ -1,10 +1,7 @@
 ﻿using Infrastructure.Entities;
-using Infrastructure.Models;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -27,21 +24,32 @@ namespace Store.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index([FromQuery] string userName = null)
+        public async Task<IActionResult> Index()
         {
+            string userName = string.Empty;
+            if (User.Identity.IsAuthenticated)
+            {
+                userName = User.Identity.Name;
+            }
             var orderCart = GetCartItems();
 
             if (!string.IsNullOrWhiteSpace(userName))
             {
                 var user = await _userManager.FindByNameAsync(userName);
-               var order = await _orderService.GetByCustomerIdOrderingAsync(user.Id);
-                return View(order);
-
+                var order = await _orderService.GetByCustomerIdOrderingAsync(user.Id);
+                if (order is not null)
+                {
+                    var total = order.OrderDetails.Select(x => x.UnitPrice * x.Quantity).Sum();
+                    order.SubTotal = string.Format("{0:0,0 VND}", total);
+                    return View(order);
+                }
             }
 
             if (!string.IsNullOrWhiteSpace(orderCart))
             {
                 var order = await _orderService.GetByIdOrderingAsync(orderCart);
+                var total = order.OrderDetails.Select(x => x.UnitPrice * x.Quantity).Sum();
+                order.SubTotal = string.Format("{0:0,0 VND}", total);
                 return View(order);
 
             }
@@ -50,7 +58,18 @@ namespace Store.Controllers
 
         }
 
-        // Lấy cart từ Session (danh sách CartItem)
+        [HttpGet]
+        public async Task<string> getCountOrderDtails()
+        {
+            var orderCart = GetCartItems();
+            if (string.IsNullOrWhiteSpace(orderCart))
+            {
+                return "0";
+            }
+            var order = await _orderService.GetByIdOrderingAsync(orderCart);
+            return order.OrderDetails.Count().ToString();
+        }
+        // Lấy cart từ Session orderId
         public string GetCartItems()
         {
 
@@ -63,5 +82,6 @@ namespace Store.Controllers
 
             return "";
         }
+
     }
 }

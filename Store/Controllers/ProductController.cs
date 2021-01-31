@@ -47,16 +47,26 @@ namespace Store.Controllers
 
         //add to cart
         [HttpGet]
-        public async Task<CartDisplayResponse> AddToCart([FromQuery] string productId, [FromQuery] int quantity, [FromQuery] string userName = null)
+        public async Task<CartDisplayResponse> AddToCart([FromQuery] string productId, [FromQuery] int quantity = 0)
         {
+
+            string userName = string.Empty;
+            if (User.Identity.IsAuthenticated)
+            {
+                userName = User.Identity.Name;
+            }
+
             var newOrder = new OrderResponseModel();
             var orderCart = GetCartItems();
+
+            var quantityVal = (int)quantity;
+
             if (!string.IsNullOrWhiteSpace(orderCart))
             {
                 var order = await _orderService.GetByIdAsync(orderCart);
-                if(order != null && string.IsNullOrWhiteSpace(userName))
+                if(order != null)
                 {
-                  newOrder =   await _orderService.UpdateExistingOrder(productId, quantity, orderCart);
+                  newOrder =   await _orderService.UpdateExistingOrder(productId, quantityVal, orderCart);
                 }
             }
             else
@@ -65,11 +75,11 @@ namespace Store.Controllers
                 {
                     var user = await _userManager.FindByNameAsync(userName);
 
-                    newOrder = await _orderService.AddNewOrder(productId, quantity, user.Id);
+                    newOrder = await _orderService.AddNewOrder(productId, quantityVal, user.Id);
                 }
                 else
                 {
-                    newOrder = await _orderService.AddNewOrder(productId, quantity);
+                    newOrder = await _orderService.AddNewOrder(productId, quantityVal);
                 }
                 
             }

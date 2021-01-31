@@ -18,7 +18,7 @@ namespace Infrastructure.Services
         Task<OrderResponseModel> GetByIdOrderingAsync(string id);
         Task<OrderResponseModel> GetByIdAsync(string id);
 
-        Task<OrderResponseModel> UpdateExistingOrder(string productId, int quantity, string? orderId = null, string? userName = null);
+        Task<OrderResponseModel> UpdateExistingOrder(string productId, int quantity , string? orderId = null, string? userName = null);
 
         Task<OrderResponseModel> AddNewOrder(string productId, int quantity, string? id = null);
 
